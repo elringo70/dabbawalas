@@ -32,22 +32,61 @@
                     </a>
                 </li>
 
+                {{!-- Divider --}}
                 <li class="my-4">
                     <hr class="dropdown-divider">
                 </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Cocina
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse1"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse1">
+                        <span class="me-2"><i class="bi bi-bag"></i></span>
+                        <span>Órdenes</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse1">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="#" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus"></i></span>
+                                        <span>Agregar orden</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
+                                        <span>Ver ordenes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
                 <li>
                     <div class="text-muted small fw-bold text-uppercase px-3">
                         Productos
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse" role="button"
-                        aria-expanded="false" aria-controls="layoutCollapse">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse2" role="button"
+                        aria-expanded="false" aria-controls="layoutCollapse2">
                         <span class="me-2"><i class="bi bi-cup-straw"></i></span>
                         <span>Platillos</span>
                         <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
                     </a>
-                    <div class="collapse" id="layoutCollapse">
+                    <div class="collapse" id="layoutCollapse2">
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
@@ -57,7 +96,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/api/products/getAllProducts" class="nav-link px-2">
+                                    <a href="/api/products/getAllProductsByRestaurant" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-card-list"></i></span>
                                         <span>Ver platillos</span>
                                     </a>
@@ -83,6 +122,9 @@
                         <span>Gráficas</span>
                     </a>
                 </li>
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
             </ul>
 
             <ul class="navbar-nav">
@@ -98,13 +140,13 @@
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse"
-                        role="button" aria-expanded="false" aria-controls="profileCollapse">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
                         <span class="me-2"><i class="bi bi-gear"></i></span>
                         <span>Opciones</span>
                         <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
                     </a>
-                    <div class="collapse" id="profileCollapse">
+                    <div class="collapse" id="profileCollapse3">
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
