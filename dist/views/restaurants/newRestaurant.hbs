@@ -218,7 +218,7 @@
             const newSchedule = schedule(days, openhours, closinghours)
             dataJSON['hours'] = newSchedule
 
-            const response = await fetch('http://localhost:3000/api/restaurants/postNewRestaurant', {
+            const response = await fetch('https://dabbawalas.herokuapp.com/api/restaurants/postNewRestaurant', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

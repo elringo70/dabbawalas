@@ -89,7 +89,7 @@
                 const dataJSON = await JSON.parse(data)
                 dataJSON['image'] = imageFile.files[0]*/
 
-                const response = await fetch('http://localhost:3000/api/products/postNewProduct', {
+                const response = await fetch('https://dabbawalas.herokuapp.com/api/products/postNewProduct', {
                     method: 'POST',
                     body: formData
                 })
