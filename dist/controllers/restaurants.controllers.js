@@ -79,7 +79,7 @@ class ResturantController {
             const { days, openhours, closinghours } = req.body;
             const user = res.locals.token;
             if (!errors.isEmpty()) {
-                return res.status(200).render('restaurants/registration', {
+                return res.status(200).render('restaurants/newRestaurant', {
                     title: 'Registro nuevo restaurant',
                     errors: errors.array(),
                     user: restaurantObj,

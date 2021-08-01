@@ -15,7 +15,7 @@ class ProductRoutes {
     config() {
         this.router.get('/getNewProductPage', jwt_1.default.checkJWT, products_controllers_1.productController.getNewProductPage);
         this.router.post('/postNewProduct', jwt_1.default.checkJWT, upload_1.upload.single('image'), products_controllers_1.productController.postNewProduct);
-        this.router.get('/getAllProducts', jwt_1.default.checkJWT, products_controllers_1.productController.getAllProductsPage);
+        this.router.get('/getAllProductsByRestaurant', jwt_1.default.checkJWT, products_controllers_1.productController.getAllProductsPage);
         /*
         this.router.get('/:id', productController.getProductById)
         this.router.patch('/:id', upload.single('image'), productController.updateProductById)

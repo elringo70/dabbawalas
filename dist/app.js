@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express_1 = __importDefault(require("express"));
 const express_handlebars_1 = __importDefault(require("express-handlebars"));
-const morgan_1 = __importDefault(require("morgan"));
+//import morgan from 'morgan'
 const path_1 = __importDefault(require("path"));
 //Error 404
 const _404_controllers_1 = require("./controllers/404.controllers");
@@ -36,7 +36,7 @@ class App {
         this.app.set('view engine', '.hbs');
     }
     middlewares() {
-        this.app.use(morgan_1.default('dev'));
+        //this.app.use(morgan('dev'))
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }

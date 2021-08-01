@@ -7,7 +7,7 @@ class Restaurant {
             database_1.conn.beginTransaction((err) => {
                 if (err)
                     throw err;
-                const a = database_1.conn.query('INSERT INTO restaurants SET ?', [restaurant], (error, results) => {
+                database_1.conn.query('INSERT INTO restaurants SET ?', [restaurant], (error, results) => {
                     if (error) {
                         return database_1.conn.rollback(() => {
                             throw error;
@@ -21,7 +21,7 @@ class Restaurant {
                         (?,?)
                     `;
                     resolve(results);
-                    const b = database_1.conn.query(manRestQuery, [user.id_user, restaurantId], (error, results) => {
+                    database_1.conn.query(manRestQuery, [user.id_user, restaurantId], (error, results) => {
                         if (error) {
                             return database_1.conn.rollback(() => {
                                 throw error;
@@ -34,7 +34,7 @@ class Restaurant {
                                 VALUES
                                 (${restaurantId},${schedule[i].days},'${schedule[i].openhours}','${schedule[i].closinghours}')
                             `;
-                            const c = database_1.conn.query(query, (error, results) => {
+                            database_1.conn.query(query, (error, results) => {
                                 if (error) {
                                     return database_1.conn.rollback(() => {
                                         throw error;
@@ -50,12 +50,9 @@ class Restaurant {
                                 });
                                 resolve(results);
                             });
-                            console.log(c.sql);
                         }
                     });
-                    console.log(b.sql);
                 });
-                console.log(a.sql);
             });
         });
     }
