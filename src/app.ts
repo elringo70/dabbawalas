@@ -1,6 +1,5 @@
 import express, { Application } from 'express'
 import exphbs from 'express-handlebars'
-import morgan from 'morgan'
 import path from 'path'
 
 //Error 404
@@ -38,7 +37,6 @@ export class App {
     }
 
     private middlewares() {
-        this.app.use(morgan('dev'))
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: false }))
     }
