@@ -54,6 +54,8 @@ class ResturantController {
     }
 
     async postNewRestaurant(req: Request, res: Response) {
+        const errors = validationResult(req)
+
         const restaurantObj: IRestaurant = {
             name: req.body.name,
             type: req.body.type,
@@ -61,20 +63,37 @@ class ResturantController {
             number: req.body.number,
             municipality: req.body.municipality,
             city: req.body.city,
-            state: req.body.state
+            state: req.body.state,
+            phone: req.body.phone
+        }
+        
+        const { days, openhours, closinghours } = req.body
+        const user = res.locals.token
+
+        if (!errors.isEmpty()) {            
+            return res.status(200).render('restaurants/newRestaurant', {
+                title: 'Registro nuevo restaurant',
+                errors: errors.array(),
+                user: restaurantObj,
+                loginIn: true
+            })
         }
 
-        const hours: IBusinessHours[] = req.body.hours
-        const user = res.locals.token
+        let hours = []
+        
+        for (let i = 0; i < days.length; i++) {
+            hours.push({
+                days: days[i],
+                openhours: openhours[i],
+                closinghours: closinghours[i]
+            })
+        }
 
         try {
             const restaurant = new Restaurant()
-            await restaurant.save(restaurantObj, user.user, hours)
+            await restaurant.save(restaurantObj, user, hours)
 
-            res.json({
-                status: 200,
-                message: 'Restaurant registrado con éxito'
-            })
+            res.redirect('/api/restaurants/manager')
         } catch (error) {
             if (error) console.log(error)
 

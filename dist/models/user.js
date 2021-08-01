@@ -45,7 +45,7 @@ class User {
             });
         });
     }
-    static findBy(column, value, verified) {
+    static findBy(column, value) {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT
@@ -71,7 +71,7 @@ class User {
                 license, image, lastpurchase, active, verified, createdAt, updatedAt
                 FROM users 
                 WHERE id_user=?
-                AND verified='UNVERIFIED'
+                AND verified='VERIFIED'
             `;
             database_1.pool.query(query, [id], (error, results) => {
                 if (error)

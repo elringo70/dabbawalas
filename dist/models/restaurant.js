@@ -6,11 +6,11 @@ class Restaurant {
         return new Promise((resolve, reject) => {
             database_1.conn.beginTransaction((err) => {
                 if (err)
-                    reject(err);
-                database_1.conn.query('INSERT INTO restaurants SET ?', [restaurant], (error, results) => {
+                    throw err;
+                const a = database_1.conn.query('INSERT INTO restaurants SET ?', [restaurant], (error, results) => {
                     if (error) {
                         return database_1.conn.rollback(() => {
-                            reject(error);
+                            throw error;
                         });
                     }
                     const restaurantId = results.insertId;
@@ -21,10 +21,10 @@ class Restaurant {
                         (?,?)
                     `;
                     resolve(results);
-                    database_1.conn.query(manRestQuery, [user.id_user, restaurantId], (error, results) => {
+                    const b = database_1.conn.query(manRestQuery, [user.id_user, restaurantId], (error, results) => {
                         if (error) {
                             return database_1.conn.rollback(() => {
-                                reject(error);
+                                throw error;
                             });
                         }
                         for (let i = 0; i < schedule.length; i++) {
@@ -32,27 +32,30 @@ class Restaurant {
                                 INSERT INTO business_hours
                                 (id_restaurant, day, openhours, closinghours)
                                 VALUES
-                                (${restaurantId},${schedule[i].day},'${schedule[i].openhours}','${schedule[i].closinghours}')
+                                (${restaurantId},${schedule[i].days},'${schedule[i].openhours}','${schedule[i].closinghours}')
                             `;
-                            database_1.conn.query(query, (error, results) => {
+                            const c = database_1.conn.query(query, (error, results) => {
                                 if (error) {
                                     return database_1.conn.rollback(() => {
-                                        reject(error);
+                                        throw error;
                                     });
                                 }
                                 resolve(results);
                                 database_1.conn.commit(() => {
                                     if (err) {
                                         return database_1.conn.rollback(() => {
-                                            reject(err);
+                                            throw err;
                                         });
                                     }
                                 });
                                 resolve(results);
                             });
+                            console.log(c.sql);
                         }
                     });
+                    console.log(b.sql);
                 });
+                console.log(a.sql);
             });
         });
     }
@@ -89,15 +92,15 @@ class Restaurant {
     static findWithUser(id) {
         return new Promise((resolve, reject) => {
             const query = `
-            SELECT restaurants.*
+                SELECT restaurants.*
                 FROM restaurants
                 RIGHT JOIN manager_restaurant
                 ON restaurants.id_restaurant = manager_restaurant.id_restaurant
                 LEFT JOIN users
                 ON manager_restaurant.id_user = users.id_user
-                WHERE users.id_user = ?
+                WHERE users.id_user=${id}
             `;
-            database_1.pool.query(query, [id], (error, results) => {
+            database_1.pool.query(query, (error, results) => {
                 if (error)
                     reject(error);
                 resolve(results.length === 1 ? results[0] : null);

@@ -6,7 +6,8 @@ export interface IRestaurant {
     number: string,
     municipality: string,
     city: string,
-    state: string
+    state: string,
+    phone: string
 }
 
 export interface IBusinessHours {

@@ -3,14 +3,14 @@ import { ICustomer } from '../interfaces/IUsers'
 import { IRestaurant, IBusinessHours } from '../interfaces/IRestaurant'
 
 export default class Restaurant {
-    save(restaurant: IRestaurant, user: ICustomer, schedule: IBusinessHours[]) {
+    save(restaurant: IRestaurant, user: ICustomer, schedule: any) {
         return new Promise((resolve, reject) => {
             conn.beginTransaction((err) => {
-                if (err) reject(err)
+                if (err) throw err
                 conn.query('INSERT INTO restaurants SET ?', [restaurant], (error, results) => {
                     if (error) {
                         return conn.rollback(() => {
-                            reject(error)
+                            throw error
                         })
                     }
 
@@ -26,7 +26,7 @@ export default class Restaurant {
                     conn.query(manRestQuery, [user.id_user, restaurantId], (error, results) => {
                         if (error) {
                             return conn.rollback(() => {
-                                reject(error)
+                                throw error
                             })
                         }
 
@@ -36,13 +36,13 @@ export default class Restaurant {
                                 INSERT INTO business_hours
                                 (id_restaurant, day, openhours, closinghours)
                                 VALUES
-                                (${restaurantId},${schedule[i].day},'${schedule[i].openhours}','${schedule[i].closinghours}')
+                                (${restaurantId},${schedule[i].days},'${schedule[i].openhours}','${schedule[i].closinghours}')
                             `
 
                             conn.query(query, (error, results) => {
                                 if (error) {
                                     return conn.rollback(() => {
-                                        reject(error)
+                                        throw error
                                     })
                                 }
                                 resolve(results)
@@ -50,7 +50,7 @@ export default class Restaurant {
                                 conn.commit(() => {
                                     if (err) {
                                         return conn.rollback(() => {
-                                            reject(err)
+                                            throw err
                                         })
                                     }
                                 })
@@ -101,16 +101,16 @@ export default class Restaurant {
     static findWithUser(id: string): Promise<IRestaurant | null> {
         return new Promise((resolve, reject) => {
             const query = `
-            SELECT restaurants.*
+                SELECT restaurants.*
                 FROM restaurants
                 RIGHT JOIN manager_restaurant
                 ON restaurants.id_restaurant = manager_restaurant.id_restaurant
                 LEFT JOIN users
                 ON manager_restaurant.id_user = users.id_user
-                WHERE users.id_user = ?
+                WHERE users.id_user=${id}
             `
-
-            pool.query(query, [id], (error, results: IRestaurant[]) => {
+            
+            pool.query(query, (error, results: IRestaurant[]) => {
                 if (error) reject(error)
 
                 resolve(results.length === 1 ? results[0] : null)

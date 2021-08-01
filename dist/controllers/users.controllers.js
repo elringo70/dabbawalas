@@ -85,7 +85,7 @@ class UserControllers {
                 yield manager.save(queryObj);
                 setTimeout(function () {
                     res.redirect('/login');
-                }, 5000);
+                }, 4000);
             }
             catch (error) {
                 if (error)
@@ -129,7 +129,7 @@ class UserControllers {
                 if (manager) {
                     res.json({
                         status: 200,
-                        email: manager.email
+                        message: 'El el correo electrónico ya se encuentra registrado'
                     });
                 }
                 else {

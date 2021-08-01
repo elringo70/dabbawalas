@@ -14,7 +14,7 @@ class ProductRoutes {
     private config() {
         this.router.get('/getNewProductPage', checkJWT.checkJWT, productController.getNewProductPage)
         this.router.post('/postNewProduct', checkJWT.checkJWT, upload.single('image'), productController.postNewProduct)
-        this.router.get('/getAllProducts', checkJWT.checkJWT, productController.getAllProductsPage)
+        this.router.get('/getAllProductsByRestaurant', checkJWT.checkJWT, productController.getAllProductsPage)
         /* 
         this.router.get('/:id', productController.getProductById)
         this.router.patch('/:id', upload.single('image'), productController.updateProductById)

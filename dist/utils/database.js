@@ -18,3 +18,7 @@ exports.conn = mysql_1.default.createConnection({
     database: 'dabbawalas',
     password: ''
 });
+/* host: 'localhost',
+user: 'root',
+database: 'dabbawalas',
+password: '' */ 

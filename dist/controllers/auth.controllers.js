@@ -31,7 +31,8 @@ class AuthController {
                     });
                 }
                 if (!user) {
-                    return res.json({
+                    return res.render('auth/login', {
+                        title: 'Login',
                         status: 304,
                         errorMessage: 'Usuario no encontrado o contraseña incorrecta'
                     });
@@ -45,7 +46,7 @@ class AuthController {
                 }
                 else {
                     const verifiedUser = yield user_1.default.findByVerified(`${user.id_user}`);
-                    if (verifiedUser) {
+                    if (!verifiedUser) {
                         return res.render('auth/login', {
                             title: 'Login',
                             status: 304,

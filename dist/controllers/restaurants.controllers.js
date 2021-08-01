@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.restaurantController = void 0;
 const restaurant_1 = __importDefault(require("../models/restaurant"));
+const express_validator_1 = require("express-validator");
 class ResturantController {
     getManagerPage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -42,7 +43,6 @@ class ResturantController {
     getNewRestaurantPage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = res.locals.token;
-            console.log(user);
             try {
                 const restaurant = yield restaurant_1.default.findWithUser(user.id_user);
                 if (restaurant) {
@@ -65,6 +65,7 @@ class ResturantController {
     }
     postNewRestaurant(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const errors = express_validator_1.validationResult(req);
             const restaurantObj = {
                 name: req.body.name,
                 type: req.body.type,
@@ -72,17 +73,31 @@ class ResturantController {
                 number: req.body.number,
                 municipality: req.body.municipality,
                 city: req.body.city,
-                state: req.body.state
+                state: req.body.state,
+                phone: req.body.phone
             };
-            const hours = req.body.hours;
+            const { days, openhours, closinghours } = req.body;
             const user = res.locals.token;
+            if (!errors.isEmpty()) {
+                return res.status(200).render('restaurants/registration', {
+                    title: 'Registro nuevo restaurant',
+                    errors: errors.array(),
+                    user: restaurantObj,
+                    loginIn: true
+                });
+            }
+            let hours = [];
+            for (let i = 0; i < days.length; i++) {
+                hours.push({
+                    days: days[i],
+                    openhours: openhours[i],
+                    closinghours: closinghours[i]
+                });
+            }
             try {
                 const restaurant = new restaurant_1.default();
-                yield restaurant.save(restaurantObj, user.user, hours);
-                res.json({
-                    status: 200,
-                    message: 'Restaurant registrado con éxito'
-                });
+                yield restaurant.save(restaurantObj, user, hours);
+                res.redirect('/api/restaurants/manager');
             }
             catch (error) {
                 if (error)
