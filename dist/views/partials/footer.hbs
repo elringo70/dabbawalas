@@ -1,0 +1,15 @@
+
+{{#unless loggedIn}}
+<footer class="footer py-3 bg-light">
+    <div class="container-fluid">
+        <small>&copy; Copyright <span id="spanYear"></span>, Dabbawalas es un producto registrado. Todos los derechos reservados</small>
+    </div>
+</footer>
+
+<script>
+    const date = new Date()
+    const dateYear = date.getFullYear()
+    const spanYear = document.getElementById('spanYear')
+    spanYear.innerHTML = dateYear
+</script>
+{{/unless}}
