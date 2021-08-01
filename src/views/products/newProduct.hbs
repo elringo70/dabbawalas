@@ -1,0 +1,160 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Platillos</div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Crear nuevo platillo
+                    </div>
+                    <div class="card-body">
+                        <form action="/api/products/postNewProduct" method="POST" id="form">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label for="name" class="form-label">Nombre del platillo</label>
+                                    <input type="text" name="name" class="form-control" id="name"
+                                        placeholder="Nombre del platillo">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label for="cost" class="form-label">Costo del platillo</label>
+                                    <input type="number" name="cost" class="form-control" id="cost"
+                                        placeholder="Costo del platillo" step="0.01">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="price" class="form-label">Precio del platillo</label>
+                                    <input type="number" name="price" class="form-control" id="price"
+                                        placeholder="Precio del platillo" step="0.01">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="priceAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="formFile" class="form-label">Imagen</label>
+                                    <input type="file" name="image" class="form-control" id="formFile"
+                                        accept=".jpg, .jpeg, .png, .webp">
+                                    <div id="formFile" class="form-text">Ingrese solo imagenes en formato JPG, JPEG o
+                                        PNG</div>
+                                </div>
+                            </div>
+                            <div class="row mb-3" hidden>
+                                <div class="col-md-6">
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="description" class="form-label">Descripción</label>
+                                    <textarea name="description" rows="4" class="form-control"
+                                        style="resize:none"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //Listeners
+    document.getElementById('form').addEventListener('submit', formValidation)
+
+    //Functions
+    async function formValidation(e) {
+        e.preventDefault()
+
+        const formData = new FormData(form)
+        //const imageFile = document.getElementById('formFile')
+        const priceVal = priceValidation()
+
+        if (priceVal) {
+            try {
+                /*const data = await JSON.stringify(Object.fromEntries(formData.entries()))
+                const dataJSON = await JSON.parse(data)
+                dataJSON['image'] = imageFile.files[0]*/
+
+                const response = await fetch('http://localhost:3000/api/products/postNewProduct', {
+                    method: 'POST',
+                    body: formData
+                })
+
+                const product = await response.json()
+
+                if (product) {
+                    registrationConfirmation()
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    function priceValidation() {
+        const cost = parseFloat(document.getElementById('cost').value, 10)
+        const price = parseFloat(document.getElementById('price').value, 10)
+
+        if (cost === 0 || price === 0) {
+            sendInputAlert('El costo o precio no puede ser 0', 'alert-danger', 'priceAlert')
+            return false
+        }
+
+        if (cost < 1 || price < 1) {
+            sendInputAlert('El costo o precio no puede ser menor a 1', 'alert-danger', 'priceAlert')
+            return false
+        }
+
+        if (price < cost) {
+            sendInputAlert('El precio no puede ser menor al costo', 'alert-danger', 'priceAlert')
+            return false
+        }
+
+        return true
+    }
+
+    //Confirmation modal
+    function registrationConfirmation() {
+        document.getElementById("backdrop").style.display = "block"
+        document.getElementById("exampleModal").style.display = "block"
+        document.getElementById("exampleModal").classList.add("show")
+    }
+</script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea agregar otro artículo?</h5>
+            </div>
+            <div class="modal-footer">
+                <a href="/api/products/getNewProductPage">
+                    <button type="button" class="btn btn-primary">
+                        Si
+                    </button>
+                </a>
+                <a href="/api/restaurants/manager">
+                    <button type="button" class="btn btn-secondary">
+                        No
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>

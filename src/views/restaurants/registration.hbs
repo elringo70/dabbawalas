@@ -1,0 +1,421 @@
+<section class="my-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Proceso de registro</div>
+        </div>
+        <div class="row my-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Registro para nuevo restaurante
+                    </div>
+                    <div class="card-body">
+                        <form id="form" action="/api/manager/postNewManager" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre" value="{{user.name}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" value="{{user.lastname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="maternalsurname" class="form-label">Apellido
+                                        Materno</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Apellido Materno"
+                                        value="{{user.maternalsurname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="dob" class="form-label">Fecha de nacimiento</label>
+                                    <input type="date" name="dob" class="form-control" id="dob" value="{{user.dob}}"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="dateAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number" class="form-control input-number-validation"
+                                        id="number" min="1" max="99999" placeholder="Número" value="{{user.number}}"
+                                        required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control" id="street"
+                                        value="{{user.street}}" placeholder="Calle" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="municipality">Colonia</label>
+                                    <input type="text" name="municipality" class="form-control" id="municipality"
+                                        placeholder="Colonia" value="{{user.municipality}}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <input type="text" name="city" class="form-control input-text-validation" id="city"
+                                        placeholder="Ciudad" value="{{user.city}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <input type="text" name="state" class="form-control input-text-validation"
+                                        id="state" placeholder="Estado" value="{{user.state}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" value="{{user.phone}}" required>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-1">
+                                    <label class="form-check-label">Género</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput1"
+                                            value="1" required>
+                                        <label class="form-check-label" for="genderInput1">Hombre</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput2"
+                                            value="0">
+                                        <label class="form-check-label" for="genderInput2">Mujer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput3"
+                                            value="null">
+                                        <label class="form-check-label" for="genderInput3">Prefiero no contestar</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="email">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="Ingrese su correo electrónico" value="{{user.email}}" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="alertEmail"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm">
+                                    <label for="pass">Contraseña</label>
+                                    <input type="password" name="pass" class="form-control" id="pass"
+                                        placeholder="Ingrese la contraseña" aria-describedby="passReq" required>
+                                    <div id="passReq" class="form-text">La contraseña debe de contar con al menos 6
+                                        letras, un número y
+                                        un caracter especial</div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="confpass">Confirme su contraseña</label>
+                                    <input type="password" name="confpass" class="form-control" id="confpass"
+                                        placeholder="Confirme la contraseña" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="alertConfPass"></div>
+                                </div>
+                            </div>
+                            {{#if errors}}
+                            {{#each errors}}
+                            <div class="my-3">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>{{this.msg}}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                            {{/each}}
+                            {{/if}}
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    //onFocusOut check email if exists
+    document.getElementById('email').addEventListener('change', emailValidation)
+
+    //onFocusOut when entering password
+    document.getElementById('pass').addEventListener('change', passValidation)
+
+    //onFocusOut remove alert
+    document.getElementById('confpass').addEventListener('change', passwordConfirmation)
+
+    //Set Max date input
+    document.getElementById('dob').addEventListener('change', dobValidation)
+
+    //Submit validation
+    document.getElementById('form').addEventListener('submit', submitValidation)
+
+    //Max age restriction
+    window.addEventListener('DOMContentLoaded', dateInputRestriction)
+
+    //Validate every input that only contains letters
+    document.querySelectorAll('.input-text-validation').forEach(function (input, i) {
+        input.addEventListener('change', function () {
+            const node = input.nextElementSibling
+
+            if (node.nodeName === 'SMALL') {
+                const regex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g
+
+                const inputValidation = regex.test(input.value)
+
+                if (!inputValidation) {
+                    return node.removeAttribute('hidden')
+                }
+
+                if (inputValidation && node.getAttribute('hidden', true) === null) {
+                    return node.setAttribute('hidden', true)
+                }
+            }
+        })
+    })
+
+    //Validate every input that only contains numbers
+    document.querySelectorAll('.input-number-validation').forEach(function (input, i) {
+        input.addEventListener('change', function () {
+            const node = input.nextElementSibling
+
+            if (node.nodeName === 'SMALL') {
+                const regex = /^\d*[1-9]\d*$/
+
+                const inputValidation = regex.test(input.value)
+
+                if (!inputValidation) {
+                    return node.removeAttribute('hidden')
+                }
+
+                if (inputValidation && node.getAttribute('hidden', true) === null) {
+                    return node.setAttribute('hidden', true)
+                }
+            }
+        })
+    })
+
+    //
+    //Functions
+    //
+
+    function passValidation() {
+        const pass = document.getElementById('pass').value
+        pass.trim()
+
+        const format = /[a-zA-Z]+([(@!#\$%\^\&*\)\(+=._-]{1,})?/
+
+        const includesCharacters = format.test(pass)
+
+        if (pass.length < 6) {
+            sendInputAlert('Debe de contener al menos 6 caracteres', 'alert-danger', 'alertConfPass')
+        } else if (!includesCharacters) {
+            sendInputAlert('La contraseña debe de contener algun caracter especial', 'alert-danger', 'alertConfPass')
+        }
+    }
+
+    function dobValidation() {
+        const dateAlert = document.getElementById('dateAlert')
+        const dateInput = document.getElementById('dob').value
+        const date = new Date(dateInput)
+        const actualYear = new Date().getFullYear()
+
+        if ((actualYear - 18) < date.getFullYear()) {
+            sendInputAlert('Debe de ser mayor de edad para registrarse', 'alert-danger', 'dateAlert')
+            return false
+        } else if (dateAlert.style.display === 'block' && (actualYear - 18) > date.getFullYear()) {
+            dateAlert.style.display = 'none'
+        } else {
+            return true
+        }
+    }
+
+    async function submitValidation(e) {
+        e.preventDefault()
+
+        const passValidation = passwordValidation()
+        const dateValidation = dobValidation()
+        const passConfirmation = passwordConfirmation()
+        const emailConfirmation = await emailValidation()
+
+        if (
+            passValidation
+            && dateValidation
+            && passConfirmation
+            && emailConfirmation
+        ) {
+            try {
+                registrationConfirmation()
+                form.submit()
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            sendInputAlert('Confirme todos los campos', 'alert-danger', 'alertConfPass')
+        }
+    }
+
+    function passwordValidation() {
+        const pass = document.getElementById('pass').value
+        pass.trim()
+
+        const format = /[a-zA-Z]+([(@!#\$%\^\&*\)\(+=._-]{1,})?/
+
+        const includesCharacters = format.test(pass)
+
+        if (pass.length < 6) {
+            sendInputAlert('Debe de contener al menos 6 caracteres', 'alert-danger', 'alertConfPass')
+            return false
+        } else if (!includesCharacters) {
+            sendInputAlert('La contraseña debe de contener algun caracter especial', 'alert-danger', 'alertConfPass')
+            return false
+        } else {
+            const confpass = document.getElementById('confpass').value
+            confpass.trim()
+
+            if (pass != confpass) {
+                sendInputAlert('Las contraseñas no coinciden', 'alert-danger', 'alertConfPass')
+                return false
+            } else {
+                return true
+            }
+        }
+    }
+
+    function dateInputRestriction() {
+        const dateInput = document.getElementById('dob')
+        let last18 = new Date()
+
+        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(last18) - 18
+        const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(last18)
+        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(last18)
+
+        last18 = ye + '-' + mo + '-' + da
+
+        dateInput.setAttribute('max', last18)
+    }
+
+    async function emailValidation() {
+        const path = `http://localhost:3000/api/manager/searchByEmail`
+        let alert
+
+        const emailInput = {
+            email: document.getElementById('email').value
+        }
+
+        document.getElementById('email').addEventListener('change', function (element) {
+            const emailAlert = document.getElementById(alert)
+            if (emailAlert != null) {
+                emailAlert.remove()
+            }
+        })
+
+        try {
+            const response = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(emailInput)
+            })
+
+            const data = await response.json()
+
+            if (data.status === 200) {
+                alert = sendInputAlert(`${data.message}`, 'alert-danger', 'alertEmail')
+                return false
+            }
+
+            if (data.status === 304) {
+                return true
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function passwordConfirmation() {
+        const pass = document.getElementById('pass').value
+        const confpass = document.getElementById('confpass').value
+        let alert
+
+        document.getElementById('confpass').addEventListener('change', function (element) {
+            const emailAlert = document.getElementById(alert)
+            if (emailAlert != null) {
+                emailAlert.remove()
+            }
+        })
+
+        if (pass != confpass) {
+            alert = sendInputAlert('Las contraseñas no coinciden', 'alert-danger', 'alertConfPass')
+            return false
+        } else {
+            return true
+        }
+    }
+
+    function registrationConfirmation() {
+        document.getElementById("backdrop").style.display = "block"
+        document.getElementById("exampleModal").style.display = "block"
+        document.getElementById("exampleModal").classList.add("show")
+    }
+</script>
+
+{{!-- Email Modal confirmation --}}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro correcto</h5>
+            </div>
+            <div class="modal-body">
+                Correo enviado para confirmación de la cuenta, por favor verifiquelo.
+            </div>
+{{!--             <div class="modal-footer">
+                <a href="/login"><button type="button" class="btn btn-primary">Enterado</button></a>
+            </div> --}}
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>
