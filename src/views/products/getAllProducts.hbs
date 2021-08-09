@@ -31,10 +31,10 @@
                                     <td>{{this.price}}</td>
                                     <td>{{this.description}}</td>
                                     <td class="d-flex justify-content-around">
-                                        <a href="">
+                                        <a href="/api/products/deleteProduct/{{this.id_product}}">
                                             <span><i class="bi bi-x"></i></span>
                                         </a>
-                                        <a href="">
+                                        <a href="/api/products/editProduct/{{this.id_product}}">
                                             <span><i class="bi bi-pencil"></i></span>
                                         </a>
                                     </td>
@@ -48,7 +48,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-</script>

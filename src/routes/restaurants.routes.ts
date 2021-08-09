@@ -14,29 +14,35 @@ class RestaurantRoutes {
     private config() {
         this.router.get('/postNewRestaurant', checkJWT.checkJWT, restaurantController.getNewRestaurantPage)
 
+        //Post new restaurant route
         this.router.post('/postNewRestaurant', checkJWT.checkJWT, [
+            //Input validations
             check('name')
-                .not().isEmpty().withMessage('Ingrese nombre del restaurant')
+                .not().isEmpty().withMessage('Ingrese el nombre')
                 .trim()
-                .not().isEmpty().withMessage('Ingrese el tipo de restaurant')
-                .trim(),
+                .isLength({ min: 3 }).withMessage('El nombre debe de contener al menos 3 caracteres'),
             check('number')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese el número de casa')
                 .trim()
                 .isNumeric().withMessage('Solo puede ingresar valores numéricos'),
             check('street')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la calle')
                 .trim(),
             check('municipality')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la colonia')
                 .trim(),
             check('city')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la ciudad')
                 .trim(),
             check('state')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese el estado')
                 .trim(),
+            check('phone')
+                .trim()
+                .isNumeric().withMessage('Solo puede ingresar valores numéricos')
+                .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido')
         ], restaurantController.postNewRestaurant)
+        
         this.router.get('/', checkJWT.checkJWT, restaurantController.getAllRestaurants)
         this.router.get('/manager', checkJWT.checkJWT, restaurantController.getManagerPage)
         this.router.get('/:id', checkJWT.checkJWT, restaurantController.getRestaurantById)

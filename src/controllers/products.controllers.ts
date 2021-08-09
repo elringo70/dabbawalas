@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import Product from '../models/product'
 import { IProduct } from '../interfaces/IProduct'
 import Restaurant from '../models/restaurant'
+import { validationResult } from 'express-validator'
 
 class ProductController {
     getNewProductPage(req: Request, res: Response) {
@@ -19,7 +20,7 @@ class ProductController {
         try {
             const restaurant = await Restaurant.findWithUser(user.id_user)
             const products = await Product.fetchAllByRestaurant(restaurant?.id_restaurant)
-            
+
             res.render('products/getAllProducts', {
                 title: 'Todos los platillos',
                 user: res.locals.token,
@@ -37,19 +38,34 @@ class ProductController {
     }
 
     async postNewProduct(req: Request, res: Response) {
-        const user = res.locals.token
+        const errors: any = validationResult(req)
 
-        try {
+        const body = req.body
+        res.json({
+            body
+        })
+
+        /* try {
             const restaurant = await Restaurant.findWithUser(user.id_user)
+            const image: any = req.files?.image
 
             const productObj: IProduct = {
                 name: req.body.name,
                 cost: req.body.cost,
                 price: req.body.price,
-                image: req.file.path,
+                image: image.data,
                 description: req.body.description,
                 active: 1,
                 id_restaurant: restaurant?.id_restaurant
+            }
+
+            if (!errors.array()) {
+                return res.render('products/newProduct', {
+                    title: 'Agregar nuevo platillo',
+                    errors: errors.array(),
+                    product: productObj,
+                    loggedIn: true
+                })
             }
 
             const product = new Product()
@@ -65,7 +81,7 @@ class ProductController {
             res.json({
                 errorMessage: 'Error al agregar el Platillo'
             })
-        }
+        } */
     }
 
     /* async getAllProducts(req: Request, res: Response) {

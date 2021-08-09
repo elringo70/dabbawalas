@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import exphbs from 'express-handlebars'
 //import morgan from 'morgan'
 import path from 'path'
+import fileUpload from 'express-fileupload'
 
 //Error 404
 import { error404 } from './controllers/404.controllers'
@@ -12,6 +13,8 @@ import restaurantRoutes from './routes/restaurants.routes'
 import productsRoutes from './routes/products.routes'
 import usersRoutes from './routes/users.routes'
 import authRoutes from './routes/auth.routes'
+import customersRoutes from './routes/customers.routes'
+import ordersRoutes from './routes/orders.routes'
 
 export class App {
     private app: Application
@@ -40,7 +43,8 @@ export class App {
     private middlewares() {
         //this.app.use(morgan('dev'))
         this.app.use(express.json())
-        this.app.use(express.urlencoded({ extended: false }))
+        this.app.use(express.urlencoded({ extended: true }))
+        this.app.use(fileUpload())
     }
 
     private routes() {
@@ -49,6 +53,8 @@ export class App {
         this.app.use('/api/products', productsRoutes)
         this.app.use('/api/restaurants', restaurantRoutes)
         this.app.use('/api/auth', authRoutes)
+        this.app.use('/api/customers', customersRoutes)
+        this.app.use('/api/orders', ordersRoutes)
         this.app.use(error404.get404Page)
     }
 

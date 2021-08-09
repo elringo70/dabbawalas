@@ -5,39 +5,7 @@ import { genSaltSync, hashSync } from 'bcrypt'
 import { validationResult } from 'express-validator'
 
 class UserControllers {
-
-    //Customer Controllers
-    async postNewCustomer(req: Request, res: Response) {
-        const queryObj: ICustomer = req.body
-        queryObj.usertype = 'C'
-        queryObj.active = 1
-        queryObj.verified = 'UNVERIFIED'
-
-        const customer = await User.findBy('email', queryObj.email)
-
-        try {
-            if (customer) {
-                return res.json({
-                    status: 304,
-                    message: 'El email ya se encuentra registrado'
-                })
-            }
-
-            const user = new User()
-            await user.save(queryObj)
-
-            res.status(201).json({
-                message: 'Usuario almacenado exitosamente'
-            })
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error al registrar al usuario'
-            })
-        }
-    }
-
+    //Manager controllers
     async postNewManager(req: Request, res: Response) {
         const errors = validationResult(req)
 
@@ -49,6 +17,13 @@ class UserControllers {
         const salt = genSaltSync(10)
         const hashPass = hashSync(`${queryObj.pass}`, salt)
         queryObj.pass = hashPass
+
+        if (queryObj.email === undefined) {
+            return res.json({
+                status: 304,
+                errorMessage: 'Envie el dato email'
+            })
+        }
 
         const manager = await User.findBy('email', queryObj.email)
 
@@ -94,32 +69,6 @@ class UserControllers {
         }
     }
 
-    async getCustomerBy(req: Request, res: Response) {
-        const { option, email } = req.body
-
-        try {
-            const customer = await User.findBy(option, email)
-
-            if (!customer) {
-                return res.json({
-                    status: 400,
-                    messages: 'Usuario no encontrado'
-                })
-            }
-
-            res.json({
-                status: 200,
-                customer
-            })
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error al buscar al cliente'
-            })
-        }
-    }
-
     async getManagerExistsByEmail(req: Request, res: Response) {
         const { email } = req.body
 
@@ -145,95 +94,6 @@ class UserControllers {
             })
         }
     }
-
-    async getCustomerByEmail(req: Request, res: Response) {
-        const { email } = req.body
-
-        try {
-            const emailCustomer = await User.findBy('email', email)
-
-            if (emailCustomer) {
-                res.json(emailCustomer?.email)
-            } else {
-                res.status(304)
-            }
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error al buscar el correo electrónico'
-            })
-        }
-    }
-
-    async getCustomerById(req: Request, res: Response) {
-        const { id } = req.params
-
-        try {
-            const customer = await User.findById(id)
-
-            if (!customer) {
-                return res.status(400).json({
-                    messages: 'Usuario no encontrado'
-                })
-            }
-
-            res.status(200).json(customer)
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error al buscar al usuario'
-            })
-        }
-    }
-
-    async getAllCustomers(req: Request, res: Response) {
-        try {
-            const customers = await User.fetchAll()
-
-            res.status(200).json(customers)
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error obtener todos los usuarios'
-            })
-        }
-    }
-
-    async updateCustomerById(req: Request, res: Response) {
-        const queryObj: ICustomer = req.body
-        queryObj.usertype = 'C'
-        queryObj.active = 1
-
-        const { id } = req.params
-
-        try {
-            const customer = await User.findById(id)
-
-            if (!customer) {
-                return res.status(400).json({
-                    messages: 'Cliente no encontrado'
-                })
-            }
-
-            const updatedCustomer = new User()
-            await updatedCustomer.updateById(id, queryObj)
-
-            res.status(200).json({
-                message: 'Cliente actualizado'
-            })
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                errorMessage: 'Error al actualizar al cliente'
-            })
-        }
-    }
-
-    //
 }
 
 export const userControllers = new UserControllers()

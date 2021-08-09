@@ -23,22 +23,45 @@ export interface IUser {
 
 export interface ICustomer {
     id_user?: number,
-    email: string,
+    email?: string,
     pass?: string,
     confpass?: string,
     name: string,
     lastname: string,
     maternalsurname: string,
-    dob: Date,
+    dob?: Date,
     street: string,
     number: string,
     municipality: string,
     city: string,
     state: string,
     phone: string,
-    gender: number,
-    usertype: string,
+    gender?: number,
+    usertype: 'C' | 'M' | 'D',
     image?: string,
     active: number,
     verified: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
+    id_restaurant?: number | string
+}
+
+export interface ICustomers {
+    id_user?: number,
+    email?: string,
+    pass?: string,
+    confpass?: string,
+    name: string,
+    lastname: string,
+    maternalsurname: string,
+    dob?: Date,
+    street: string,
+    number: string,
+    municipality: string,
+    city: string,
+    state: string,
+    phone: string,
+    gender?: number,
+    usertype: string,
+    image?: string,
+    active: number,
+    verified?: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
 }

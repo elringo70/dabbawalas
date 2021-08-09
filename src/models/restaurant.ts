@@ -80,7 +80,7 @@ export default class Restaurant {
         })
     }
 
-    static findById(id: string) {
+    static findById(id: string): Promise<IRestaurant | null> {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT
@@ -90,10 +90,10 @@ export default class Restaurant {
                 WHERE id_restaurant=?
             `
 
-            pool.query(query, [id], (error, results) => {
+            pool.query(query, [id], (error, results: IRestaurant[]) => {
                 if (error) reject(error)
 
-                resolve(results)
+                resolve(results.length === 1 ? results[0] : null)
             })
         })
     }

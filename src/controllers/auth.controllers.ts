@@ -11,6 +11,13 @@ class AuthController {
         const queryObj: ICustomer = req.body
 
         try {
+            if (queryObj.email === undefined) {
+                return res.json({
+                    status: 304,
+                    errorMessage: 'Envie el dato email'
+                })
+            }
+
             const user = await User.findBy('email', queryObj.email)
             
             if (!errors.isEmpty()) {

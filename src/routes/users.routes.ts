@@ -11,14 +11,6 @@ class UsersRoutes {
     }
 
     private config() {
-        //Customer Routes
-        this.router.post('/customers/postNewUser', userControllers.postNewCustomer)
-        this.router.get('/customers/:id', userControllers.getCustomerById)
-        this.router.get('/customers', userControllers.getAllCustomers)
-        this.router.post('/customers/searchBy', userControllers.getCustomerBy)
-        this.router.patch('/customers/:id', userControllers.updateCustomerById)
-        this.router.post('/customers/searchByEmail', userControllers.getCustomerByEmail)
-
         //Manager Routes
         this.router.post('/manager/postNewManager',
             [

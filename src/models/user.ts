@@ -1,6 +1,6 @@
 import { ICustomer } from '../interfaces/IUsers'
 import { IReqRest } from '../interfaces/IRestaurant'
-import { pool } from '../utils/database'
+import { pool, conn } from '../utils/database'
 
 export default class User {
     save(data: ICustomer) {
