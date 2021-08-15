@@ -82,7 +82,7 @@ class Restaurant {
             database_1.pool.query(query, [id], (error, results) => {
                 if (error)
                     reject(error);
-                resolve(results);
+                resolve(results.length === 1 ? results[0] : null);
             });
         });
     }

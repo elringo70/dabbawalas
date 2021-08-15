@@ -16,6 +16,8 @@ const restaurants_routes_1 = __importDefault(require("./routes/restaurants.route
 const products_routes_1 = __importDefault(require("./routes/products.routes"));
 const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const customers_routes_1 = __importDefault(require("./routes/customers.routes"));
+const orders_routes_1 = __importDefault(require("./routes/orders.routes"));
 class App {
     constructor(port) {
         this.app = express_1.default();
@@ -31,14 +33,42 @@ class App {
             defaultLayout: 'main',
             layoutsDir: path_1.default.join(this.app.get('views'), 'layouts'),
             partialsDir: path_1.default.join(this.app.get('views'), 'partials'),
-            extname: '.hbs'
+            extname: '.hbs',
+            helpers: {
+                ifCond: function (v1, operator, v2, options) {
+                    switch (operator) {
+                        case '==':
+                            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                        case '===':
+                            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                        case '!=':
+                            return (v1 != v2) ? options.fn(this) : options.inverse(this);
+                        case '!==':
+                            return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+                        case '<':
+                            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                        case '<=':
+                            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                        case '>':
+                            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                        case '>=':
+                            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                        case '&&':
+                            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                        case '||':
+                            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                        default:
+                            return options.inverse(this);
+                    }
+                }
+            }
         }));
         this.app.set('view engine', '.hbs');
     }
     middlewares() {
         //this.app.use(morgan('dev'))
         this.app.use(express_1.default.json());
-        this.app.use(express_1.default.urlencoded({ extended: false }));
+        this.app.use(express_1.default.urlencoded({ extended: true }));
     }
     routes() {
         this.app.use('/', index_routes_1.default);
@@ -46,6 +76,8 @@ class App {
         this.app.use('/api/products', products_routes_1.default);
         this.app.use('/api/restaurants', restaurants_routes_1.default);
         this.app.use('/api/auth', auth_routes_1.default);
+        this.app.use('/api/customers', customers_routes_1.default);
+        this.app.use('/api/orders', orders_routes_1.default);
         this.app.use(_404_controllers_1.error404.get404Page);
     }
     listen() {

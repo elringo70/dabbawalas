@@ -14,28 +14,33 @@ class RestaurantRoutes {
     }
     config() {
         this.router.get('/postNewRestaurant', jwt_1.default.checkJWT, restaurants_controllers_1.restaurantController.getNewRestaurantPage);
+        //Post new restaurant route
         this.router.post('/postNewRestaurant', jwt_1.default.checkJWT, [
+            //Input validations
             express_validator_1.check('name')
-                .not().isEmpty().withMessage('Ingrese nombre del restaurant')
+                .not().isEmpty().withMessage('Ingrese el nombre')
                 .trim()
-                .not().isEmpty().withMessage('Ingrese el tipo de restaurant')
-                .trim(),
+                .isLength({ min: 3 }).withMessage('El nombre debe de contener al menos 3 caracteres'),
             express_validator_1.check('number')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese el número de casa')
                 .trim()
                 .isNumeric().withMessage('Solo puede ingresar valores numéricos'),
             express_validator_1.check('street')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la calle')
                 .trim(),
             express_validator_1.check('municipality')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la colonia')
                 .trim(),
             express_validator_1.check('city')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese la ciudad')
                 .trim(),
             express_validator_1.check('state')
-                .not().isEmpty().withMessage('No ingreso ningun valor')
+                .not().isEmpty().withMessage('Ingrese el estado')
                 .trim(),
+            express_validator_1.check('phone')
+                .trim()
+                .isNumeric().withMessage('Solo puede ingresar valores numéricos')
+                .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido')
         ], restaurants_controllers_1.restaurantController.postNewRestaurant);
         this.router.get('/', jwt_1.default.checkJWT, restaurants_controllers_1.restaurantController.getAllRestaurants);
         this.router.get('/manager', jwt_1.default.checkJWT, restaurants_controllers_1.restaurantController.getManagerPage);

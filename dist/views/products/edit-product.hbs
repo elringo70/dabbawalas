@@ -4,6 +4,7 @@
         <div class="row mb-4">
             <div class="col-md-12 fw-bold fs-3">Platillos</div>
         </div>
+
         <div class="row mt-3 mx-auto">
             <div class="col-md-12">
                 <div class="card">
@@ -66,10 +67,10 @@
                                 </div>
                             </div>
 
-                            {{#if errorMessage}}
+                            {{#if imageError}}
                             <div class="my-3">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{errorMessage}}</strong>
+                                    <strong>{{imageError}}</strong>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                                         aria-label="Close"></button>
                                 </div>
@@ -114,10 +115,7 @@
         const priceVal = priceValidation()
 
         if (priceVal) {
-            const confirmation = window.confirm('¿Desea continuar con el registro del producto?')
-            if (confirmation) {
-                form.submit()
-            }
+            form.submit()
         }
     }
 

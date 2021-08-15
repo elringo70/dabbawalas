@@ -9,13 +9,6 @@ class UsersRoutes {
         this.config();
     }
     config() {
-        //Customer Routes
-        this.router.post('/customers/postNewUser', users_controllers_1.userControllers.postNewCustomer);
-        this.router.get('/customers/:id', users_controllers_1.userControllers.getCustomerById);
-        this.router.get('/customers', users_controllers_1.userControllers.getAllCustomers);
-        this.router.post('/customers/searchBy', users_controllers_1.userControllers.getCustomerBy);
-        this.router.patch('/customers/:id', users_controllers_1.userControllers.updateCustomerById);
-        this.router.post('/customers/searchByEmail', users_controllers_1.userControllers.getCustomerByEmail);
         //Manager Routes
         this.router.post('/manager/postNewManager', [
             express_validator_1.check('name')

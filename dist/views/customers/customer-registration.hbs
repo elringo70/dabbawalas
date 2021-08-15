@@ -1,0 +1,228 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Clientes</div>
+        </div>
+
+        <div class="row mt-3 mx-auto">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Almacenar un nuevo cliente
+                    </div>
+                    <div class="card-body">
+                        <form id="form">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" value="{{customer.phone}}" required>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-sm">
+                                    <div id="phoneExistsAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre del cliente" value="{{customer.name}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" value="{{customer.lastname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="maternalsurname" class="form-label">Segundo apellido</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Segundo apellido"
+                                        value="{{customer.maternalsurname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="dateAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number" class="form-control input-number-validation"
+                                        id="number" min="1" max="99999" placeholder="Número" value="{{customer.number}}"
+                                        required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control" id="street"
+                                        value="{{customer.street}}" placeholder="Calle" required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="municipality">Colonia</label>
+                                    <input type="text" name="municipality" class="form-control" id="municipality"
+                                        placeholder="Colonia" value="{{customer.municipality}}" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <input type="text" name="city" class="form-control input-text-validation" id="city"
+                                        placeholder="Ciudad" value="{{customer.city}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <input type="text" name="state" class="form-control input-text-validation"
+                                        id="state" placeholder="Estado" value="{{customer.state}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-1">
+                                    <label class="form-check-label">Género</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput1"
+                                            value="1" required>
+                                        <label class="form-check-label" for="genderInput1">Hombre</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput2"
+                                            value="0">
+                                        <label class="form-check-label" for="genderInput2">Mujer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput3"
+                                            value="null">
+                                        <label class="form-check-label" for="genderInput3">Prefiere no contestar</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="formAlert"></div>
+                                </div>
+                            </div>
+
+                            {{#if errors}}
+                            {{#each errors}}
+                            <div class="my-3">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <strong>{{this.msg}}</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                            {{/each}}
+                            {{/if}}
+
+                            <div class="row">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //Listeners
+
+    document.getElementById('phone').addEventListener('change', findCustomerByPhone)
+
+    //Remove more than 10 characters
+    document.getElementById('phone').addEventListener('keyup', function (e) {
+        if (event.target.value.length > 4) {
+            event.target.value = event.target.value.slice(0, 10);
+        }
+    })
+
+    document.getElementById('form').addEventListener('submit', formValidation)
+
+    
+    //Functions
+
+    async function formValidation(e) {
+        e.preventDefault()
+
+        const findPhone = await findCustomerByPhone(e)
+
+        if (findPhone) {
+            const confirmation = window.confirm('¿Desea continuar con el registro?')
+
+            if (confirmation) {
+                const path = `https://dabbawalas.herokuapp.com/api/customers/postNewCustomer`
+
+                const formData = new FormData(form)
+
+                try {
+                    if (confirmation) {
+                        const response = await fetch(path, {
+                            method: 'POST',
+                            body: formData
+                        })
+
+                        const data = await response.json()
+
+                        if (data.status === 304) {
+                            return sendInputAlert(data.errorMessage, 'alert-danger', 'formAlert')
+                        }
+
+                        if (data.status === 201) {
+                            form.reset()
+                        }
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+    }
+
+    async function findCustomerByPhone(e) {
+        const path = `https://dabbawalas.herokuapp.com/api/customers/getCustomerBy`
+
+        const customerPhone = {
+            phone: e.target.value
+        }
+
+        try {
+            const response = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerPhone)
+            })
+
+            const data = await response.json()
+
+            if (data.status === 200) {
+                return sendInputAlert('El número telefónico ya esta registrado', 'alert-danger', 'phoneExistsAlert')
+                return false
+            }
+            return true
+        } catch (error) {
+            console.log(error)
+        }
+    }
+</script>

@@ -66,3 +66,34 @@ document.querySelectorAll('.input-number-validation').forEach(function (input, i
         }
     })
 })
+
+//Validate productName doesn't have more than 20 characteres
+document.querySelectorAll('.input-name-product-validation').forEach(function (input, i) {
+    input.addEventListener('change', function (e) {
+        const node = input.nextElementSibling
+
+        if (e.target.value.length === '') {
+            node.innerHTML = 'Agregue el nombre del platillo'
+            return node.removeAttribute('hidden')
+        }
+
+        if (node.nodeName === 'SMALL') {
+            const regex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/g
+
+            const inputValidation = regex.test(input.value)
+
+            if (!inputValidation) {
+                return node.removeAttribute('hidden')
+            }
+
+            if (inputValidation && node.getAttribute('hidden', true) === null) {
+                return node.setAttribute('hidden', true)
+            }
+        }
+
+        if (e.target.value.length > 20) {
+            node.innerHTML = 'Ingrese menos de 20 caracteres'
+            node.removeAttribute('hidden')
+        }
+    })
+})

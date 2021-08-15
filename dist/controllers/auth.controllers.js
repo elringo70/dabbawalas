@@ -23,6 +23,12 @@ class AuthController {
             const errors = express_validator_1.validationResult(req);
             const queryObj = req.body;
             try {
+                if (queryObj.email === undefined) {
+                    return res.json({
+                        status: 304,
+                        errorMessage: 'Envie el dato email'
+                    });
+                }
                 const user = yield user_1.default.findBy('email', queryObj.email);
                 if (!errors.isEmpty()) {
                     return res.status(200).render('auth/login', {

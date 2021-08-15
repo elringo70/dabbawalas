@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const products_controllers_1 = require("../controllers/products.controllers");
-const upload_1 = require("../middlewares/upload");
 const jwt_1 = __importDefault(require("../middlewares/jwt"));
+const express_validator_1 = require("express-validator");
+const upload_1 = require("../middlewares/upload");
 class ProductRoutes {
     constructor() {
         this.router = express_1.Router();
@@ -14,7 +15,22 @@ class ProductRoutes {
     }
     config() {
         this.router.get('/getNewProductPage', jwt_1.default.checkJWT, products_controllers_1.productController.getNewProductPage);
-        this.router.post('/postNewProduct', jwt_1.default.checkJWT, upload_1.upload.single('image'), products_controllers_1.productController.postNewProduct);
+        //Post new product 
+        this.router.post('/postNewProduct', jwt_1.default.checkJWT, [
+            //Validations
+            express_validator_1.check('name')
+                .trim()
+                .not().isEmpty().withMessage('Ingrese el nombre del producto')
+                .isLength({ min: 0, max: 20 }),
+            express_validator_1.check('cost')
+                .trim()
+                .isFloat({ min: 0, max: 499 }).withMessage('Ingrese solo numeros y el valor no puede exceder de $500'),
+            express_validator_1.check('price')
+                .trim()
+                .isFloat({ min: 0, max: 499 }).withMessage('Ingrese solo numeros y el valor no puede exceder de $500'),
+            express_validator_1.check('image')
+                .not().isEmpty().withMessage('Por favor ingrese la imagen del producto'),
+        ], upload_1.upload.single('image'), products_controllers_1.productController.postNewProduct);
         this.router.get('/getAllProductsByRestaurant', jwt_1.default.checkJWT, products_controllers_1.productController.getAllProductsPage);
         /*
         this.router.get('/:id', productController.getProductById)
