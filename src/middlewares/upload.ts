@@ -1,10 +1,9 @@
-import { Request, Response, NextFunction } from 'express'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './src/uploads')
+        cb(null, './src/public/uploads')
     },
     filename: function (req, file, cb) {
         cb(null, uuidv4() + file.originalname);

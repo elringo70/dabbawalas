@@ -2,7 +2,6 @@ import express, { Application } from 'express'
 import exphbs from 'express-handlebars'
 //import morgan from 'morgan'
 import path from 'path'
-import fileUpload from 'express-fileupload'
 
 //Error 404
 import { error404 } from './controllers/404.controllers'
@@ -35,7 +34,35 @@ export class App {
             defaultLayout: 'main',
             layoutsDir: path.join(this.app.get('views'), 'layouts'),
             partialsDir: path.join(this.app.get('views'), 'partials'),
-            extname: '.hbs'
+            extname: '.hbs',
+            helpers: {
+                ifCond: function (v1: any, operator: any, v2: any, options: any) {
+                    switch (operator) {
+                        case '==':
+                            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                        case '===':
+                            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                        case '!=':
+                            return (v1 != v2) ? options.fn(this) : options.inverse(this);
+                        case '!==':
+                            return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+                        case '<':
+                            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                        case '<=':
+                            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                        case '>':
+                            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                        case '>=':
+                            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                        case '&&':
+                            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                        case '||':
+                            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                        default:
+                            return options.inverse(this);
+                    }
+                }
+            }
         }))
         this.app.set('view engine', '.hbs')
     }
@@ -44,7 +71,6 @@ export class App {
         //this.app.use(morgan('dev'))
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
-        this.app.use(fileUpload())
     }
 
     private routes() {

@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { productController } from '../controllers/products.controllers'
-import { upload } from '../middlewares/upload'
 import checkJWT from '../middlewares/jwt'
-import { check, CustomValidator } from 'express-validator'
+import { check } from 'express-validator'
+import { upload } from '../middlewares/upload'
 
 class ProductRoutes {
     public router: Router
@@ -14,7 +14,10 @@ class ProductRoutes {
 
     private config() {
         this.router.get('/getNewProductPage', checkJWT.checkJWT, productController.getNewProductPage)
+
+        //Post new product 
         this.router.post('/postNewProduct', checkJWT.checkJWT, [
+            //Validations
             check('name')
                 .trim()
                 .not().isEmpty().withMessage('Ingrese el nombre del producto')
@@ -28,6 +31,7 @@ class ProductRoutes {
             check('image')
                 .not().isEmpty().withMessage('Por favor ingrese la imagen del producto'),
         ], upload.single('image'), productController.postNewProduct)
+
         this.router.get('/getAllProductsByRestaurant', checkJWT.checkJWT, productController.getAllProductsPage)
         /* 
         this.router.get('/:id', productController.getProductById)

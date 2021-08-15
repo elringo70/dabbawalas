@@ -3,7 +3,7 @@ export interface IProduct {
     name: string,
     cost: number,
     price: number,
-    image: string,
+    image: any,
     description: string,
     active: number,
     lastmodification?: Date,
