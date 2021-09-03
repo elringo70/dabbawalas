@@ -12,6 +12,7 @@ class JWT {
 
                 if (user) {
                     res.locals.token = user.user
+
                     next()
                 } else {
                     res.clearCookie('token')

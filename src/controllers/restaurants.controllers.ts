@@ -8,9 +8,8 @@ class ResturantController {
         const user = res.locals.token
 
         try {
-            const restaurant = await Restaurant.findWithUser(user.id_user)
 
-            if (!restaurant) {
+            if (user.id_restaurant === null || user.id_restaurant === undefined) {
                 return res.redirect('/api/restaurants/postNewRestaurant')
             }
 
@@ -33,9 +32,8 @@ class ResturantController {
         const user = res.locals.token
 
         try {
-            const restaurant = await Restaurant.findWithUser(user.id_user)
 
-            if (restaurant) {
+            if (user.id_restaurant) {
                 return res.redirect('/api/restaurants/manager')
             }
 

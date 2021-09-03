@@ -1,24 +1,28 @@
 export interface IUser {
     id_user?: number,
-    email: string,
-    pass: string,
     name: string,
     lastname: string,
     maternalsurname: string,
     dob: Date,
     street: string,
-    number: string,
+    number: string
     municipality: string,
     city: string,
     state: string,
     phone: string,
-    gender: number,
-    usertype: string,
-    position?: string,
-    license?: string,
+    usertype: 'M' | 'C' | 'D' | 'A',
     image?: string,
-    lastpurchase?: Date,
     active: number
+}
+
+export interface IManager extends IUser {
+    email: string,
+    pass?: string,
+    confpass?: string,
+    gender: number,
+    position: string,
+    verified: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
+    id_restaurant: number
 }
 
 export interface ICustomer {
@@ -37,8 +41,9 @@ export interface ICustomer {
     state: string,
     phone: string,
     gender?: number,
-    usertype: 'C' | 'M' | 'D',
+    usertype: 'C' | 'M' | 'D' | 'A',
     image?: string,
+    lastpurchase?: string,
     active: number,
     verified: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
     id_restaurant?: number | string

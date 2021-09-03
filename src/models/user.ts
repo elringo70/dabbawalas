@@ -1,6 +1,6 @@
-import { ICustomer } from '../interfaces/IUsers'
 import { IReqRest } from '../interfaces/IRestaurant'
-import { pool, conn } from '../utils/database'
+import { ICustomer } from '../interfaces/IUsers'
+import { pool } from '../utils/database'
 
 export default class User {
     save(data: ICustomer) {
@@ -33,7 +33,7 @@ export default class User {
         })
     }
 
-    static findById(id: string): Promise<ICustomer | null> {
+    static findById(id: string): Promise<any | null> {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT
@@ -44,7 +44,7 @@ export default class User {
                 WHERE id_user=?
             `
 
-            pool.query(query, [id], (error, results: ICustomer[]) => {
+            pool.query(query, [id], (error, results) => {
                 if (error) reject(error)
 
                 resolve(results.length === 1 ? results[0] : null)
@@ -52,7 +52,7 @@ export default class User {
         })
     }
 
-    static findBy(column: string, value: string): Promise<ICustomer | null> {
+    static findBy(column: string, value: string): Promise<any | null> {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT
@@ -63,7 +63,7 @@ export default class User {
                 WHERE ${column}='${value}'
             `
 
-            pool.query(query, (error, results: ICustomer[]) => {
+            pool.query(query, (error, results) => {
                 if (error) reject(error)
 
                 resolve(results.length === 1 ? results[0] : null)
@@ -71,7 +71,7 @@ export default class User {
         })
     }
 
-    static findByVerified(id: string): Promise<ICustomer | null> {
+    static findByVerified(id: string): Promise<any | null> {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT
@@ -83,7 +83,7 @@ export default class User {
                 AND verified='VERIFIED'
             `
 
-            pool.query(query, [id], (error, results: ICustomer[])=>{
+            pool.query(query, [id], (error, results) => {
                 if (error) reject(error)
 
                 resolve(results.length === 1 ? results[0] : null)
@@ -109,7 +109,7 @@ export default class User {
         })
     }
 
-    updateById(id: string, data: ICustomer) {
+    updateById(id: string, data: any) {
         return new Promise((resolve, reject) => {
             const query = `UPDATE users SET ? WHERE id_user=?`
 

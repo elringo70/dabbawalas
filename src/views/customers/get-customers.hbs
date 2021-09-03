@@ -1,0 +1,129 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Nuestros clientes</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Todos los clientes
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <input class="form-control" id="search" type="text"
+                                placeholder="Buscar por número telefónico">
+                            <table class="table table-hover align-middle" id="customersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Teléfono</th>
+                                        <th>Cliente</th>
+                                        <th>Dirección</th>
+                                        <th>Correo electrónico</th>
+                                        <th>Edición</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each customers}}
+                                    <tr>
+                                        <td><a href="#">{{this.phone}}</a></td>
+                                        <td>{{this.name}} {{this.lastname}} {{this.maternalsurname}}</td>
+                                        <td>{{this.street}} #{{this.number}}, {{this.municipality}}, {{this.city}}</td>
+                                        <td>{{this.email}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a data-user="{{this.id_user}}"
+                                                    class="btn btn-outline-danger customerEdition">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-person-x-fill"
+                                                        viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                            d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                    <span class="visually-hidden">Button</span>
+                                                </a>
+                                                <a href="/api/customers/editCustomerByRestaurantPage/{{this.id_user}}"
+                                                    class="btn btn-outline-primary">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        fill="currentColor" class="bi bi-person-square"
+                                                        viewBox="0 0 16 16">
+                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                                        <path
+                                                            d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z">
+                                                        </path>
+                                                    </svg>
+                                                    <span class="visually-hidden">Button</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //Listeners
+
+
+    document.getElementById('search').addEventListener('keyup', tableFilter)
+
+    document.querySelectorAll('.customerEdition').forEach(function (href, i) {
+        href.addEventListener('click', async function (e) {
+            e.preventDefault()
+
+            const customerButton = document.querySelectorAll('.customerEdition')
+            const userId = customerButton[i].getAttribute('data-user')
+
+            path = `http://localhost:3000/api/customers/deleteCustomerByRestaurant/${userId}`
+
+            const alterConfirmation = window.confirm('¿Esta seguro de borrar al cliente?')
+
+            if (alterConfirmation) {
+                try {
+                    const response = await fetch(path, {
+                        method: 'DELETE'
+                    })
+
+                    const data = await response.json()
+
+                    location.reload()
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        })
+    })
+
+
+    //Functions
+    function tableFilter() {
+        var input, filter, table, tr, td, i, txtValue;
+
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("customersTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0]
+
+            if (td) {
+                txtValue = td.textContent || td.innerText
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = ""
+                } else {
+                    tr[i].style.display = "none"
+                }
+            }
+        }
+    }
+</script>

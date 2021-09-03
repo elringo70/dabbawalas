@@ -1,5 +1,5 @@
-import { query, Request, Response } from 'express'
-import { ICustomer } from '../interfaces/IUsers'
+import { Request, Response } from 'express'
+import { IManager } from '../interfaces/IUsers'
 import User from '../models/user'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { validationResult } from 'express-validator'
@@ -9,7 +9,7 @@ class UserControllers {
     async postNewManager(req: Request, res: Response) {
         const errors = validationResult(req)
 
-        const queryObj: ICustomer = req.body
+        const queryObj: IManager = req.body
         queryObj.usertype = 'M'
         queryObj.active = 1
         queryObj.verified = 'UNVERIFIED'

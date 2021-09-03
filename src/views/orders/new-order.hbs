@@ -1,0 +1,394 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Ordenes</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Nueva orden
+                    </div>
+                    <div class="card-body">
+                        <form id="customer-phone">
+                            <div class="row mb-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label for="phone">Número del cliente</label>
+                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" required>
+                                    <div class="form-text">Ingrese el número telefónico de 10 dígitos</div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-md customer-phone-card" hidden>
+                                    <div id="customerCard"></div>
+                                </div>
+                                <div class="col-md-2 customer-phone-card" hidden>
+                                    <label></label>
+                                    <button class="btn btn-primary" id="cleanCustomer">Quitar</button>
+                                    <div class="form-text"></div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div id="phoneExistsAlert"></div>
+                            </div>
+                        </div>
+
+                        <div class="order-table" hidden>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <hr class="dropdown-divider">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h5 class="card-title">Orden del cliente</h5>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="row mb-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label for="idproduct">Código del platillo</label>
+                                        <input type="number" name="idproduct"
+                                            class="form-control input-number-validation" id="idproduct" pattern="[0-9]"
+                                            required>
+                                        <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                            números</small>
+                                    </div>
+
+                                    <div class="col-md-1">
+                                        <a id="id-product" class="btn btn-primary">Agregar</a>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                Total de la orden
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-center">
+                                                    <h3 class="card-title">
+                                                        <div id="totalCart">$ 0</div>
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="row mb-3">
+                                    <form id="order-form">
+                                        <table class="table table-hover align-middle">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>ID</th>
+                                                    <th>Imagen</th>
+                                                    <th>Nombre</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                    <th>X</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="product-list"></tbody>
+                                        </table>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary" type="submit">Procesar la orden</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let order = []
+    const productList = document.getElementById('product-list')
+    const orderTable = document.querySelector('.order-table')
+
+    async function findProduct(id) {
+        const path = `/api/products/getProductByIdByRestaurant`
+        const item = {
+            id
+        }
+
+        try {
+            const response = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+
+            const data = await response.json()
+
+            return data.product
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function findCustomer(phone) {
+        const path = `/api/customers/getCustomerBy`
+
+        const customerPhone = {
+            phone: phone
+        }
+
+        try {
+            const response = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerPhone)
+            })
+
+            const data = await response.json()
+            const customer = data.customer
+
+            return customer
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function customerCard(customer) {
+        const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
+        for (let i = 0; i < customerPhoneCard.length; i++) {
+            customerPhoneCard[i].hidden = false
+        }
+
+        const cardInfo = document.getElementById('customerCard')
+        cardInfo.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" data-idcustomer="${customer.id_user}">${customer.name} ${customer.lastname}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Dirección</h6>
+                    <p class="card-text">${customer.street} #${customer.number}, ${customer.municipality}, ${customer.city}</p>
+                </div>
+            </div>
+        `
+    }
+
+    function renderCart() {
+        productList.innerHTML = ''
+        order.map(item => {
+            const tr = document.createElement('tr')
+            tr.classList.add('product-item')
+            tr.classList.add('text-center')
+            tr.setAttribute('data-idproduct', item.id)
+            const content = `
+                <td class="productItem" id="product-id">${item.id}</td>
+                <td><img src="/${item.image}" class="img-thumbnail" alt="${item.name}" width="150px"></td>
+                <td>${item.name}</td>
+                <td>$ ${item.price}</td>
+                <td>
+                    <input class="form-control quantity m-auto" type="number" name="quantity" min="1" value=${item.quantity} style="width: 75px;">
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-outline-danger delete-product-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+                <input type="number" name="product" value='${item.id}' hidden>
+                <input type="number" name="price" value='${item.price}' hidden>
+            `
+
+            tr.innerHTML = content
+            productList.append(tr)
+
+            tr.querySelector('.delete-product-item').addEventListener('click', deleteProduct)
+            tr.querySelector('.quantity').addEventListener('change', sumQuantity)
+        })
+        totalCart()
+    }
+
+    function deleteProduct(e) {
+        const button = e.target.closest('.product-item')
+        const idproduct = button.dataset.idproduct
+
+        order.forEach(function (item) {
+            if (item.id == idproduct) {
+                const confirm = window.confirm('¿Desea quitar el platillo?')
+                if (confirm) {
+                    order.splice(item, 1)
+                    return null
+                }
+            }
+        })
+        renderCart()
+    }
+
+    function sumQuantity(e) {
+        const inputValue = e.target
+        const tr = inputValue.closest('.product-item')
+        const productId = tr.dataset.idproduct
+
+        for (let i = 0; i < order.length; i++) {
+            if (order[i].id == productId) {
+                order[i].quantity = inputValue.value
+                totalCart()
+                return null
+            }
+        }
+    }
+
+    function totalCart() {
+        let total = 0
+
+        const totalAmount = document.getElementById('totalCart')
+
+        order.forEach(function (item) {
+            const price = Number(item.price)
+            total += price * item.quantity
+        })
+
+        totalAmount.innerHTML = `$ ${total}`
+    }
+
+    function addItem(product, idproduct) {
+        const item = {
+            id: product.id_product,
+            image: product.image,
+            name: product.name,
+            price: product.price,
+            quantity: 1
+        }
+
+        const input = document.getElementsByClassName('quantity')
+
+        for (let i = 0; i < order.length; i++) {
+            if (order[i].id == idproduct) {
+                order[i].quantity++
+                input[i].value = order[i].quantity
+
+                return null
+            }
+        }
+
+        order.push(item)
+        renderCart()
+    }
+
+    async function orderForm() {
+        const formData = new URLSearchParams()
+        const form = document.getElementById('order-form')
+
+        for (const pair of new FormData(form)) {
+            formData.append(pair[0], pair[1]);
+        }
+
+        try {
+            const customerPhone = document.getElementById('phone').value
+            const customer = await findCustomer(customerPhone)
+            formData.append('id_user', customer.id_user)
+
+            path = `/api/orders/postNewOrder`
+            const data = await fetch(path, {
+                method: 'POST',
+                body: formData
+            })
+
+            const response = await data.json()
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function cleanCompleteForm(e) {
+        e.preventDefault()
+
+        const phone = document.getElementById('phone')
+        phone.value = ''
+        const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
+
+        for (let i = 0; i < customerPhoneCard.length; i++) {
+            customerPhoneCard[i].hidden = true
+        }
+
+        const cardInfo = document.getElementById('customerCard')
+        const child = cardInfo.firstElementChild
+        child.remove()
+        order = []
+        renderCart()
+        orderTable.hidden = true
+    }
+
+    document.getElementById('order-form').addEventListener('submit', async function (e) {
+        e.preventDefault()
+
+        if (order.length <= 0) {
+            alert('No hay platillos agregados a la order')
+        } else {
+            const confirm = window.confirm('¿Esta completa la orden?')
+            if (confirm) {
+                const order = await orderForm()
+                if (order.status === 422) {
+                    for (let i = 0; i < order.errors.length; i++) {
+                        console.log(order.errors[i])
+                    }
+                } else {
+                    alert('Orden generada')
+                    cleanCompleteForm(e)
+                }
+            }
+        }
+    })
+
+    document.getElementById('customer-phone').addEventListener('change', async function (e) {
+        e.preventDefault()
+        const phone = document.getElementById('phone')
+        const customer = await findCustomer(phone.value)
+        if (customer) {
+            customerCard(customer)
+            orderTable.hidden = false
+        } else {
+            alert('El número del cliente no existe')
+            phone.value = ''
+        }
+    })
+
+    document.querySelector('#customer-phone').addEventListener('submit', cleanCompleteForm)
+
+    document.getElementById('id-product').addEventListener('click', async function (e) {
+        e.preventDefault()
+        const idproduct = document.getElementById('idproduct')
+        const product = await findProduct(idproduct.value)
+
+        if (!product) {
+            const modalObj = {
+                title: 'Proceso de orden',
+                message: 'El id del platillo no existe',
+                trueButton: 'Enterado'
+            }
+
+            alert('Platillo no encontrado')
+            idproduct.value = ''
+        } else {
+            addItem(product, idproduct.value)
+            idproduct.value = ''
+        }
+    })
+</script>

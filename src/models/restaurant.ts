@@ -98,15 +98,15 @@ export default class Restaurant {
         })
     }
 
-    static findWithUser(id: string): Promise<IRestaurant | null> {
+    static findWithUser(id: string | number): Promise<IRestaurant | null> {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT restaurants.*
                 FROM restaurants
                 RIGHT JOIN manager_restaurant
-                ON restaurants.id_restaurant = manager_restaurant.id_restaurant
+                ON restaurants.id_restaurant=manager_restaurant.id_restaurant
                 LEFT JOIN users
-                ON manager_restaurant.id_user = users.id_user
+                ON manager_restaurant.id_user=users.id_user
                 WHERE users.id_user=${id}
             `
             

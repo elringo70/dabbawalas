@@ -70,3 +70,9 @@ html, body {
         visibility: visible !important;
     }
 }
+
+
+/* Dashboard */
+.card-dashboard-text {
+    color: #777777
+}

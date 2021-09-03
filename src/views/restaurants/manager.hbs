@@ -1,47 +1,93 @@
 {{>sidebar}}
-<div class="admin-container">
+<div class="admin-container" style="background-color: #ebeff2;">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row py-3">
             <div class="col-md-12 fw-bold fs-3">Dashboard</div>
         </div>
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <div class="card text-white bg-warning h-100">
-                    <div class="card-header">En proceso</div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Ordenes en proceso</h5>
-                        <p class="card-text">1</p>
+                        <div class="d-flex justify-content-between">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="processing-orders">0</h1>
+                                <h6 class="card-title">En proceso</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#2196f3"
+                                    class="bi bi-bag" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card text-white bg-success h-100">
-                    <div class="card-header">Completadas</div>
+            <div class="col-md-3">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Ordenes completadas</h5>
-                        <p class="card-text">2</p>
+                        <div class="d-flex">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="completed-orders">0</h1>
+                                <h6 class="card-title">Completadas</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#4caf50"
+                                    class="bi bi-bag-check" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card text-white bg-danger h-100">
-                    <div class="card-header">Canceladas</div>
+            <div class="col-md-3">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Ordenes canceladas</h5>
-                        <p class="card-text">0</p>
+                        <div class="d-flex">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="canceled-orders">0</h1>
+                                <h6 class="card-title">Canceladas</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#ff5252"
+                                    class="bi bi-bag-x" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M6.146 8.146a.5.5 0 0 1 .708 0L8 9.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 0 1 0-.708z" />
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card text-white bg-secondary h-100">
-                    <div class="card-header">Header</div>
+            <div class="col-md-3">
+                <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Primary card title</h5>
-                        <p class="card-text"></p>
+                        <div class="d-flex">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="today-orders">0</h1>
+                                <h6 class="card-title">Ordenes del día</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="currentColor"
+                                    class="bi bi-bag-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
@@ -68,34 +114,21 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Tablas de información
+                        Últimas ordenes
                     </div>
                     <div class="card-body">
                         <table class="table table-striped data-table">
                             <thead>
                                 <tr>
-                                    <th>Firstname</th>
-                                    <th>Lastname</th>
-                                    <th>Email</th>
+                                    <th>ID</th>
+                                    <th>Número telefónico</th>
+                                    <th>Cliente</th>
+                                    <th>Hora de creación</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>John</td>
-                                    <td>Doe</td>
-                                    <td>john@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>Mary</td>
-                                    <td>Moe</td>
-                                    <td>mary@example.com</td>
-                                </tr>
-                                <tr>
-                                    <td>July</td>
-                                    <td>Dooley</td>
-                                    <td>july@example.com</td>
-                                </tr>
-                            </tbody>
+                            <tbody class="orders-list"></tbody>
                         </table>
                     </div>
                 </div>
@@ -103,3 +136,87 @@
         </div>
     </div>
 </div>
+
+<script>
+    let orders = []
+    const ordersList = document.querySelector('.orders-list')
+
+    async function ordersStatus() {
+        const path = `/api/orders/loadDashboard`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function loadDashboardCards() {
+        const ordersByStatus = await ordersStatus()
+        const orders = ordersByStatus.ordersByStatus
+
+        const com = document.querySelector('.completed-orders')
+        const can = document.querySelector('.canceled-orders')
+        const pro = document.querySelector('.processing-orders')
+        const tod = document.querySelector('.today-orders')
+
+        if (ordersByStatus.length !== 0) {
+            com.innerHTML = orders.completed
+            can.innerHTML = orders.canceled
+            pro.innerHTML = orders.processing
+            tod.innerHTML = orders.todayOrders
+        }
+    }
+
+    async function loadLastOrders() {
+        path = `/api/orders/getAllTodayOrders`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            for (let i = 0; i < 3; i++) {
+                const date = new Date(response[i].createdAt)
+                const order = {
+                    id: response[i].id_order,
+                    phone: response[i].phone,
+                    customer: `${response[i].name} ${response[i].lastname}`,
+                    total: response[i].total,
+                    creationTime: date.toLocaleTimeString(),
+                    status: response[i].orderstatus
+                }
+                orders.push(order)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function renderOrders() {
+        ordersList.innerHTML = ''
+        orders.map(order => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-order', order.id)
+            tr.classList.add('text-center')
+            const content = `
+                <td>${order.id}</td>
+                <td>${order.phone}</td>
+                <td>${order.customer}</td>
+                <td>${order.creationTime}</td>
+                <td>${order.status.toUpperCase()}</td>
+                <td>$ ${order.total}</td>
+            `
+
+            tr.innerHTML = content
+            ordersList.append(tr)
+        })
+    }
+
+    addEventListener('load', async function () {
+        await loadDashboardCards()
+        await loadLastOrders()
+        renderOrders()
+    })
+</script>

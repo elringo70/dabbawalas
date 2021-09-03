@@ -32,11 +32,12 @@ class ProductRoutes {
                 .not().isEmpty().withMessage('Por favor ingrese la imagen del producto'),
         ], upload.single('image'), productController.postNewProduct)
 
-        this.router.get('/getAllProductsByRestaurant', checkJWT.checkJWT, productController.getAllProductsPage)
-        /* 
-        this.router.get('/:id', productController.getProductById)
-        this.router.patch('/:id', upload.single('image'), productController.updateProductById)
-        this.router.delete('/:id', productController.deleteProductById) */
+        this.router.get('/getAllProductsPage', checkJWT.checkJWT, productController.getAllProductsPage)
+        this.router.get('/getAllProductsByRestaurant', checkJWT.checkJWT, productController.getAllProductsByRestaurant)
+        this.router.post('/getProductByIdByRestaurant', checkJWT.checkJWT, productController.getProductByIdByRestaurant)
+        this.router.delete('/deleteProductByIdByRestaurant/:id', checkJWT.checkJWT, productController.deleteProductByIdByRestaurant)
+        this.router.get('/editProductByIdPage/:id', checkJWT.checkJWT, productController.editProductByIdPage)
+        this.router.patch('/editProductByIdByRestaurant/:id', checkJWT.checkJWT, upload.single('image'), productController.editProductByIdByRestaurant)
     }
 }
 

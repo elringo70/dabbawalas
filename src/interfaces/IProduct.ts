@@ -3,9 +3,9 @@ export interface IProduct {
     name: string,
     cost: number,
     price: number,
-    image: any,
+    image?: any,
     description: string,
     active: number,
     lastmodification?: Date,
-    id_restaurant: string | number | undefined
+    id_restaurant?: string | number | undefined
 }

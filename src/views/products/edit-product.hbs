@@ -2,17 +2,18 @@
 <div class="admin-container">
     <div class="container-fluid">
         <div class="row mb-4">
-            <div class="col-md-12 fw-bold fs-3">Platillos</div>
+            <div class="col-md-12 fw-bold fs-3">Edición de los platillos</div>
         </div>
+
         <div class="row mt-3 mx-auto">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Crear nuevo platillo
+                        Editar el platillo
                     </div>
                     <div class="card-body">
-                        <form action="/api/products/postNewProduct" method="POST" id="form"
-                            enctype="multipart/form-data">
+                        <form id="form">
+                            <input id="product-id" type="hidden" data-product="{{product.id_product}}">
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label for="name" class="form-label">Nombre del platillo</label>
@@ -39,23 +40,31 @@
                                         números</small>
                                 </div>
                             </div>
-                            <div class="row">
+
+                            <div class="row mb-3">
                                 <div class="col-8 m-auto">
                                     <div id="priceAlert"></div>
                                 </div>
                             </div>
+
                             <div class="row mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <a id="btnImageChangeButton" class="btn btn-primary">Cambiar imagen</a>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6" id="insertImage" hidden>
                                     <label for="formFile" class="form-label">Imagen</label>
                                     <input type="file" name="image" class="form-control" id="formFile"
-                                        accept=".jpg, .jpeg, .png, .webp" required>
+                                        accept=".jpg, .jpeg, .png, .webp" disabled>
                                     <div id="formFile" class="form-text">Ingrese solo imagenes en formato JPG, JPEG o
                                         PNG</div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <img id="loadedImg" src="" alt="" class="img-fluid">
+                                    <img id="loadedImg" src="/{{product.image}}" alt="" class="img-fluid">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -66,10 +75,10 @@
                                 </div>
                             </div>
 
-                            {{#if errorMessage}}
+                            {{#if imageError}}
                             <div class="my-3">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{errorMessage}}</strong>
+                                    <strong>{{imageError}}</strong>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                                         aria-label="Close"></button>
                                 </div>
@@ -108,16 +117,28 @@
     //Image listener
     document.getElementById('formFile').addEventListener('change', loadImage)
 
+    //insertImage listener
+    document.getElementById('btnImageChangeButton').addEventListener('click', btnImageChangeButton)
+
     //Functions
     async function formValidation(e) {
         e.preventDefault()
-        const priceVal = priceValidation()
 
-        if (priceVal) {
-            const confirmation = window.confirm('¿Desea continuar con el registro del producto?')
-            if (confirmation) {
-                form.submit()
-            }
+        const formData = new FormData(form)
+        const idProduct = document.getElementById('product-id').getAttribute('data-product')
+        const path = `/api/products/editProductByIdByRestaurant/${idProduct}`
+
+        try {
+            const data = await fetch(path, {
+                method: 'PATCH',
+                body: formData
+            })
+
+            const response = await data.json()
+
+            console.log(response)
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -175,5 +196,16 @@
         } else {
             preview.src = ''
         }
+    }
+
+    function btnImageChangeButton() {
+        const insertImage = document.getElementById('insertImage')
+        const loadedImg = document.getElementById('loadedImg')
+        const formFile = document.getElementById('formFile')
+
+        insertImage.removeAttribute('hidden')
+        loadedImg.removeAttribute('src')
+        formFile.required = true
+        formFile.disabled = false
     }
 </script>
