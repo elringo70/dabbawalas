@@ -12,6 +12,7 @@ class CustomerController {
             title: 'Agregar un cliente al restaurant',
             user: res.locals.token,
             active: true,
+            manager: true,
             loggedIn: true
         })
     }
@@ -35,6 +36,7 @@ class CustomerController {
                 customers,
                 user: res.locals.token,
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         } catch (error) {
@@ -238,6 +240,7 @@ class CustomerController {
                 title: 'Editar información del cliente',
                 customer,
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         } catch (error) {
@@ -247,6 +250,7 @@ class CustomerController {
                 title: 'Editar información del cliente',
                 errorMessage: 'Error al cargar la pagina de edición',
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         }
@@ -268,7 +272,8 @@ class CustomerController {
                     title: 'Editar información del cliente',
                     errors: errors.array(),
                     customer: customerObj,
-                    loginIn: true
+                    manager: true,
+                    loggedIn: true
                 })
             }
 
@@ -280,6 +285,7 @@ class CustomerController {
                 title: 'Editar información del cliente',
                 errorMessage: 'Error al actualizar al cliente de edición',
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         }

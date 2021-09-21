@@ -14,14 +14,12 @@ export default class Product {
         })
     }
 
-    static fetchAll() {
+    static fetchAll(query: string): Promise<IProduct[] | null> {
         return new Promise((resolve, reject) => {
-            const query = `SELECT * FROM products`
-
-            pool.query(query, (error, results) => {
+            pool.query(query, (error, results: IProduct[]) => {
                 if (error) reject(error)
 
-                resolve(results)
+                resolve(results.length > 0 ? results : null)
             })
         })
     }
@@ -44,22 +42,9 @@ export default class Product {
         })
     }
 
-    static findById(product: { id_product: string | number, id_restaurant: string | number }): Promise<IProduct | null> {
+    static findById(query: string): Promise<IProduct | null> {
         return new Promise((resolve, reject) => {
-            const query = `
-                SELECT
-                id_product, name, cost, price, image, description, id_restaurant, active
-                FROM products
-                WHERE id_product=?
-                AND id_restaurant=?
-                AND active=1
-            `
-
-            pool.query(query,
-                [
-                    product.id_product,
-                    product.id_restaurant
-                ], (error, results: IProduct[]) => {
+            pool.query(query, (error, results: IProduct[]) => {
                 if (error) reject(error)
 
                 resolve(results.length === 1 ? results[0] : null)

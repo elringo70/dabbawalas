@@ -1,4 +1,4 @@
-import { IOrder } from '../interfaces/IOrder'
+import { IOrder, IOrderDetail } from '../interfaces/IOrder'
 import { conn, pool } from '../utils/database'
 
 export default class Order {
@@ -98,6 +98,16 @@ export default class Order {
         })
     }
 
+    static findOne(query: string): Promise<IOrder | IOrderDetail | null> {
+        return new Promise((resolve, reject) => {
+            pool.query(query, (error, results: IOrder[] | IOrderDetail[]) => {
+                if (error) reject(error)
+
+                resolve(results.length === 1 ? results[0] : null)
+            })
+        })
+    }
+
     static fetchAll(
         order: {
             id_restaurant: string | number
@@ -122,17 +132,9 @@ export default class Order {
         })
     }
 
-    static fetchAllByToday(id_restaurant: string | number): Promise<IOrder[] | null> {
+    static fetchAllAny(query: string): Promise<IOrder[] | null> {
         return new Promise((resolve, reject) => {
-            const date = new Date()
-            const query = `
-                SELECT id_order, total, orderstatus, id_restaurant, id_user
-                FROM orders 
-                WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
-                AND id_restaurant=?
-            `
-
-            pool.query(query, [id_restaurant],(error, results: IOrder[]) => {
+            pool.query(query, (error, results:IOrder[]) => {
                 if (error) reject(error)
 
                 resolve(results.length > 0 ? results : null)
@@ -140,14 +142,20 @@ export default class Order {
         })
     }
 
-    static fetchAllDetail() {
+    static fetchAllByToday(id_restaurant: string | number): Promise<IOrder[] | null> {
         return new Promise((resolve, reject) => {
-            const query = ``
+            const date = new Date()
+            const query = `
+                SELECT *
+                FROM orders 
+                WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
+                AND id_restaurant=?
+            `
 
-            pool.query(query, (error, results) => {
+            pool.query(query, [id_restaurant], (error, results: IOrder[]) => {
                 if (error) reject(error)
 
-                resolve(results)
+                resolve(results.length > 0 ? results : null)
             })
         })
     }

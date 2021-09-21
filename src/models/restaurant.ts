@@ -1,4 +1,5 @@
-import { pool, conn } from '../utils/database'
+import { pool, conn, asyncConn } from '../utils/database'
+const db = asyncConn()
 import { ICustomer } from '../interfaces/IUsers'
 import { IRestaurant, IBusinessHours } from '../interfaces/IRestaurant'
 
@@ -83,9 +84,7 @@ export default class Restaurant {
     static findById(id: string): Promise<IRestaurant | null> {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT
-                id_restaurant, name, type, street, number, municipality, city, state,
-                createdAt, updatedAt
+                SELECT *
                 FROM restaurants
                 WHERE id_restaurant=?
             `
@@ -109,7 +108,7 @@ export default class Restaurant {
                 ON manager_restaurant.id_user=users.id_user
                 WHERE users.id_user=${id}
             `
-            
+
             pool.query(query, (error, results: IRestaurant[]) => {
                 if (error) reject(error)
 
@@ -128,7 +127,7 @@ export default class Restaurant {
                 WHERE restaurants.id_restaurant = ?
             `
 
-            pool.query(query, [id], (error, results: IBusinessHours)=>{
+            pool.query(query, [id], (error, results: IBusinessHours) => {
                 if (error) reject(error)
 
                 resolve(results)
@@ -154,31 +153,7 @@ export default class Restaurant {
         })
     }
 
-    /* updateById(id: string) {
-        return new Promise((resolve, reject)=>{
-            const queryRestObj = {
-                name: this.name,
-                restaurantType: this.restaurantType,
-                street: this.street,
-                number: this.number,
-                municipality: this.municipality,
-                city: this.city,
-                state: this.state,
-                phone: this.phone,
-                businessHours: this.businessHours
-            }
-
-            const query = `UPDATE restaurants SET ? WHERE id_restaurant=?`
-
-            pool.query(query, [queryRestObj, id], (error, results)=>{
-                if (error) reject (error)
-
-                resolve (results)
-            })
-        })
-    } */
-
-    static deleteById(id: string) {
+    static deleteById(id: string | number) {
         return new Promise((resolve, reject) => {
             const query = `DELETE FROM restaurants WHERE id_restaurant=?`
 
@@ -187,6 +162,62 @@ export default class Restaurant {
 
                 resolve(results)
             })
+        })
+    }
+
+    static findOne(query: string) {
+        return new Promise((resolve, reject) => {
+            pool.query(query, (error, results) => {
+                if (error) reject(error)
+
+                resolve(results)
+            })
+        })
+    }
+
+    updateById(restaurant: IRestaurant, id: string | number, schedule?: any) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await db.beginTransaction()
+
+                const restaurantQuery = `
+                    UPDATE restaurants
+                    SET
+                        name='${restaurant.name}',
+                        type='${restaurant.type}',
+                        street='${restaurant.street}',
+                        number='${restaurant.number}',
+                        municipality='${restaurant.municipality}',
+                        city='${restaurant.city}',
+                        state='${restaurant.state}',
+                        phone='${restaurant.phone}'
+                    WHERE id_restaurant=${id}
+                `
+                const updateRestaurant = await db.query(restaurantQuery)
+
+                if (schedule.length > 0) {
+                    for (let i = 0; i < schedule.length; i++) {
+                        const query = `
+                            UPDATE business_hours
+                            SET
+                                day=${schedule[i].days},
+                                openhours='${schedule[i].openhours}',
+                                closinghours='${schedule[i].closinghours}'
+                            WHERE id_restaurant=${id}
+                        `
+
+                        await db.query(query)
+                    }
+                }
+
+                const results = await db.commit()
+                resolve(results)
+            } catch (error) {
+                await db.rollback()
+                reject(error)
+            } finally {
+                await db.close()
+            }
         })
     }
 }

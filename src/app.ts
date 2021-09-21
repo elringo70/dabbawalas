@@ -2,6 +2,8 @@ import express, { Application } from 'express'
 import exphbs from 'express-handlebars'
 import morgan from 'morgan'
 import path from 'path'
+import { Server as HTTPServer } from 'http'
+import { Server, Socket } from 'socket.io'
 
 //Error 404
 import { error404 } from './controllers/404.controllers'
@@ -14,13 +16,18 @@ import usersRoutes from './routes/users.routes'
 import authRoutes from './routes/auth.routes'
 import customersRoutes from './routes/customers.routes'
 import ordersRoutes from './routes/orders.routes'
+import adminRoutes from './routes/admin.routes'
 
 export class App {
     private app: Application
     private port: number | string | undefined
+    private server: HTTPServer
+    private io: Server
 
     constructor(port?: number | string | undefined) {
         this.app = express()
+        this.server = new HTTPServer(this.app);
+        this.io = new Server(this.server);
         this.settings()
         this.middlewares()
         this.routes()
@@ -65,6 +72,9 @@ export class App {
             }
         }))
         this.app.set('view engine', '.hbs')
+        this.io.on('connection', (socket: Socket) => {
+            require(__dirname + 'sockets.ts')(socket)
+        })
     }
 
     private middlewares() {
@@ -81,6 +91,7 @@ export class App {
         this.app.use('/api/auth', authRoutes)
         this.app.use('/api/customers', customersRoutes)
         this.app.use('/api/orders', ordersRoutes)
+        this.app.use('/api/admin', adminRoutes)
         this.app.use(error404.get404Page)
     }
 

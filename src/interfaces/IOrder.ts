@@ -1,4 +1,4 @@
-export interface IOrder {
+export interface IOrder extends IOrderDetail{
     id_order?: number,
     total: number,
     orderstatus: string,
@@ -8,7 +8,7 @@ export interface IOrder {
 }
 
 export interface IOrderDetail {
-    id_order: number,
+    id_user: number,
     id_product: number,
     id_restaurant: number,
     quantity: number

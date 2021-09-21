@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { authController } from '../controllers/auth.controllers'
 import { check } from 'express-validator'
+import { checkRole } from '../middlewares/roles'
+import checkJWT from '../middlewares/jwt'
 
 class AuthRoutes {
     public router: Router
@@ -18,7 +20,7 @@ class AuthRoutes {
                 .not().isEmpty().withMessage('Ingrese la contraseña')
         ], authController.postLoginUser)
         
-        this.router.get('/logout', authController.getLogoutUser)
+        this.router.get('/logout', [checkJWT.checkJWT, checkRole(['M', 'D', 'CO', 'A'])], authController.getLogoutUser)
     }
 }
 

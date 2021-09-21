@@ -10,6 +10,7 @@ class ProductController {
             title: 'Agregar nuevo platillo',
             user: res.locals.token,
             active: true,
+            manager: true,
             loggedIn: true
         })
     }
@@ -26,6 +27,7 @@ class ProductController {
                 user: res.locals.token,
                 products: products,
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         } catch (error) {
@@ -60,6 +62,7 @@ class ProductController {
                     title: 'Agregar nuevo platillo',
                     errorMessage: 'Asegurese de enviar una imagen o un formato valido',
                     product: productObj,
+                    manager: true,
                     loggedIn: true
                 })
             }
@@ -69,6 +72,7 @@ class ProductController {
                     title: 'Agregar nuevo platillo',
                     errors: errors.array(),
                     product: productObj,
+                    manager: true,
                     loggedIn: true
                 })
             }
@@ -79,6 +83,7 @@ class ProductController {
             res.render('products/newProduct', {
                 title: 'Agregar nuevo platillo',
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         } catch (error) {
@@ -93,13 +98,16 @@ class ProductController {
     async getProductByIdByRestaurant(req: Request, res: Response) {
         const user = res.locals.token
 
-        const productId = {
-            id_product: req.body.id,
-            id_restaurant: user.id_restaurant
-        }
+        const productQuery = `
+            SELECT *
+            FROM products
+            WHERE id_product=${req.body.id}
+            AND id_restaurant=${user.id_restaurant}
+            AND active=1
+        `
 
         try {
-            const product = await Product.findById(productId)
+            const product = await Product.findById(productQuery)
             if (product) {
                 return res.json({
                     status: 200,
@@ -165,19 +173,23 @@ class ProductController {
         const user = res.locals.token
         const id = req.params.id
 
-        const product = {
-            id_product: id,
-            id_restaurant: user.id_restaurant
-        }
+        const productQuery = `
+            SELECT *
+            FROM products
+            WHERE id_product=${id}
+            AND id_restaurant=${user.id_restaurant}
+            AND active=1
+        `
 
         try {
-            const editProduct = await Product.findById(product)
+            const editProduct = await Product.findById(productQuery)
 
             res.status(200).render('products/edit-product', {
                 title: 'Editar el platillo',
                 user: res.locals.token,
-                product: editProduct, 
+                product: editProduct,
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         } catch (error) {
@@ -188,6 +200,7 @@ class ProductController {
                 user: res.locals.token,
                 errorMessage: 'Error al cargar la página',
                 active: true,
+                manager: true,
                 loggedIn: true
             })
         }
@@ -199,7 +212,7 @@ class ProductController {
 
         try {
             const product: IProduct = req.body
-            
+
             const editProduct = {
                 id_product: id,
                 id_restaurant: user.id_restaurant

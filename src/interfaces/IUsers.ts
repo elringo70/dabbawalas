@@ -70,3 +70,39 @@ export interface ICustomers {
     active: number,
     verified?: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
 }
+
+export interface ICooker {
+    id_user?: number | string,
+    email?: string,
+    pass: string,
+    name: string,
+    lastname: string,
+    maternalsurname: string,
+    usertype: string,
+    active: number,
+    id_restaurant?: number | string
+}
+
+export interface IAdmin {
+    id_user?: number,
+    email?: string,
+    pass?: string,
+    confpass?: string,
+    name: string,
+    lastname: string,
+    maternalsurname: string,
+    dob?: Date,
+    street: string,
+    number: string,
+    municipality: string,
+    city: string,
+    state: string,
+    phone: string,
+    gender?: number,
+    usertype: 'C' | 'M' | 'D' | 'A',
+    image?: string,
+    lastpurchase?: string,
+    active: number,
+    verified: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
+    id_restaurant?: number | string
+}

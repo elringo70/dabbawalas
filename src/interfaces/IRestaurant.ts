@@ -12,7 +12,7 @@ export interface IRestaurant {
 
 export interface IBusinessHours {
     id_restaurant: number,
-    day: 1 | 2 | 3 | 4 | 5 | 6 | 0,
+    day: 0 | 1 | 2 | 3 | 4 | 5 | 6,
     openhours: string,
     closinghours: string
 }

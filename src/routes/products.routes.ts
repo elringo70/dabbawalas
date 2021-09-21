@@ -3,6 +3,7 @@ import { productController } from '../controllers/products.controllers'
 import checkJWT from '../middlewares/jwt'
 import { check } from 'express-validator'
 import { upload } from '../middlewares/upload'
+import { checkRole } from '../middlewares/roles'
 
 class ProductRoutes {
     public router: Router
@@ -13,10 +14,10 @@ class ProductRoutes {
     }
 
     private config() {
-        this.router.get('/getNewProductPage', checkJWT.checkJWT, productController.getNewProductPage)
+        this.router.get('/getNewProductPage', [checkJWT.checkJWT, checkRole(['M'])], productController.getNewProductPage)
 
         //Post new product 
-        this.router.post('/postNewProduct', checkJWT.checkJWT, [
+        this.router.post('/postNewProduct', [checkJWT.checkJWT, checkRole(['M'])], [
             //Validations
             check('name')
                 .trim()
@@ -32,12 +33,12 @@ class ProductRoutes {
                 .not().isEmpty().withMessage('Por favor ingrese la imagen del producto'),
         ], upload.single('image'), productController.postNewProduct)
 
-        this.router.get('/getAllProductsPage', checkJWT.checkJWT, productController.getAllProductsPage)
-        this.router.get('/getAllProductsByRestaurant', checkJWT.checkJWT, productController.getAllProductsByRestaurant)
-        this.router.post('/getProductByIdByRestaurant', checkJWT.checkJWT, productController.getProductByIdByRestaurant)
-        this.router.delete('/deleteProductByIdByRestaurant/:id', checkJWT.checkJWT, productController.deleteProductByIdByRestaurant)
-        this.router.get('/editProductByIdPage/:id', checkJWT.checkJWT, productController.editProductByIdPage)
-        this.router.patch('/editProductByIdByRestaurant/:id', checkJWT.checkJWT, upload.single('image'), productController.editProductByIdByRestaurant)
+        this.router.get('/getAllProductsPage', [checkJWT.checkJWT, checkRole(['M'])], productController.getAllProductsPage)
+        this.router.get('/getAllProductsByRestaurant', [checkJWT.checkJWT, checkRole(['M'])], productController.getAllProductsByRestaurant)
+        this.router.post('/getProductByIdByRestaurant', [checkJWT.checkJWT, checkRole(['M'])], productController.getProductByIdByRestaurant)
+        this.router.delete('/deleteProductByIdByRestaurant/:id', [checkJWT.checkJWT, checkRole(['M'])], productController.deleteProductByIdByRestaurant)
+        this.router.get('/editProductByIdPage/:id', [checkJWT.checkJWT, checkRole(['M'])], productController.editProductByIdPage)
+        this.router.patch('/editProductByIdByRestaurant/:id', [checkJWT.checkJWT, checkRole(['M'])], upload.single('image'), productController.editProductByIdByRestaurant)
     }
 }
 

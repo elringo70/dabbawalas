@@ -92,20 +92,20 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        Gráficas
+                        Ventas de la última semana
                     </div>
                     <div class="card-body">
-                        <canvas class="chart" width="400" height="200"></canvas>
+                        <canvas class="chart" id="seven-day-chart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        Gráficas
+                        Ventas del mes
                     </div>
                     <div class="card-body">
-                        <canvas class="chart" width="400" height="200"></canvas>
+                        <canvas class="chart" id="month-sales" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -137,6 +137,7 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
 <script>
     let orders = []
     const ordersList = document.querySelector('.orders-list')
@@ -157,16 +158,18 @@
         const ordersByStatus = await ordersStatus()
         const orders = ordersByStatus.ordersByStatus
 
-        const com = document.querySelector('.completed-orders')
-        const can = document.querySelector('.canceled-orders')
-        const pro = document.querySelector('.processing-orders')
-        const tod = document.querySelector('.today-orders')
+        if (ordersByStatus.orders !== false) {
+            const com = document.querySelector('.completed-orders')
+            const can = document.querySelector('.canceled-orders')
+            const pro = document.querySelector('.processing-orders')
+            const tod = document.querySelector('.today-orders')
 
-        if (ordersByStatus.length !== 0) {
             com.innerHTML = orders.completed
             can.innerHTML = orders.canceled
             pro.innerHTML = orders.processing
             tod.innerHTML = orders.todayOrders
+        } else {
+            return ordersByStatus.message
         }
     }
 
@@ -214,9 +217,71 @@
         })
     }
 
+    async function loadData7DayChart() {
+        const path = `/api/orders/loadData7DayChart`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+            return response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function monthDataSales() {
+        const path = `/api/orders/monthDataSales`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            let labels = []
+            for (let i = 0; i < response.length; i++) {
+                labels[i] = response[i].day
+            }
+
+            let datasetData = []
+            for (let i = 0; i < response.length; i++) {
+                datasetData[i] = response[i].day_count
+            }
+
+            var ctx = document.getElementById('month-sales')
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Ventas del mes',
+                        data: datasetData
+                    }]
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function render7DayChart() {
+        const data = await loadData7DayChart()
+        var ctx = document.getElementById('seven-day-chart')
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',],
+                datasets: [{
+                    label: 'Ventas de la semana',
+                    data
+                }]
+            }
+        })
+    }
+
     addEventListener('load', async function () {
         await loadDashboardCards()
         await loadLastOrders()
+        render7DayChart()
+        await monthDataSales()
         renderOrders()
     })
 </script>

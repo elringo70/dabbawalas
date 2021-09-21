@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import Product from '../models/product'
 import Order from '../models/orders'
-import { IOrder } from '../interfaces/IOrder'
+import { IOrder, IOrderDetail } from '../interfaces/IOrder'
 import { validationResult } from 'express-validator'
 
 class OrderController {
@@ -10,6 +10,7 @@ class OrderController {
             title: 'Nueva orden',
             user: res.locals.token,
             active: true,
+            manager: true,
             loggedIn: true
         })
     }
@@ -19,6 +20,17 @@ class OrderController {
             title: 'Ordenes del día',
             user: res.locals.token,
             active: true,
+            manager: true,
+            loggedIn: true
+        })
+    }
+
+    getAllTodayOrdersCookerPage(req: Request, res: Response) {
+        res.render('orders/cooking-dashboard', {
+            title: 'Ordenes del día',
+            user: res.locals.token,
+            active: true,
+            cooker: true,
             loggedIn: true
         })
     }
@@ -48,11 +60,15 @@ class OrderController {
             }
 
             if (body.quantity.length === 1) {
-                const productObj = {
-                    id_product: body.product,
-                    id_restaurant: user.id_restaurant
-                }
-                const productPrice = await Product.findById(productObj)
+                const productQuery = `
+                    SELECT *
+                    FROM products
+                    WHERE id_product=${body.product}
+                    AND id_restaurant=${user.id_restaurant}
+                    AND active=1
+                `
+
+                const productPrice = await Product.findById(productQuery)
                 if (!productPrice) {
                     return res.json({
                         status: 304,
@@ -62,12 +78,15 @@ class OrderController {
                 productsPrice[0] = productPrice.price
             } else {
                 for (let i = 0; i < body.quantity.length; i++) {
-                    const productObj = {
-                        id_product: body.product[i],
-                        id_restaurant: user.id_restaurant
-                    }
+                    const productQuery = `
+                        SELECT *
+                        FROM products
+                        WHERE id_product=${body.product[i]}
+                        AND id_restaurant=${user.id_restaurant}
+                        AND active=1
+                    `
 
-                    const productPrice = await Product.findById(productObj)
+                    const productPrice = await Product.findById(productQuery)
                     if (!productPrice) {
                         return res.json({
                             status: 304,
@@ -99,6 +118,8 @@ class OrderController {
             const order = new Order()
             await order.save(orderObj, orderDetailObj)
 
+            //disparo evento io
+
             res.json({
                 status: 201,
                 message: 'Orden procesada con éxito'
@@ -116,12 +137,18 @@ class OrderController {
     async getAllTodayOrders(req: Request, res: Response) {
         const user = res.locals.token
 
-        const orderOBJ = {
-            id_restaurant: user.id_restaurant
-        }
+        const query = `
+            SELECT orders.*, users.name, users.lastname, users.phone
+            FROM orders
+            LEFT JOIN users
+            ON orders.id_user = users.id_user
+            WHERE orders.id_restaurant=${user.id_restaurant}
+            AND orderstatus='opened'
+            ORDER BY orders.createdAt DESC
+        `
 
         try {
-            const orders = await Order.fetchAll(orderOBJ)
+            const orders = await Order.fetchAllAny(query)
             res.status(200).json(orders)
         } catch (error) {
             if (error) console.log(error)
@@ -184,6 +211,7 @@ class OrderController {
 
             if (orders === null) {
                 return res.status(200).json({
+                    orders: false,
                     message: 'No hay ordenes del dia'
                 })
             }
@@ -226,6 +254,159 @@ class OrderController {
             res.json({
                 status: 304,
                 errorMessage: 'Error al cargar el dashboard'
+            })
+        }
+    }
+
+    async loadData7DayChart(req: Request, res: Response) {
+        const user = res.locals.token
+
+        try {
+            const query = `
+                SELECT DAYNAME(orders.createdAt) AS day_name, COUNT(*) AS day_count
+                FROM orders
+                WHERE YEARWEEK(createdAt) = YEARWEEK(NOW())
+                AND id_restaurant=${user.id_restaurant}
+                GROUP BY day_name
+            `
+
+            const sevenDayChart: any = await Order.fetchAllAny(query)
+
+            let Monday = 0,
+                Tuesday = 0,
+                Wednesday = 0,
+                Thursday = 0,
+                Friday = 0,
+                Saturday = 0,
+                Sunday = 0
+
+            if (sevenDayChart.length !== 0) {
+                for (let i = 0; i < sevenDayChart.length; i++) {
+                    switch (sevenDayChart[i].day_name) {
+                        case 'Monday':
+                            Monday = sevenDayChart[i].day_count
+                            break
+                        case 'Tuesday':
+                            Tuesday = sevenDayChart[i].day_count
+                            break
+                        case 'Wednesday':
+                            Wednesday = sevenDayChart[i].day_count
+                            break
+                        case 'Thursday':
+                            Thursday = sevenDayChart[i].day_count
+                            break
+                        case 'Friday':
+                            Friday = sevenDayChart[i].day_count
+                            break
+                        case 'Saturday':
+                            Saturday = sevenDayChart[i].day_count
+                            break
+                        case 'Sunday':
+                            Sunday = sevenDayChart[i].day_count
+                            break
+                    }
+                }
+            }
+
+            let daysCount = [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+
+            res.status(200).json(daysCount)
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.json({
+                status: 304,
+                errorMessage: 'Error al cargar información de la gráfica'
+            })
+        }
+    }
+
+    async monthDataSales(req: Request, res: Response) {
+        const user = res.locals.token
+
+        try {
+            const query = `
+                SELECT DATE_FORMAT(orders.createdAt, '%Y-%m-%d') AS day, COUNT(*) AS day_count
+                FROM orders 
+                WHERE YEAR(createdAt) = YEAR(CURRENT_DATE())
+                AND MONTH(createdAt) = MONTH(CURRENT_DATE())
+                AND id_restaurant=${user.id_restaurant}
+                GROUP BY day
+            `
+
+            const monthSales: any = await Order.fetchAllAny(query)
+
+            res.status(200).json(monthSales)
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.json({
+                status: 304,
+                errorMessage: 'Error al traer las ventas del mes'
+            })
+        }
+    }
+
+    async getCookerOrderDetailPage(req: Request, res: Response) {
+        const user = res.locals.token
+        const { id } = req.params
+
+        try {
+            const query = `
+                SELECT orders.id_order, orders.id_user, order_detail.*
+                FROM orders
+                RIGHT JOIN order_detail
+                ON orders.id_order = order_detail.id_order
+                WHERE orders.id_order=${id}
+            `
+
+            const orderDetail = await Order.fetchAllAny(query)
+
+            if (!orderDetail) {
+                return res.status(200).render('orders/order-detail', {
+                    title: 'Detalle de la orden',
+                    user: res.locals.token,
+                    active: true,
+                    cooker: true,
+                    errorMessage: 'No exite informacion para esa orden',
+                    loggedIn: true
+                })
+            }
+
+            let products = []
+            for (let i = 0; i < orderDetail.length; i++) {
+                const productQuery = `
+                    SELECT *
+                    FROM products
+                    WHERE id_product=${orderDetail[i].id_product}
+                    AND id_restaurant=${user.id_restaurant}
+                    AND active=1
+                `
+                const product = await Product.findById(productQuery)
+                products.push({
+                    quantity: orderDetail[i].quantity,
+                    product
+                })
+            }
+
+            res.status(200).render('orders/order-detail', {
+                title: 'Detalle de la orden',
+                user: res.locals.token,
+                active: true,
+                cooker: true,
+                loggedIn: true,
+                products
+            })
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.status(200).render('orders/order-detail', {
+                title: 'Detalle de la orden',
+                user: res.locals.token,
+                active: true,
+                cooker: true,
+                errorMessage: 'Error al traer el detalle de la orden',
+                loggedIn: true
             })
         }
     }

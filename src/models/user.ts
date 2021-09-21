@@ -1,9 +1,9 @@
 import { IReqRest } from '../interfaces/IRestaurant'
-import { ICustomer } from '../interfaces/IUsers'
 import { pool } from '../utils/database'
+import { IAdmin } from '../interfaces/IUsers'
 
 export default class User {
-    save(data: ICustomer) {
+    save(data: any) {
         return new Promise((resolve, reject) => {
             const query = `INSERT INTO users SET ?`
 
@@ -36,10 +36,7 @@ export default class User {
     static findById(id: string): Promise<any | null> {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT
-                id_user, email, pass, name, lastname, maternalsurname, dob, street,
-                number, municipality, city, state, phone, gender, usertype, position,
-                license, image, lastpurchase, active, verified, createdAt, updatedAt
+                SELECT *
                 FROM users 
                 WHERE id_user=?
             `
@@ -55,10 +52,7 @@ export default class User {
     static findBy(column: string, value: string): Promise<any | null> {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT
-                id_user, email, pass, name, lastname, maternalsurname, dob, street,
-                number, municipality, city, state, phone, gender, usertype, position,
-                license, image, lastpurchase, active, verified, createdAt, updatedAt
+                SELECT *
                 FROM users
                 WHERE ${column}='${value}'
             `
@@ -105,6 +99,16 @@ export default class User {
                 if (error) reject(error)
 
                 resolve(results)
+            })
+        })
+    }
+
+    static fetchAllAny(query: string): Promise<IAdmin[] | null> {
+        return new Promise((resolve, reject) => {
+            pool.query(query, (error, results: IAdmin[]) => {
+                if (error) reject(error)
+
+                resolve(results.length > 0 ? results : null)
             })
         })
     }

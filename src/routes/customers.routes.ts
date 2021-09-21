@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { customerController } from '../controllers//customers.controllers'
 import { check } from 'express-validator'
 import checkJWT from '../middlewares/jwt'
+import { checkRole } from '../middlewares/roles'
 
 class CustomerRoutes {
     public router: Router
@@ -14,7 +15,7 @@ class CustomerRoutes {
     private config() {
 
         //Route post a new customer
-        this.router.post('/postNewCustomer', checkJWT.checkJWT, [
+        this.router.post('/postNewCustomer', [checkJWT.checkJWT, checkRole(['M'])], [
             //Inputs validations
             check('name')
                 .not().isEmpty().withMessage('Ingrese el nombre')
@@ -53,17 +54,17 @@ class CustomerRoutes {
                 .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido')
         ], customerController.postNewCustomer)
 
-        this.router.get('/getCustomerPage', checkJWT.checkJWT, customerController.getCustomerPage)
-        this.router.get('/getAllCustomersPageByRestaurant', checkJWT.checkJWT, customerController.getAllCustomersPage)
-        this.router.post('/getCustomerBy', checkJWT.checkJWT, customerController.getCustomerByPhone)
-        this.router.get('/getCustomerById/:id', checkJWT.checkJWT, customerController.getCustomerById)
-        this.router.post('/getCustomerByPhone', checkJWT.checkJWT, customerController.getCustomerBy)
-        this.router.delete('/deleteCustomerByRestaurant/:id', checkJWT.checkJWT, customerController.deleteCustomerByRestaurant)
-        this.router.get('/getAllCustomersByRestaurant', checkJWT.checkJWT, customerController.getAllCustomersByRestaurant)
-        this.router.get('/editCustomerByRestaurantPage/:id', checkJWT.checkJWT, customerController.editCustomerByRestaurantPage)
+        this.router.get('/getCustomerPage', [checkJWT.checkJWT, checkRole(['M'])], customerController.getCustomerPage)
+        this.router.get('/getAllCustomersPageByRestaurant', [checkJWT.checkJWT, checkRole(['M'])], customerController.getAllCustomersPage)
+        this.router.post('/getCustomerBy', [checkJWT.checkJWT, checkRole(['M', 'A'])], customerController.getCustomerByPhone)
+        this.router.get('/getCustomerById/:id', [checkJWT.checkJWT, checkRole(['M', 'A'])], customerController.getCustomerById)
+        this.router.post('/getCustomerByPhone', [checkJWT.checkJWT, checkRole(['M', 'A'])], customerController.getCustomerBy)
+        this.router.delete('/deleteCustomerByRestaurant/:id', [checkJWT.checkJWT, checkRole(['M', 'A'])], customerController.deleteCustomerByRestaurant)
+        this.router.get('/getAllCustomersByRestaurant', [checkJWT.checkJWT, checkRole(['M'])], customerController.getAllCustomersByRestaurant)
+        this.router.get('/editCustomerByRestaurantPage/:id', [checkJWT.checkJWT, checkRole(['M'])], customerController.editCustomerByRestaurantPage)
         
         //Route edit customer
-        this.router.patch('/editCustomerByRestaurant', checkJWT.checkJWT, [
+        this.router.patch('/editCustomerByRestaurant', [checkJWT.checkJWT, checkRole(['M', 'A'])], [
             //Inputs validations
             check('number')
                 .not().isEmpty().withMessage('Ingrese el número de casa')

@@ -11,6 +11,7 @@
                         Nueva orden
                     </div>
                     <div class="card-body">
+
                         <form id="customer-phone">
                             <div class="row mb-3 align-items-end">
                                 <div class="col-md-3">
@@ -27,7 +28,7 @@
                                 </div>
                                 <div class="col-md-2 customer-phone-card" hidden>
                                     <label></label>
-                                    <button class="btn btn-primary" id="cleanCustomer">Quitar</button>
+                                    <a class="btn btn-primary" id="cleanCustomer">Quitar</a>
                                     <div class="form-text"></div>
                                 </div>
                             </div>
@@ -317,28 +318,8 @@
         }
     }
 
-    function cleanCompleteForm(e) {
-        e.preventDefault()
-
-        const phone = document.getElementById('phone')
-        phone.value = ''
-        const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
-
-        for (let i = 0; i < customerPhoneCard.length; i++) {
-            customerPhoneCard[i].hidden = true
-        }
-
-        const cardInfo = document.getElementById('customerCard')
-        const child = cardInfo.firstElementChild
-        child.remove()
-        order = []
-        renderCart()
-        orderTable.hidden = true
-    }
-
     document.getElementById('order-form').addEventListener('submit', async function (e) {
-        e.preventDefault()
-
+        e.preventDefault();
         if (order.length <= 0) {
             alert('No hay platillos agregados a la order')
         } else {
@@ -351,26 +332,32 @@
                     }
                 } else {
                     alert('Orden generada')
-                    cleanCompleteForm(e)
+                    completeCleanOrder(e)
                 }
             }
         }
     })
 
     document.getElementById('customer-phone').addEventListener('change', async function (e) {
-        e.preventDefault()
-        const phone = document.getElementById('phone')
-        const customer = await findCustomer(phone.value)
+        e.preventDefault();
+
+        const phone = document.getElementById('phone');
+        const customer = await findCustomer(phone.value);
+
         if (customer) {
-            customerCard(customer)
-            orderTable.hidden = false
+            customerCard(customer);
+            orderTable.hidden = false;
         } else {
-            alert('El número del cliente no existe')
-            phone.value = ''
+            alert('El número del cliente no existe');
+            phone.value = '';
         }
     })
 
-    document.querySelector('#customer-phone').addEventListener('submit', cleanCompleteForm)
+    document.getElementById('customer-phone').addEventListener('submit', (e) => {
+        e.preventDefault()
+    })
+
+    document.getElementById('cleanCustomer').addEventListener('click', completeCleanOrder)
 
     document.getElementById('id-product').addEventListener('click', async function (e) {
         e.preventDefault()
@@ -391,4 +378,23 @@
             idproduct.value = ''
         }
     })
+
+    function completeCleanOrder(e) {
+        e.preventDefault()
+
+        const phone = document.getElementById('phone')
+        phone.value = ''
+        const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
+
+        for (let i = 0; i < customerPhoneCard.length; i++) {
+            customerPhoneCard[i].hidden = true
+        }
+
+        const cardInfo = document.getElementById('customerCard')
+        const child = cardInfo.firstElementChild
+        child.remove()
+        order = []
+        renderCart()
+        orderTable.hidden = true
+    }
 </script>

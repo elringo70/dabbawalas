@@ -63,7 +63,7 @@ class IndexControllers {
             if (error) console.log(error)
 
             res.json({
-                errorMessage: 'Error al cargar la pagina de login'
+                errorMessage: 'Error al cargar la página de login'
             })
         }
     }

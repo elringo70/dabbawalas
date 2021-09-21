@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { ICustomer } from '../interfaces/IUsers'
 import User from '../models/user'
 import { sign } from 'jsonwebtoken'
 import { compareSync } from 'bcrypt'
@@ -9,7 +8,7 @@ import Restaurant from '../models/restaurant'
 class AuthController {
     async postLoginUser(req: Request, res: Response) {
         const errors = validationResult(req)
-        const queryObj: ICustomer = req.body
+        const queryObj = req.body
 
         let user
 
@@ -58,7 +57,7 @@ class AuthController {
                             status: 304,
                             errorMessage: 'El supervisor no ha sido aun no ha sido verificado'
                         })
-                    }                    
+                    }
 
                     const restaurant = await Restaurant.findWithUser(emailUser.id_user)
 
@@ -81,8 +80,8 @@ class AuthController {
                         })
 
                         return res.redirect('/api/restaurants/manager')
-                    } 
-                    
+                    }
+
                     if (!restaurant) {
 
                         user = {
@@ -102,7 +101,68 @@ class AuthController {
 
                         res.redirect('/api/restaurants/manager')
                     }
-                    
+
+                    break
+                case 'CO':
+                    const verifiedCooker = await User.findById(`${emailUser.id_user}`)
+
+                    if (!verifiedCooker) {
+                        return res.render('auth/login', {
+                            title: 'Login',
+                            status: 304,
+                            errorMessage: 'Usuario no existe o contraseña incorrecta'
+                        })
+                    }
+
+                    const restaurantCooker = await User.findById(emailUser.id_user)
+
+                    if (restaurantCooker) {
+                        user = {
+                            id_user: emailUser.id_user,
+                            email: emailUser.email,
+                            name: emailUser.name + " " + emailUser.lastname,
+                            usertype: emailUser.usertype,
+                            id_restaurant: restaurantCooker?.id_restaurant
+                        }
+
+                        const token = sign({ user }, 'SECRET', { expiresIn: '1h' })
+
+                        res.cookie('token', token, {
+                            httpOnly: false
+                        })
+
+                        return res.redirect('/api/orders/getAllTodayOrdersCookerPage')
+                    }
+
+                    break
+                case 'A':
+                    const admin = await User.findById(emailUser.id_user)
+
+                    if (!admin) {
+                        return res.render('auth/login', {
+                            title: 'Login',
+                            status: 304,
+                            errorMessage: 'Usuario no existe o contraseña incorrecta'
+                        })
+                    }
+
+                    if (admin) {
+                        user = {
+                            id_user: emailUser.id_user,
+                            email: emailUser.email,
+                            name: emailUser.name + " " + emailUser.lastname,
+                            usertype: emailUser.usertype,
+                            image: emailUser.image,
+                        }
+
+                        const token = sign({ user }, 'SECRET', { expiresIn: '1h' })
+
+                        res.cookie('token', token, {
+                            httpOnly: false
+                        })
+
+                        return res.redirect('/api/admin/getAdminDashboardPage')
+                    }
                     break
             }
         } catch (error) {
