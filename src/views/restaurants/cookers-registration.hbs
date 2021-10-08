@@ -1,0 +1,79 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Cocina</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Registrar nuevo cocinero
+                    </div>
+                    <div class="card-body">
+                        {{#if message}}
+                        <div class="row mb-3">
+                            <div class="col-md-6 m-auto">
+                                <div class="alert alert-success" role="alert">
+                                    {{message}}
+                                </div>
+                            </div>
+                        </div>
+                        {{/if}}
+                        <form action="/api/restaurants/postCookerRegistration" method="POST" id="form">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre del cocinero" value="{{cooker.name}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" value="{{cooker.lastname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="maternalsurname" class="form-label">Segundo apellido</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Segundo apellido"
+                                        value="{{cooker.maternalsurname}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="Email o login" value="{{cooker.name}}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="pass" class="form-label">Constraseña</label>
+                                    <input type="password" name="pass" class="form-control" id="pass"
+                                        placeholder="Constraseña" required>
+                                </div>
+                            </div>
+
+                            {{#if errorMessage}}
+                            <div class="row mb-3">
+                                <div class="col-md-6 m-auto">
+                                    <div class="alert alert-danger" role="alert">
+                                        {{errorMessage}}
+                                    </div>
+                                </div>
+                            </div>
+                            {{/if}}
+
+                            <div class="row">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

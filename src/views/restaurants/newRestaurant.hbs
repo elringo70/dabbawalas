@@ -1,0 +1,296 @@
+<div class="container-fluid">
+    <form id="form">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Registro de nuevo restaurante</div>
+        </div>
+        <div class="card w-75 m-auto">
+            <div class="card-header">
+                Primer paso. Registre su restaurante
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="name" class="form-label">Nombre del restaurante</label>
+                        <input type="text" name="name" class="form-control" id="name"
+                            placeholder="Nombre del restaurante" autocomplete="new-name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="type" class="form-label">Tipo de restaurante</label>
+                        <input type="text" name="type" class="form-control" id="type" placeholder="Tipo de restaurante"
+                        autocomplete="new-type" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="description" class="form-label">Descripción del restaurante</label>
+                        <textarea name="description" rows="4" class="form-control textarea-validation"
+                            style="resize:none" required></textarea>
+                        <small class="text-danger" id="text-muted"></small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8 m-auto">
+                        <div id="firstAlert"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12 fw-bold fs-3">Horario</div>
+                </div>
+                <div class="w-100 m-auto">
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label for="end" class="form-label">Día</label>
+                            <div class="form-control">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                        value="1">
+                                    <label class="form-check-label" for="inlineCheckBoxDays1">Lunes</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="openhours" class="form-label">Horario de apertura</label>
+                            <input type="time" name="openhours" class="form-control" id="openhours1" disabled>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="closinghours" class="form-label">Horario de cierre</label>
+                            <input type="time" name="closinghours" class="form-control" id="closinghours1" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="2">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Martes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours2" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours2" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="3">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Miércoles</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours3" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours3" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="4">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Jueves</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours4" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours4" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="5">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Viernes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours5" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours5" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="6">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Sábado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours6" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours6" disabled>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="form-control">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                    value="0">
+                                <label class="form-check-label" for="inlineCheckBoxDays1">Domingo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="openhours" class="form-control" id="openhours7" disabled>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <input type="time" name="closinghours" class="form-control" id="closinghours7" disabled>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12 fw-bold fs-3">Dirección</div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-4">
+                        <label for="state">Estado</label>
+                        <select name="state" class="form-select" id="state-select" required>
+                            <option selected>Seleccione un estado</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="city">Ciudad</label>
+                        <select name="city" class="form-select" id="city-select" required>
+                            <option selected>Seleccione una ciudad</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="municipality">Colonia</label>
+                        <select name="municipality" class="form-select" id="municipality-select" required>
+                            <option selected>Seleccione una colonia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="number">Número</label>
+                        <input type="number" name="number" class="form-control input-number-validation" id="number"
+                            min="1" max="99999" placeholder="Número" autocomplete="new-number" required>
+                        <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                            números</small>
+                    </div>
+                    <div class="col-md-5">
+                        <label for="street">Calle</label>
+                        <input type="text" name="street" class="form-control" id="street" value="" placeholder="Calle"
+                        autocomplete="new-street" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="phone">Número telefónico</label>
+                        <input type="number" name="phone" class="form-control input-number-validation" id="phone"
+                            placeholder="Número telefónico" min="1111111111" max="9999999999" pattern="[0-9]" autocomplete="new-phone" required>
+                        <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                        </div>
+                        <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                            números</small>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a href="/api/auth/logout" class="btn btn-primary">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/js/addresses.js"></script>
+<script>
+
+    //Listeners
+    document.querySelectorAll('.form-check-input').forEach(function (checkbox, i) {
+        checkbox.addEventListener('change', function () {
+            const openInput = document.querySelector(`#openhours${(i + 1)}`)
+            const closeInput = document.querySelector(`#closinghours${(i + 1)}`)
+
+            openInput.toggleAttribute('disabled')
+            openInput.toggleAttribute('required')
+            closeInput.toggleAttribute('disabled')
+            closeInput.toggleAttribute('required')
+        })
+    })
+
+    document.getElementById('form').addEventListener('submit', formSubmit)
+
+    function schedule(getDay, openHours, closingHours) {
+        let hoursDays = []
+
+        for (let i = 0; i < getDay.length; i++) {
+            hoursDays.push({ day: getDay[i], openhours: openHours[i], closinghours: closingHours[i] })
+        }
+
+        return hoursDays
+    }
+
+    function registrationConfirmation() {
+        document.getElementById("backdrop").style.display = "block"
+        document.getElementById("exampleModal").style.display = "block"
+        document.getElementById("exampleModal").classList.add("show")
+    }
+
+    async function formSubmit(e) {
+        e.preventDefault()
+
+        const path = `/api/restaurants/postNewRestaurant`
+
+        try {
+            const confirm = window.confirm('¿Desea continuar con el registro?')
+            if (confirm) {
+                const formData = new URLSearchParams();
+
+                for (const pair of new FormData(form)) {
+                    formData.append(pair[0], pair[1]);
+                }
+
+                const data = await fetch(path, {
+                    method: 'POST',
+                    body: formData
+                })
+
+                const response = await data.json()
+                switch (response.status) {
+                    case 201:
+                        alert('Registro completado. Favor de loguearse.')
+                        window.location.href = "/api/auth/logout"
+                        break;
+                    case 304:
+                        sendInputAlert(response.message, 'alert-danger', 'firstAlert')
+                        break;
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+</script>

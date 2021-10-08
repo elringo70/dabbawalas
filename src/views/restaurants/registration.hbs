@@ -1,0 +1,157 @@
+<section>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-md-12 fw-bold fs-3">Proceso de registro</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Registro para nuevo restaurante
+                    </div>
+                    <div class="card-body">
+                        <form id="form" autocomplete="off">
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="dateAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation change"
+                                        id="name" placeholder="Nombre" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation change"
+                                        id="lastname" placeholder="Apellido" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="maternalsurname" class="form-label">Apellido
+                                        Materno</label>
+                                    <input type="text" name="maternalsurname"
+                                        class="form-control input-text-validation change" id="maternalsurname"
+                                        placeholder="Apellido Materno" required>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="dob" class="form-label change">Fecha de nacimiento</label>
+                                    <input type="date" name="dob" class="form-control" id="dob" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select change" id="state-select" required>
+                                        <option selected>Seleccione un estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select change" id="city-select" required>
+                                        <option selected>Seleccione una ciudad</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select change" id="municipality-select"
+                                        required>
+                                        <option selected>Seleccione una colonia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control change" id="street"
+                                        placeholder="Calle" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number"
+                                        class="form-control input-number-validation change" id="number" min="1"
+                                        max="99999" placeholder="Número" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone"
+                                        class="form-control input-number-validation change" id="phone"
+                                        placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" required>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-1">
+                                    <label class="form-check-label">Género</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput1"
+                                            value="1" required>
+                                        <label class="form-check-label" for="genderInput1">Hombre</label>
+                                    </div>
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput2"
+                                            value="0">
+                                        <label class="form-check-label change" for="genderInput2">Mujer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput3"
+                                            value="null">
+                                        <label class="form-check-label" for="genderInput3">Prefiero no contestar</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="email">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control change" id="email"
+                                        placeholder="Ingrese su correo electrónico" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="pass">Contraseña</label>
+                                    <input type="password" name="pass" class="form-control change" id="pass"
+                                        placeholder="Ingrese la contraseña" aria-describedby="passReq" required>
+                                    <div id="passReq" class="form-text">Debe contener 6 caracteres, una mayuscula, minuscula y caracteres especiales.</div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="confpass">Confirme su contraseña</label>
+                                    <input type="password" name="confpass" class="form-control change" id="confpass"
+                                        placeholder="Confirme la contraseña" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="emailAlert"></div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/addresses.js"></script>
+<script src="/js/restaurant/registration.js"></script>

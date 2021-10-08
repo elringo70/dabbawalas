@@ -1,0 +1,168 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Managers</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        All managers status
+                    </div>
+                    <div class="card-body">
+                        <input class="form-control" id="search" type="text" placeholder="Search by manager">
+                        <table class="table table-sm table-hover align-middle" id="productsTable">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th>Date of birth</th>
+                                    <th>Phone</th>
+                                    <th>Position</th>
+                                    <th>Status</th>
+                                    <th>Restaurant</th>
+                                    <th>Edition</th>
+                                </tr>
+                            </thead>
+                            <tbody id="managers-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let managers = []
+    const managersList = document.getElementById('managers-list')
+
+    async function loadManagers() {
+        path = `/api/admin/getAllManagers`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            for (let i = 0; i < response.length; i++) {
+                managers.push(response[i])
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    function renderManagers() {
+        managersList.innerHTML = ''
+        managers.map(manager => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-manager', manager.id)
+            tr.classList.add('text-center')
+
+            const dob = new Date(manager.dob).toLocaleDateString("en-US")
+
+            let verified
+            let btnColor
+            if (manager.verified === 'VERIFIED') {
+                verified = "disabled"
+                btnColor = "btn-outline-secondary"
+            } else {
+                verified = ""
+                btnColor = "btn-outline-primary"
+            }
+
+            let restaurantId
+            if (manager.id_restaurant === null) {
+                restaurantId = 'PENDING'
+            } else {
+                restaurantId = `<a href="/api/restaurants/editRestaurantPage/${manager.id_restaurant}">${manager.id_restaurant}</a>`
+            }
+
+            const content = `
+                <td><a href="/api/admin/getManagerPageInfoPage/${manager.id_user}">${manager.id_user}</a></td>
+                <td>${manager.email}</td>
+                <td>${manager.name} ${manager.lastname} ${manager.maternalsurname}</td>
+                <td>${dob}</td>
+                <td>${manager.phone}</td>
+                <td>${manager.position}</td>
+                <td>${manager.verified}</td>
+                <td>${restaurantId}</td>
+                <td>
+                    <div class="btn-group">
+                        <a data-manager="${manager.id_user}" class="btn ${btnColor} approve-manager ${verified}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"/>
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+
+            tr.innerHTML = content
+            managersList.append(tr)
+
+            tr.querySelector('.approve-manager').addEventListener('click', async function () {
+                await approveManager(manager.id_user)
+            })
+        })
+    }
+
+    function tableFilter() {
+        var input, filter, table, tr, td, i, txtValue
+
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("productsTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2]
+
+            if (td) {
+                txtValue = td.textContent || td.innerText
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = ""
+                } else {
+                    tr[i].style.display = "none"
+                }
+            }
+        }
+    }
+
+    async function approveManager(manager) {
+        const path = `/api/admin/approveManager/${manager}`
+
+        try {
+            const confirm = window.confirm('Do you want to approve this manager?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'PATCH'
+                })
+
+                const response = await data.json()
+                reloadManagerList()
+            }
+        } catch (error) {
+            console.log(error)
+            alert(error)
+        }
+    }
+
+    async function reloadManagerList() {
+        managers = []
+        await loadManagers()
+        renderManagers()
+    }
+
+    document.getElementById('search').addEventListener('keyup', tableFilter)
+
+    addEventListener('load', async function () {
+        await loadManagers()
+        renderManagers()
+    })
+</script>

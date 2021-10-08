@@ -1,0 +1,121 @@
+{{>sidebar}}
+<div class="admin-container">
+
+
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Proceso de registro</div>
+        </div>
+        <div class="row my-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Manager information
+                    </div>
+                    <div class="card-body">
+                        <form id="form" action="/api/manager/postNewManager" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre" value="{{manager.name}}" disabled>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="lastname" class="form-label">Last name</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" value="{{manager.lastname}}" disabled>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="maternalsurname" class="form-label">Maternal Surname</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Apellido Materno"
+                                        value="{{manager.maternalsurname}}" disabled>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="dob" class="form-label">Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control" id="dob" value="{{manager.dob}}"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="number">Number</label>
+                                    <input type="number" name="number" class="form-control input-number-validation"
+                                        id="number" min="1" max="99999" placeholder="Número" value="{{manager.number}}"
+                                        disabled>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="street">Street</label>
+                                    <input type="text" name="street" class="form-control" id="street"
+                                        value="{{manager.street}}" placeholder="Calle" disabled>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="municipality">Municipality</label>
+                                    <input type="text" name="municipality" class="form-control" id="municipality"
+                                        placeholder="Colonia" value="{{manager.municipality}}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="city">City</label>
+                                    <input type="text" name="city" class="form-control input-text-validation" id="city"
+                                        placeholder="Ciudad" value="{{manager.city}}" disabled>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="state">State</label>
+                                    <input type="text" name="state" class="form-control input-text-validation"
+                                        id="state" placeholder="Estado" value="{{manager.state}}" disabled>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="phone">Telephone number</label>
+                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" value="{{manager.phone}}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-1">
+                                    <label class="form-check-label">Gender</label>
+                                </div>
+                                <div class="col">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput1"
+                                            value="1" disabled>
+                                        <label class="form-check-label" for="genderInput1">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput2"
+                                            value="0" disabled>
+                                        <label class="form-check-label" for="genderInput2">Female</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput3"
+                                            value="null" disabled>
+                                        <label class="form-check-label" for="genderInput3">Prefiero no contestar</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="Ingrese su correo electrónico" value="{{manager.email}}" disabled>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for=""></label>
+                                    <a href="#" class="btn btn-primary form-control">Reset password</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

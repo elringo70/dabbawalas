@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="text-center mt-5">
+        <form id="loginForm" action="/api/auth/login" method="POST" style="max-width: 400px; margin:auto;">
+            <img class="mt-4 mb-4" src="/img/logo.png" alt="Dabbawalas-Logo" height="72">
+            <h1 class="h3 mb-3 fw-normal">Por favor inicie sesión</h1>
+
+            <label for="email" class="visually-hidden">Correo Electrónico</label>
+            <input type="email" name="email" id="email" class="form-control form-control-lg email-login"
+                placeholder="Email" autocomplete="off" required autofocus>
+
+            <label for="pass" class="visually-hidden">Constraseña</label>
+            <input type="password" name="pass" class="form-control form-control-lg pass-login" id="pass"
+                placeholder="Contraseña" required>
+            <div class="form-group mt-3">
+                <a href="#">¿Olvidó su contraseña?</a>
+            </div>
+
+            <div class="row">
+                <div class="col-8 m-auto">
+                    <div id="loginAlert"></div>
+                </div>
+            </div>
+            {{#if errorMessage}}
+            <div class="my-3" id="emailAlert">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>{{errorMessage}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if errors}}
+            {{#each errors}}
+            <div class="my-3">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{this.msg}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+
+            <div class="d-grid gap-2 mt-3">
+                <input type="submit" class="btn btn-lg btn-primary" id="loginSubmit">
+            </div>
+        </form>
+    </div>
+</div>
