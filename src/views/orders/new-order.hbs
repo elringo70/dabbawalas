@@ -2,7 +2,7 @@
 <div class="admin-container">
     <div class="container-fluid">
         <div class="row mb-3">
-            <div class="col-md-12 fw-bold fs-3">Órdenes</div>
+            <div class="col-md-12 fw-bold fs-4">Panel de nueva orden</div>
         </div>
         <div class="row mt-3">
             <div class="col-md-12">
@@ -11,35 +11,26 @@
                         Nueva orden
                     </div>
                     <div class="card-body">
-                        <form id="customer-phone" autocomplete="off">
-                            <div class="row mb-3 align-items-end">
-                                <div class="col-md-3">
-                                    <label for="phone">Número del cliente</label>
-                                    <input type="number" name="phone" class="form-control input-number-validation"
-                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
-                                        pattern="[0-9]" autocomplete="new-phone" required>
-                                    <div class="form-text">Ingrese el número telefónico de 10 dígitos</div>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
-                                        números</small>
-                                </div>
-                                <div class="col-md customer-phone-card" hidden>
-                                    <div id="customerCard"></div>
-                                </div>
-                                <div class="col-md-2 customer-phone-card" hidden>
-                                    <label></label>
-                                    <a class="btn btn-primary" id="cleanCustomer">Quitar</a>
-                                    <div class="form-text"></div>
-                                </div>
-                            </div>
-                        </form>
-
                         <div class="row mb-3">
-                            <div class="col">
-                                <div id="phoneExistsAlert"></div>
+                            <div class="col-md-3">
+                                <label for="phone">Número del cliente</label>
+                                <input type="number" name="phone"
+                                    class="form-control input-number-validation arrow-number text-center" id="phone"
+                                    placeholder="Número telefónico" min="1111111111" max="9999999999" pattern="[0-9]"
+                                    required>
+                                <div class="form-text">Ingrese el número telefónico de 10 dígitos</div>
+                                <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                    números</small>
+                            </div>
+                            <div class="col-md customer-card-table" hidden>
+                                <div id="customer-card"></div>
+                            </div>
+                            <div class="col-md-2 customer-card-table" hidden>
+                                <a class="btn btn-primary" id="clean-customer">Quitar</a>
                             </div>
                         </div>
 
-                        <div class="order-table" hidden>
+                        <div class="order-table customer-card-table" hidden>
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <hr class="dropdown-divider">
@@ -52,31 +43,30 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="row mb-3 align-items-end">
-                                    <div class="col-md-3">
-                                        <label for="idproduct">Código del platillo</label>
-                                        <input type="number" name="idproduct"
-                                            class="form-control input-number-validation" id="idproduct" pattern="[0-9]"
-                                            required>
-                                        <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
-                                            números</small>
-                                    </div>
 
-                                    <div class="col-md-1">
-                                        <a id="id-product" class="btn btn-primary">Agregar</a>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                Total de la orden
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-center">
-                                                    <h3 class="card-title">
-                                                        <div id="totalCart">$ 0</div>
-                                                    </h3>
-                                                </div>
+                            <div class="row mb-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label for="id-product">Código del platillo</label>
+                                    <input type="number" name="id-product"
+                                        class="form-control input-number-validation text-center arrow-number"
+                                        id="id-product" pattern="[0-9]" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+
+                                <div class="col-md-2 text-center">
+                                    <a id="btn-id-product" class="btn btn-primary">Agregar</a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            Total de la orden
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-center">
+                                                <h3 class="card-title">
+                                                    <div id="totalCart">$ 0</div>
+                                                </h3>
                                             </div>
                                         </div>
                                     </div>
@@ -85,7 +75,7 @@
 
                             <div class="row mb-3">
                                 <div class="row mb-3">
-                                    <form id="order-form">
+                                    <form id="form">
                                         <table class="table table-hover align-middle">
                                             <thead>
                                                 <tr class="text-center">
@@ -112,4 +102,5 @@
         </div>
     </div>
 </div>
+
 <script src="/js/orders/newOrder.js"></script>

@@ -1,0 +1,41 @@
+{{#if message}}
+<div class="container d-flex justify-content-center">
+    <div class="row">
+        <div class="col-md-12 d-flex align-items-center">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Contraseña reiniciada</h4>
+                <p>La contraseña se ha reiniciado con exito. Se le proporionará una contraseña temporal pero es necesario que ingrese a su perfil y la cambie</p>
+                <hr>
+                <p class="mb-0"><strong>Constraseña temporal:</strong>  {{password}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+
+{{#if errorMessage}}
+<div class="container d-flex justify-content-center">
+    <div class="row">
+        <div class="col-md-12 d-flex align-items-center">
+            <div class="alert alert-danger " role="alert">
+                <h4 class="alert-heading">Error en el token</h4>
+                <p>Se creó una modificación o manipulación para el proceso de reinicio de su contraseña. </p>
+                <hr>
+                <p class="mb-0">Intente de nuevo</p>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+
+<script>
+    addEventListener('load', ()=>{
+        const container = document.querySelectorAll('.container')
+        const header = document.getElementsByTagName('HEADER')[0]
+        const footer = document.getElementsByTagName('FOOTER')[0]
+        const height = window.innerHeight - header.offsetHeight - footer.offsetHeight
+        container.forEach(element =>{
+            element.style.height = height + "px" 
+        })
+    })
+</script>

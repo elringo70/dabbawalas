@@ -1,20 +1,20 @@
 export interface IUser {
-    id_user?: number,
+    id_user?: number | string,
     name: string,
     lastname: string,
     maternalsurname: string,
     dob: Date,
     phone: string,
-    usertype: 'M' | 'C' | 'D' | 'A' | 'CA',
+    usertype?: 'M' | 'C' | 'D' | 'A' | 'CA',
     image?: string,
-    active: number
+    active?: number,
+    id_address?: number | string
 }
 
 export interface ICashier extends IUser {
     email: string,
     pass: string,
-    id_restaurant: number | string,
-    id_address?: number | string
+    id_restaurant: number | string
 }
 
 export interface IManager extends IUser {
@@ -22,8 +22,8 @@ export interface IManager extends IUser {
     pass?: string,
     confpass?: string,
     gender: number,
-    position: string,
-    verified: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
+    position?: string,
+    verified?: 'VERIFIED' | 'UNVERIFIED' | 'REMOVED'
     id_restaurant?: number
 }
 

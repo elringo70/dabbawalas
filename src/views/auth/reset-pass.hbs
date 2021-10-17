@@ -1,0 +1,90 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Cambio de contraseña</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Cambiar contraseña
+                    </div>
+                    {{#if message}}
+                    <div class="row m-3">
+                        <div class="col-md-6 mx-auto">
+                            <div class="alert alert-primary" role="alert">
+                                {{message}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                    <div class="card-body">
+                        <form action="/api/auth/resetPassword" id="form" method="POST">
+                            <div class="row mb-3">
+                                <div class="col-sm-4 mx-auto">
+                                    <label for="actualpass">Contraseña actual</label>
+                                    <input type="password" name="actualpass" class="form-control" id="actual-pass"
+                                        placeholder="Ingrese su contraseña actual" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4 mx-auto">
+                                    <label for="pass">Nueva contraseña</label>
+                                    <input type="password" name="pass" class="form-control password" id="pass"
+                                        placeholder="Ingrese la contraseña" required>
+                                    <div class="form-text">Debe contener 6 caracteres, una mayuscula, minuscula y
+                                        caracteres especiales.</div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-sm-4 mx-auto">
+                                    <label for="confpass">Confirme su contraseña</label>
+                                    <input type="password" name="confpass" class="form-control password" id="confpass"
+                                        placeholder="Confirme la contraseña" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-grid gap-2 col-4 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Guardar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('confpass').addEventListener('change', passwordValidation)
+    document.getElementById('form').addEventListener('submit', formValidation)
+
+    function passwordValidation() {
+        const pass = document.querySelectorAll('.password')
+        const format = new RegExp('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
+
+        if (!(format.test(pass[0].value) || format.test(pass[1].value))) {
+            alert('Debe contener el formato requerido')
+            return false
+        }
+        if (pass[0].value !== pass[1].value) {
+            alert('Las contraseñas deben coincidir')
+            return false
+        }
+        return true
+    }
+
+    function formValidation(e) {
+        e.preventDefault()
+
+        const passValidation = passwordValidation()
+
+        if (!passValidation) {
+            alert('Verifique las contraseñas')
+        } else {
+            form.submit()
+        }
+    }
+</script>

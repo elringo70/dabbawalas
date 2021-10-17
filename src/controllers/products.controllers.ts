@@ -117,17 +117,10 @@ class ProductController {
 
     async getProductByIdByRestaurant(req: Request, res: Response) {
         const user = res.locals.token
-
-        const productQuery = `
-            SELECT *
-            FROM products
-            WHERE id_product=${req.body.id}
-            AND id_restaurant=${user.id_restaurant}
-            AND active=1
-        `
+        const id = req.body.id        
 
         try {
-            const product = await Product.findById(productQuery)
+            const product = await Product.findById(id, user.id_restaurant)
             if (product) {
                 return res.json({
                     status: 200,
@@ -191,18 +184,10 @@ class ProductController {
 
     async editProductByIdPage(req: Request, res: Response) {
         const user = res.locals.token
-        const id = req.params.id
-
-        const productQuery = `
-            SELECT *
-            FROM products
-            WHERE id_product=${id}
-            AND id_restaurant=${user.id_restaurant}
-            AND active=1
-        `
+        const id = req.params.id        
 
         try {
-            const editProduct = await Product.findById(productQuery)
+            const editProduct = await Product.findById(id, user.id_restaurant)
 
             res.status(200).render('products/edit-product', {
                 title: 'Editar el platillo',
@@ -244,20 +229,20 @@ class ProductController {
             const image = req.file?.filename
 
             const productObject: IProduct = {
-                id_product: id,
                 name: body.name.toUpperCase(),
                 cost: body.cost,
                 price: body.price,
-                image: 'uploads/' + image,
                 description: body.description.toUpperCase(),
                 cookingTime: body.cookingtime,
                 active: 1,
                 id_restaurant: user.id_restaurant
             }
-            const query = `
-                SELECT id_product FROM products WHERE id_product=${id}
-            `
-            const searchProduct = await Product.findById(query)
+            
+            if (image !== undefined) {
+                productObject.image = 'uploads/' + image
+            }
+            
+            const searchProduct = await Product.findById(id, user.id_restaurant)
             if (!searchProduct) {
                 return res.json({
                     status: 200,
@@ -266,7 +251,7 @@ class ProductController {
             }
 
             const product = new Product()
-            await product.updateById(productObject)
+            await product.updateById(id, productObject)
 
             res.json({
                 status: 200,

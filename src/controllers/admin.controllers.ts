@@ -194,7 +194,7 @@ class AdminController {
                     WHERE id_product=${bestSellingProductObject[0].id_product}
                 `
 
-                const findProduct: any = await Product.findById(query)
+                const findProduct: any = await Product.findBy(query)
 
                 let dataLabels = []
                 let data = []
@@ -283,7 +283,8 @@ class AdminController {
                 WHERE id_user=${id}
             `
 
-            const verifiedManager = await User.updateById(query)
+            const verifiedManager = new User()
+            await verifiedManager.updateById(query)
 
             console.log(verifiedManager)
             res.status(200).json(verifiedManager)

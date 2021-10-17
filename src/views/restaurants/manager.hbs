@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div class="card-dashboard-text w-100">
-                                <h1 class="processing-orders">0</h1>
+                                <h1 class="dashboard-cards" id="processing">0</h1>
                                 <h6 class="card-title">En proceso</h6>
                             </div>
                             <div class="d-flex justify-content-end align-items-center w-100">
@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="card-dashboard-text w-100">
-                                <h1 class="completed-orders">0</h1>
+                                <h1 class="dashboard-cards" id="completed">0</h1>
                                 <h6 class="card-title">Completadas</h6>
                             </div>
                             <div class="d-flex justify-content-end align-items-center w-100">
@@ -51,7 +51,7 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="card-dashboard-text w-100">
-                                <h1 class="canceled-orders">0</h1>
+                                <h1 class="dashboard-cards" id="canceled">0</h1>
                                 <h6 class="card-title">Canceladas</h6>
                             </div>
                             <div class="d-flex justify-content-end align-items-center w-100">
@@ -72,8 +72,8 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="card-dashboard-text w-100">
-                                <h1 class="today-orders">0</h1>
-                                <h6 class="card-title">Ordenes del día</h6>
+                                <h1 class="dashboard-cards" id="delayed">0</h1>
+                                <h6 class="card-title">Órdenes retrasadas</h6>
                             </div>
                             <div class="d-flex justify-content-end align-items-center w-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="currentColor"
@@ -118,7 +118,7 @@
                     </div>
                     <div class="card-body">
                         <table class="table table-striped data-table">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
                                     <th>ID</th>
                                     <th>Número telefónico</th>
@@ -138,150 +138,4 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
-<script>
-    let orders = []
-    const ordersList = document.querySelector('.orders-list')
-
-    async function ordersStatus() {
-        const path = `/api/orders/loadDashboard`
-
-        try {
-            const data = await fetch(path)
-            const response = await data.json()
-            return response
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function loadDashboardCards() {
-        const ordersByStatus = await ordersStatus()
-        const orders = ordersByStatus.ordersByStatus
-
-        if (ordersByStatus.orders !== false) {
-            const com = document.querySelector('.completed-orders')
-            const can = document.querySelector('.canceled-orders')
-            const pro = document.querySelector('.processing-orders')
-            const tod = document.querySelector('.today-orders')
-
-            com.innerHTML = orders.completed
-            can.innerHTML = orders.canceled
-            pro.innerHTML = orders.processing
-            tod.innerHTML = orders.todayOrders
-        } else {
-            return ordersByStatus.message
-        }
-    }
-
-    async function loadLastOrders() {
-        path = `/api/orders/getAllTodayOrders`
-
-        try {
-            const data = await fetch(path)
-            const response = await data.json()
-
-            for (let i = 0; i < 3; i++) {
-                const date = new Date(response[i].createdAt)
-                const order = {
-                    id: response[i].id_order,
-                    phone: response[i].phone,
-                    customer: `${response[i].name} ${response[i].lastname}`,
-                    total: response[i].total,
-                    creationTime: date.toLocaleTimeString(),
-                    status: response[i].orderstatus
-                }
-                orders.push(order)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    function renderOrders() {
-        ordersList.innerHTML = ''
-        orders.map(order => {
-            const tr = document.createElement('tr')
-            tr.setAttribute('data-order', order.id)
-            tr.classList.add('text-center')
-            const content = `
-                <td>${order.id}</td>
-                <td>${order.phone}</td>
-                <td>${order.customer}</td>
-                <td>${order.creationTime}</td>
-                <td>${order.status.toUpperCase()}</td>
-                <td>$ ${order.total}</td>
-            `
-
-            tr.innerHTML = content
-            ordersList.append(tr)
-        })
-    }
-
-    async function loadData7DayChart() {
-        const path = `/api/orders/loadData7DayChart`
-
-        try {
-            const data = await fetch(path)
-            const response = await data.json()
-            return response
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function monthDataSales() {
-        const path = `/api/orders/monthDataSales`
-
-        try {
-            const data = await fetch(path)
-            const response = await data.json()
-
-            let labels = []
-            for (let i = 0; i < response.length; i++) {
-                labels[i] = response[i].day
-            }
-
-            let datasetData = []
-            for (let i = 0; i < response.length; i++) {
-                datasetData[i] = response[i].day_count
-            }
-
-            var ctx = document.getElementById('month-sales')
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Ventas del mes',
-                        data: datasetData
-                    }]
-                }
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    async function render7DayChart() {
-        const data = await loadData7DayChart()
-        var ctx = document.getElementById('seven-day-chart')
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',],
-                datasets: [{
-                    label: 'Ventas de la semana',
-                    data
-                }]
-            }
-        })
-    }
-
-    addEventListener('load', async function () {
-        await loadDashboardCards()
-        await loadLastOrders()
-        render7DayChart()
-        await monthDataSales()
-        renderOrders()
-    })
-</script>
+<script src="/js/manager/loadDashboard.js"></script>

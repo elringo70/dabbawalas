@@ -20,8 +20,7 @@ class JWT {
                     let profile: any = {
                         user: newUser.user,
                         active: true,
-                        loggedIn: true,
-                        message: null
+                        loggedIn: true
                     }
 
                     switch(newUser.user.usertype) {

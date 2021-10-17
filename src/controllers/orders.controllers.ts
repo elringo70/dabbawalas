@@ -81,27 +81,11 @@ class OrderController {
                 phone: body.phone
             }
 
-            const sameLength = confirmLength(orderObject)
-            if (!sameLength) {
-                return res.json({
-                    status: 304,
-                    errorMessage: 'Error al enviar la cantidad de productos'
-                })
-            }
-
             const length = orderObject.quantity.length
             let orderDetailArray = []
 
             for (let i = 0; i < length; i++) {
-                const productQuery = `
-                        SELECT *
-                        FROM products
-                        WHERE id_product=${orderObject.id_product[i]}
-                        AND id_restaurant=${user.id_restaurant}
-                        AND active=1
-                    `
-
-                const productPrice = await Product.findById(productQuery)
+                const productPrice = await Product.findById(orderObject.id_product[i], user.id_restaurant)
                 if (!productPrice) {
                     return res.json({
                         status: 304,
@@ -127,16 +111,22 @@ class OrderController {
                 SELECT id_user
                 FROM users
                 WHERE phone='${body.phone}'
+                AND usertype='C'
             `
             const customerPhone = await Customer.findBy(customerPhoneQuery)
-            let newOrder
-            if (customerPhone) {
-                newOrder = {
-                    total,
-                    orderstatus: 'opened',
-                    id_restaurant: user.id_restaurant,
-                    id_user: customerPhone.id_user
-                }
+
+            console.log(customerPhone)
+            if (!customerPhone) {
+                return res.json({
+                    status: 304,
+                    message: 'El número enviado no fue encontrado'
+                })
+            }
+            const newOrder = {
+                total,
+                orderstatus: 'opened',
+                id_restaurant: user.id_restaurant,
+                id_user: customerPhone.id_user
             }
 
             const order = new Order()
@@ -229,84 +219,28 @@ class OrderController {
     async loadDashboard(req: Request, res: Response) {
         const user = res.locals.token
 
-        try {
-
-            let query = ``
-
-            switch (user.usertype) {
-                case 'A':
-                    query = `
-                        SELECT *
-                        FROM orders 
-                        WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
-                    `
-                    break
-                case 'M':
-                    query = `
-                        SELECT *
-                        FROM orders 
-                        WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
-                        AND id_restaurant=${user.id_restaurant}
-                    `
-                    break
-            }
-
-            const orders: IOrder[] | null = await Order.fetchAllAny(query)
-
-            if (!orders) {
-                return res.status(200).json({
-                    orders: false,
-                    message: 'No hay ordenes del dia'
-                })
-            }
-
-            let processing = 0
-            let completed = 0
-            let canceled = 0
-            let todayOrders = 0
-
-            for (let i = 0; i < orders?.length; i++) {
-                switch (orders[i].orderstatus) {
-                    case 'opened':
-                        processing++
-                        todayOrders++
-                        break
-                    case 'canceled':
-                        canceled++
-                        todayOrders++
-                        break
-                    case 'completed':
-                        completed++
-                        todayOrders++
-                        break
-                }
-            }
-
-            const dashboard = {
-                ordersByStatus: {
-                    processing,
-                    completed,
-                    canceled,
-                    todayOrders
-                }
-            }
-
-            res.status(200).json(dashboard)
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                status: 304,
-                errorMessage: 'Error al cargar el dashboard'
-            })
+        let dashboard: any = {
+            ordersByStatus: null,
+            daysCount: null,
+            monthSales: null,
+            lastSales: null
         }
-    }
-
-    async loadData7DayChart(req: Request, res: Response) {
-        const user = res.locals.token
 
         try {
-            const query = `
+            //Orders query
+            const ordersQuery = todayOrdersRoleQuery(user)
+
+            //Load orders from database
+            const orders = await Order.fetchAllAny(ordersQuery)
+
+            if (orders) {
+                //Load variables for cards
+                const ordersByStatus = loadStatusCards(orders)
+                dashboard.ordersByStatus = ordersByStatus
+            }
+
+            //Query for the 7 day chart
+            const sevenDayQuery = `
                 SELECT DAYNAME(orders.createdAt) AS day_name, COUNT(*) AS day_count
                 FROM orders
                 WHERE YEARWEEK(createdAt) = YEARWEEK(NOW())
@@ -314,61 +248,16 @@ class OrderController {
                 GROUP BY day_name
             `
 
-            const sevenDayChart = await Order.fetchAllAny(query)
-
-            let Monday = 0,
-                Tuesday = 0,
-                Wednesday = 0,
-                Thursday = 0,
-                Friday = 0,
-                Saturday = 0,
-                Sunday = 0
+            //Load 7 day chart from database
+            const sevenDayChart = await Order.fetchAllAny(sevenDayQuery)
 
             if (sevenDayChart) {
-                for (let i = 0; i < sevenDayChart.length; i++) {
-                    switch (sevenDayChart[i].day_name) {
-                        case 'Monday':
-                            Monday = sevenDayChart[i].day_count
-                            break
-                        case 'Tuesday':
-                            Tuesday = sevenDayChart[i].day_count
-                            break
-                        case 'Wednesday':
-                            Wednesday = sevenDayChart[i].day_count
-                            break
-                        case 'Thursday':
-                            Thursday = sevenDayChart[i].day_count
-                            break
-                        case 'Friday':
-                            Friday = sevenDayChart[i].day_count
-                            break
-                        case 'Saturday':
-                            Saturday = sevenDayChart[i].day_count
-                            break
-                        case 'Sunday':
-                            Sunday = sevenDayChart[i].day_count
-                            break
-                    }
-                }
+                //Load days variables for 7 day chart
+                const daysCount = load7DayChart(sevenDayChart)
+                dashboard.daysCount = daysCount
             }
 
-            let daysCount = [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-
-            res.status(200).json(daysCount)
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                status: 304,
-                errorMessage: 'Error al cargar información de la gráfica'
-            })
-        }
-    }
-
-    async monthDataSales(req: Request, res: Response) {
-        const user = res.locals.token
-
-        try {
+            //Query for month sales
             const query = `
                 SELECT DATE_FORMAT(orders.createdAt, '%Y-%m-%d') AS day, COUNT(*) AS day_count
                 FROM orders 
@@ -378,15 +267,32 @@ class OrderController {
                 GROUP BY day
             `
 
-            const monthSales: any = await Order.fetchAllAny(query)
+            //Load data from database for month sales
+            const monthSales = await Order.fetchAllAny(query)
+            dashboard.monthSales = monthSales
 
-            res.status(200).json(monthSales)
+            const last3OrdersQuery = `
+                SELECT orders.*, users.name, users.lastname, users.phone
+                FROM orders
+                LEFT JOIN users
+                    ON orders.id_user = users.id_user
+                WHERE orders.id_restaurant=${user.id_restaurant}
+                    AND orderstatus='opened'
+                    AND CURDATE()
+                ORDER BY orders.createdAt ASC
+                LIMIT 3
+            `
+            const last3Orders = await Order.fetchAllAny(last3OrdersQuery)
+            dashboard.lastSales = last3Orders
+
+            //Dashboard Object
+            res.status(200).json(dashboard)
         } catch (error) {
             if (error) console.log(error)
 
             res.json({
                 status: 304,
-                errorMessage: 'Error al traer las ventas del mes'
+                errorMessage: 'Error al cargar el dashboard'
             })
         }
     }
@@ -419,12 +325,7 @@ class OrderController {
 
             let products = []
             for (let i = 0; i < orderDetail.length; i++) {
-                const productQuery = `
-                    SELECT *
-                    FROM products
-                    WHERE id_product=${orderDetail[i].id_product}
-                `
-                const product = await Product.findById(productQuery)
+                const product = await Product.findById(orderDetail[i].id_product, user.id_restaurant)
 
                 products.push({
                     quantity: orderDetail[i].quantity,
@@ -481,10 +382,101 @@ class OrderController {
 
 export const ordersController = new OrderController()
 
-function confirmLength(orderObject: IPostingOrder) {
-    const orderArray = [orderObject.quantity.length, orderObject.price.length, orderObject.id_product.length]
 
-    const attributesArray = orderArray.every(e => orderArray[0] == e)
+//Select query if admin, manager
+function todayOrdersRoleQuery(user: any) {
 
-    return attributesArray
+    let query = ``
+
+    switch (user.usertype) {
+        case 'A':
+            query = `
+                SELECT * FROM orders
+                WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
+                AND id_restaurant=6
+            `
+            break
+        case 'M':
+            query = `
+                SELECT *
+                FROM orders 
+                WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
+                AND id_restaurant=${user.id_restaurant}
+            `
+            break
+    }
+    return query
+}
+
+//Load variables for 
+function loadStatusCards(orders: IOrder[]) {
+    let processing = 0
+    let completed = 0
+    let canceled = 0
+    let delayed = 0
+
+    for (let i = 0; i < orders?.length; i++) {
+        switch (orders[i].orderstatus) {
+            case 'opened':
+                processing++
+                delayed++
+                break
+            case 'canceled':
+                canceled++
+                delayed++
+                break
+            case 'completed':
+                completed++
+                delayed++
+                break
+        }
+    }
+
+    return {
+        processing,
+        completed,
+        canceled,
+        delayed
+    }
+}
+
+function load7DayChart(sevenDayChart: IOrder[]) {
+    let Monday = 0,
+        Tuesday = 0,
+        Wednesday = 0,
+        Thursday = 0,
+        Friday = 0,
+        Saturday = 0,
+        Sunday = 0
+
+    if (sevenDayChart) {
+        for (let i = 0; i < sevenDayChart.length; i++) {
+            switch (sevenDayChart[i].day_name) {
+                case 'Monday':
+                    Monday = sevenDayChart[i].day_count
+                    break
+                case 'Tuesday':
+                    Tuesday = sevenDayChart[i].day_count
+                    break
+                case 'Wednesday':
+                    Wednesday = sevenDayChart[i].day_count
+                    break
+                case 'Thursday':
+                    Thursday = sevenDayChart[i].day_count
+                    break
+                case 'Friday':
+                    Friday = sevenDayChart[i].day_count
+                    break
+                case 'Saturday':
+                    Saturday = sevenDayChart[i].day_count
+                    break
+                case 'Sunday':
+                    Sunday = sevenDayChart[i].day_count
+                    break
+            }
+        }
+    }
+
+    let daysCount = [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    return daysCount
 }

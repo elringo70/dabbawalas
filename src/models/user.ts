@@ -178,12 +178,16 @@ export default class User {
             pool.query(query, (error, results: IAdmin[]) => {
                 if (error) reject(error)
 
+                if (results === undefined) {
+                    return null
+                }
+
                 resolve(results.length > 0 ? results : null)
             })
         })
     }
 
-    static updateById(query: string) {
+    updateById(query: string) {
         return new Promise((resolve, reject) => {
             pool.query(query, (error, results) => {
                 if (error) reject(error)

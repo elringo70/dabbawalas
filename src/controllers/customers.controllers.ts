@@ -104,6 +104,7 @@ class CustomerController {
 
     }
 
+
     async getCustomerByPhone(req: Request, res: Response) {
         const errors = validationResult(req)
         const error = errors.array()
@@ -150,21 +151,52 @@ class CustomerController {
 
             if (customer !== null) {
                 return res.json({
-                    status: 304,
+                    status: 201,
                     customer
                 })
             }
 
-            res.json({
-                status: 200,
-                message: 'Número disponible'
-            })
+            res.status(200).json(customer)
         } catch (error) {
             if (error) console.log(error)
 
             res.json({
                 status: 304,
                 errorMessage: 'Error al obtener el cliente'
+            })
+        }
+    }
+
+    async findCustomerByPhone(req: Request, res: Response) {
+        const { phone } = req.params
+        const user = res.locals.token
+
+        try {
+            const query = `
+                SELECT phone
+                FROM users
+                WHERE phone='${phone}'
+                AND id_restaurant=${user.id_restaurant}
+                AND usertype='C'
+            `
+            const customer = await Customer.findBy(query)
+
+            if (customer) {
+                return res.json({
+                    status: 200,
+                    message: 'El número ya se encuentra registrado'
+                })
+            }
+            res.json({
+                status: 400,
+                message: 'Disponible'
+            })
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.json({
+                status: 304,
+                errorMessage: 'Error al encontrar el número'
             })
         }
     }
@@ -284,7 +316,7 @@ class CustomerController {
                     message: error[0].msg
                 })
             }
-            
+
             const query = `
                 SELECT users.*
                 FROM users

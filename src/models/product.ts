@@ -19,6 +19,10 @@ export default class Product {
             pool.query(query, (error, results: IProduct[]) => {
                 if (error) reject(error)
 
+                if (results === undefined) {
+                    return null
+                }
+
                 resolve(results.length > 0 ? results : null)
             })
         })
@@ -42,7 +46,24 @@ export default class Product {
         })
     }
 
-    static findById(query: string): Promise<IProduct | null> {
+    static findById(id: string | number, restaurant: string | number): Promise<IProduct | null> {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT *
+                FROM products
+                WHERE id_product=?
+                AND id_restaurant=?
+                AND active=1
+            `
+            pool.query(query, [id, restaurant], (error, results: IProduct[]) => {
+                if (error) reject(error)
+
+                resolve(results.length === 1 ? results[0] : null)
+            })
+        })
+    }
+
+    static findBy(query: string): Promise<IProduct | null> {
         return new Promise((resolve, reject) => {
             pool.query(query, (error, results: IProduct[]) => {
                 if (error) reject(error)
@@ -68,20 +89,11 @@ export default class Product {
         })
     }
 
-    updateById(product: IProduct) {
+    updateById(id: string | number, product: IProduct) {
         return new Promise((resolve, reject) => {
-            const query = `
-                UPDATE products SET
-                name='${product.name}',
-                cost=${product.cost},
-                price=${product.price},
-                image='${product.image}',
-                description='${product.description}',
-                cookingtime=${product.cookingTime}
-                WHERE id_product=${product.id_product}
-            `
+            const query = `UPDATE products SET ? WHERE id_product=?`
 
-            pool.query(query, (error, results) => {
+            pool.query(query, [product, id], (error, results) => {
                 if (error) reject(error)
 
                 resolve(results)

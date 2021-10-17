@@ -70,6 +70,7 @@ class CustomerRoutes {
                 .trim()
                 .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono válido'),
         ], customerController.getCustomerByPhone)
+        this.router.get('/findCustomerByPhone/:phone', [checkJWT.checkJWT, checkRole(['M'])], customerController.findCustomerByPhone)
 
         //Route edit customer
         this.router.patch('/editCustomerByRestaurant/:phone', [checkJWT.checkJWT, checkRole(['M', 'A'])], [

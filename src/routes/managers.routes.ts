@@ -121,6 +121,56 @@ class ManagerRoutes {
         ], managerControllers.postNewCashier)
         this.router.get('/getCashiersPage', [checkJWT.checkJWT, checkRole(['M', 'A'])], managerControllers.getCashiersPage)
         this.router.get('/getCashiers', [checkJWT.checkJWT, checkRole(['M', 'A'])], managerControllers.getCashiers)
+        this.router.get('/editManagerPage/:id', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.editManagerPage)
+        
+        //Edit validations
+        this.router.patch('/editManager/:id', [checkJWT.checkJWT, checkRole(['M'])], [
+            check('name')
+                .not().isEmpty().withMessage('Ingrese su nombre')
+                .trim()
+                .isLength({ min: 3 }).withMessage('El nombre debe de contener al menos 3 caracteres')
+                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el nombre'),
+            check('lastname')
+                .not().isEmpty().withMessage('Ingrese el apellido')
+                .trim()
+                .isLength({ min: 3 }).withMessage('El apellido debe de contener al menos 3 caracteres')
+                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el apellido'),
+            check('maternalsurname')
+                .not().isEmpty().withMessage('Ingrese su segundo apellido')
+                .trim()
+                .isLength({ min: 3 }).withMessage('El segundo apellido debe de contener al menos 3 caracteres')
+                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el segundo apellido'),
+            check('dob')
+                .not().isEmpty().withMessage('Ingrese la su fecha de nacimiento')
+                .trim()
+                .isDate().withMessage('Seleccione un formato valido de fecha'),
+            check('number')
+                .not().isEmpty().withMessage('Ingrese el numero de la dirección')
+                .trim()
+                .isNumeric().withMessage('Solo puede ingresar valores numéricos'),
+            check('street')
+                .not().isEmpty().withMessage('Ingrese el nombre de la calle')
+                .trim(),
+            check('municipality')
+                .not().isEmpty().withMessage('Seleccione una colonia')
+                .trim(),
+            check('city')
+                .not().isEmpty().withMessage('Seleccione una ciudad')
+                .trim(),
+            check('state')
+                .not().isEmpty().withMessage('Seleccione un estado')
+                .trim(),
+            check('phone')
+                .not().isEmpty().withMessage('Ingrese un número telefonico')
+                .trim()
+                .isNumeric().withMessage('Solo puede ingresar valores numéricos')
+                .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido'),
+        ], managerControllers.editManagerById)
+        this.router.get('/getChartsPage', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.getChartsPage)
+        this.router.post('/chartDashboard', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.chartDashboard)
+        this.router.get('/getPersonnel', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.getPersonnel)
+        this.router.get('/getPersonnelPage', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.getPersonnelPage)
+        this.router.get('/getNewEmployeePage', [checkJWT.checkJWT, checkRole(['M'])], managerControllers.getNewEmployeePage)
     }
 }
 

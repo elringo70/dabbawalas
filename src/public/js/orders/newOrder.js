@@ -1,9 +1,8 @@
 let order = []
 const productList = document.getElementById('product-list')
-const orderTable = document.querySelector('.order-table')
 
-document.getElementById('order-form').addEventListener('submit', orderForm)
-document.getElementById('cleanCustomer').addEventListener('click', completeCleanOrder)
+document.getElementById('form').addEventListener('submit', orderForm)
+document.getElementById('clean-customer').addEventListener('click', removeCustomerCard)
 
 document.getElementById('phone').addEventListener('change', async function (e) {
     e.preventDefault();
@@ -12,17 +11,15 @@ document.getElementById('phone').addEventListener('change', async function (e) {
     const customer = await findCustomer(phone.value);
 
     if (customer) {
-        customerCard(customer);
-        orderTable.hidden = false;
+        displayCard(customer);
     } else {
         alert('El número del cliente no existe');
         phone.value = '';
     }
 })
 
-document.getElementById('id-product').addEventListener('click', async function (e) {
-    e.preventDefault()
-    const idproduct = document.getElementById('idproduct')
+document.getElementById('btn-id-product').addEventListener('click', async function (e) {
+    const idproduct = document.getElementById('id-product')
     const product = await findProduct(idproduct.value)
 
     if (!product) {
@@ -82,22 +79,22 @@ async function findCustomer(phone) {
     }
 }
 
-function customerCard(customer) {
-    const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
-    for (let i = 0; i < customerPhoneCard.length; i++) {
-        customerPhoneCard[i].hidden = false
+function displayCard(customer) {
+    const customerCard = document.querySelectorAll('.customer-card-table')
+    for (let i = 0; i < customerCard.length; i++) {
+        customerCard[i].hidden = false
     }
 
-    const cardInfo = document.getElementById('customerCard')
-    cardInfo.innerHTML = `
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title" data-idcustomer="${customer.id_user}">${customer.name} ${customer.lastname}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Dirección</h6>
-                    <p class="card-text">${customer.street} #${customer.number}, ${customer.municipality}, ${customer.city}</p>
-                </div>
+    const customerCardInfo = document.getElementById('customer-card')
+    customerCardInfo.innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" data-idcustomer="${customer.id_user}">${customer.name} ${customer.lastname}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Dirección</h6>
+                <p class="card-text">${customer.street} ${customer.number}, ${customer.municipality}, ${customer.city}</p>
             </div>
-        `
+        </div>
+    `
 }
 
 function renderCart() {
@@ -113,7 +110,7 @@ function renderCart() {
                 <td>${item.name}</td>
                 <td>$ ${item.price}</td>
                 <td>
-                    <input class="form-control quantity m-auto" type="number" name="quantity" min="1" value=${item.quantity} style="width: 75px;">
+                    <input class="form-control quantity m-auto" type="number" name="quantity[]" min="1" value=${item.quantity} style="width: 75px;">
                 </td>
                 <td>
                     <div class="btn-group">
@@ -127,8 +124,8 @@ function renderCart() {
                         </a>
                     </div>
                 </td>
-                <input type="number" name="product" value='${item.id}' hidden>
-                <input type="number" name="price" value='${item.price}' hidden>
+                <input type="number" name="product[]" value='${item.id}' hidden>
+                <input type="number" name="price[]" value='${item.price}' hidden>
             `
 
         tr.innerHTML = content
@@ -183,7 +180,7 @@ function totalCart() {
     totalAmount.innerHTML = `$ ${total}`
 }
 
-function addItem(product, idproduct) {
+function addItem(product) {
     const item = {
         id: product.id_product,
         image: product.image,
@@ -195,7 +192,7 @@ function addItem(product, idproduct) {
     const input = document.getElementsByClassName('quantity')
 
     for (let i = 0; i < order.length; i++) {
-        if (order[i].id == idproduct) {
+        if (order[i].id == product.id_product) {
             order[i].quantity++
             input[i].value = order[i].quantity
 
@@ -211,20 +208,20 @@ async function orderForm(e) {
     e.preventDefault()
 
     if (order.length <= 0) {
-        return alert('No hay platillos agregados a la order')
+        return alert('No hay platillos agregados a la orden')
     }
 
-    const formData = new URLSearchParams()
-    const form = document.getElementById('order-form')
-
+    const formData = new URLSearchParams();
+    
     for (const pair of new FormData(form)) {
-        formData.append(pair[0], pair[1]);
+        formData.append(pair[0], pair[1])
+        console.log(pair[0], pair[1])
     }
 
     try {
         const confirm = window.confirm('¿Esta completa la orden?')
         if (confirm) {
-            const phone = document.getElementById('phone').value            
+            const phone = document.getElementById('phone').value
             formData.append('phone', phone)
 
             path = `/api/orders/postNewOrder`
@@ -239,28 +236,23 @@ async function orderForm(e) {
                 return alert(response.message)
             }
             alert('Orden generada con éxito')
-            completeCleanOrder(e)
+            removeCustomerCard()
         }
     } catch (error) {
         console.log(error)
+        alert(error)
     }
 }
 
-function completeCleanOrder(e) {
-    e.preventDefault()
-
-    const phone = document.getElementById('phone')
-    phone.value = ''
-    const customerPhoneCard = document.querySelectorAll('.customer-phone-card')
-
-    for (let i = 0; i < customerPhoneCard.length; i++) {
-        customerPhoneCard[i].hidden = true
+function removeCustomerCard() {
+    const customerCard = document.querySelectorAll('.customer-card-table')
+    for (let i = 0; i < customerCard.length; i++) {
+        customerCard[i].hidden = true
     }
 
-    const cardInfo = document.getElementById('customerCard')
-    const child = cardInfo.firstElementChild
-    child.remove()
+    const customerCardInfo = document.getElementById('customer-card')
+    customerCardInfo.innerHTML = ''
+    const phone = document.getElementById('phone')
+    phone.value = ''
     order = []
-    renderCart()
-    orderTable.hidden = true
 }

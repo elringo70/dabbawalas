@@ -101,12 +101,6 @@
                                         <span>Ver platillos</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-card-list"></i></span>
-                                        <span>Platillos descontinuados</span>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -160,7 +154,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="" class="nav-link px-3">
+                    <a href="/api/managers/getChartsPage" class="nav-link px-3">
                         <span class="me-2">
                             <i class="bi bi-graph-up"></i>
                         </span>
@@ -179,7 +173,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="" class="nav-link px-3">
+                    <a href="/api/managers/editManagerPage/{{user.id_user}}" class="nav-link px-3">
                         <span class="me-2"><i class="bi bi-person-square"></i></span>
                         <span>{{user.name}} {{user.lastname}}</span>
                     </a>
@@ -195,6 +189,12 @@
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
+                                    <a href="/api/managers/getPersonnelPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-people"></i></span>
+                                        <span>Personal</span>
+                                    </a>
+                                </li>
+{{!--                                 <li>
                                     <a href="/api/restaurants/cookerRegistration" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-layout-split"></i></span>
                                         <span>Cocineros</span>
@@ -205,7 +205,7 @@
                                         <span class="me-2"><i class="bi bi-layout-split"></i></span>
                                         <span>Cajeros</span>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li>
                                     <a href="/api/auth/logout" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-door-open"></i></span>

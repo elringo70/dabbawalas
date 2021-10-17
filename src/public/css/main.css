@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@300;400&display=swap');
+
+:root {
+    /* Charts dashboard manager */
+    --light-green: #7dcbab;
+    --medium-green: #15807e;
+    --red: #ff0000;
+}
+
 html, body {
     height: 100%;
 }
@@ -107,4 +115,16 @@ html, body {
     50% {    
         border-color: #dc3545; 
     }    
+}
+
+
+
+/* Chart manager page */
+.last-and-month {
+    background-color: #f6f6f6;
+}
+
+.dashboard-cards {
+    color: var(--medium-green);
+    font-weight: 400;
 }

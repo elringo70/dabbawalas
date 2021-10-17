@@ -2,102 +2,6 @@ import { IOrder, IOrderDetail, IPostingOrder } from '../interfaces/IOrder'
 import { conn, pool, asyncConn } from '../utils/database'
 
 export default class Order {
-    /* save(
-        orderQueryObj: {
-            total: number,
-            orderstatus: string,
-            id_restaurant: string | number,
-            id_user: string | number
-        },
-        orderDetailQueryObj: {
-            id_product: string[] | number[],
-            id_restaurant: string | number,
-            quantity: number[]
-        }
-    ) {
-        return new Promise((resolve, reject) => {
-            conn.beginTransaction(function (err) {
-                if (err) {
-                    console.log(err)
-                    return reject(err)
-                }
-
-                const orderQuery = `INSERT INTO orders SET ?`
-                conn.query(orderQuery, orderQueryObj, function (error, results) {
-                    if (error) {
-                        return conn.rollback(function () {
-                            reject(error)
-                            console.log(error)
-                        })
-                    }
-
-                    resolve(results)
-
-                    const orderId = results.insertId
-                    const quantity = orderDetailQueryObj.quantity.length
-
-                    if (quantity === 1) {
-                        const orderDetailQuery = `
-                            INSERT INTO order_detail
-                            (id_order, id_product, id_restaurant, quantity)
-                            VALUES
-                            (${orderId}, ${orderDetailQueryObj.id_product}, ${orderDetailQueryObj.id_restaurant}, ${orderDetailQueryObj.quantity})
-                        `
-
-                        conn.query(orderDetailQuery, function (error, results) {
-                            if (error) {
-                                return conn.rollback(function () {
-                                    console.log(error)
-                                    return reject(error)
-                                })
-                            }
-
-                            resolve(results)
-
-                            conn.commit(function (err) {
-                                if (err) {
-                                    return conn.rollback(function () {
-                                        console.log(err)
-                                        return reject(err)
-                                    })
-                                }
-                            })
-                        })
-                    } else {
-                        for (let i = 0; i < quantity; i++) {
-                            const orderDetailQuery = `
-                                INSERT INTO order_detail
-                                (id_order, id_product, id_restaurant, quantity)
-                                VALUES
-                                (${orderId}, ${orderDetailQueryObj.id_product[i]}, ${orderDetailQueryObj.id_restaurant}, ${orderDetailQueryObj.quantity[i]})
-                            `
-
-                            conn.query(orderDetailQuery, function (error, results) {
-                                if (error) {
-                                    return conn.rollback(function () {
-                                        console.log(error)
-                                        return reject(error)
-                                    })
-                                }
-
-                                resolve(results)
-
-                                conn.commit(function (err) {
-                                    if (err) {
-                                        return conn.rollback(function () {
-                                            console.log(err)
-                                            return reject(err)
-                                        })
-                                    }
-                                })
-                            })
-                        }
-                    }
-                })
-            })
-        })
-    } */
-
     save(orderObject: any, orderDetailArray: IOrderDetail[]) {
         return new Promise(async (resolve, reject) => {
             const db = asyncConn()
@@ -181,6 +85,10 @@ export default class Order {
         return new Promise((resolve, reject) => {
             pool.query(query, (error, results: IOrder[]) => {
                 if (error) reject(error)
+
+                if (results === undefined) {
+                    return null
+                }
 
                 resolve(results.length > 0 ? results : null)
             })

@@ -1,8 +1,8 @@
 <div class="container">
     <div class="text-center mt-5">
-        <form id="loginForm" action="/api/auth/login" method="POST" style="max-width: 400px; margin:auto;">
+        <form id="form" action="/api/auth/login" method="POST" style="max-width: 400px; margin:auto;">
             <img class="mt-4 mb-4" src="/img/logo.png" alt="Dabbawalas-Logo" height="72">
-            <h1 class="h3 mb-3 fw-normal">Por favor inicie sesión</h1>
+            <h1 class="h3 mb-3 fw-normal">Inicio de sesión</h1>
 
             <label for="email" class="visually-hidden">Correo Electrónico</label>
             <input type="email" name="email" id="email" class="form-control form-control-lg email-login"
@@ -11,8 +11,8 @@
             <label for="pass" class="visually-hidden">Constraseña</label>
             <input type="password" name="pass" class="form-control form-control-lg pass-login" id="pass"
                 placeholder="Contraseña" required>
-            <div class="form-group mt-3">
-                <a href="#">¿Olvidó su contraseña?</a>
+            <div class="form-group my-3">
+                <a id="forgot-password" href="#">¿Olvidó su contraseña?</a>
             </div>
 
             <div class="row">
@@ -39,10 +39,86 @@
             </div>
             {{/each}}
             {{/if}}
-
+            <div class="text-center" style="display: inline-block;">
+                <div class="g-recaptcha" data-sitekey="6LfVkMscAAAAABnxahDbZMC21P2XN5Do365jGCV_"></div>
+            </div>
             <div class="d-grid gap-2 mt-3">
                 <input type="submit" class="btn btn-lg btn-primary" id="loginSubmit">
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('forgot-password').addEventListener('click', forgotPassword)
+    document.getElementById('form').addEventListener('submit', confirmCaptcha)
+
+    async function forgotPassword(e) {
+        e.preventDefault()
+
+        const email = document.getElementById('email').value
+        if (email == '') {
+            return alert('Ingrese un correo electrónico')
+        }
+
+        const userEmail = {
+            email
+        }
+
+        try {
+            const path = `/api/auth/forgotPassword`
+            const data = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userEmail)
+            })
+
+            const response = await data.json()
+            if (response.status === 200) {
+                alert(response.message)
+                document.getElementById('email').value = ''
+            }
+        } catch (error) {
+            if (error) console.log(error)
+            alert(error)
+        }
+    }
+
+    async function confirmCaptcha(e) {
+        e.preventDefault()
+
+        const path = `/api/auth/confirmCaptcha`
+        const captcha = document.querySelector('#g-recaptcha-response').value
+
+        try {
+            const data = await fetch(path, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ captcha: captcha })
+            })
+            const response = await data.json()
+
+            if (response.status === 200) {
+                return form.submit()
+            }
+            grecaptcha.reset()
+            alert(response.message)
+        } catch (error) {
+            if (error) console.log(error)
+            alert(error)
+        }
+    }
+    addEventListener('load', () => {
+        const container = document.querySelector('.container')
+        const header = document.getElementsByTagName('HEADER')[0]
+        const footer = document.getElementsByTagName('FOOTER')[0]
+        const height = window.innerHeight - header.offsetHeight - footer.offsetHeight
+
+        container.style.height = height + "px"
+    })
+</script>

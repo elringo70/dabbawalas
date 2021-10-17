@@ -22,6 +22,15 @@ class AuthRoutes {
         
         this.router.get('/logout', [checkJWT.checkJWT, checkRole(['M', 'D', 'CO', 'A', 'CA'])], authController.getLogoutUser)
         this.router.get('/getNotPermissionsPage', [checkJWT.checkJWT, checkRole(['M', 'D', 'CO', 'A', 'CA'])], authController.getNotPermissionsPage)
+        this.router.get('/resetPasswordPage', [checkJWT.checkJWT, checkRole(['M', 'D', 'CO', 'A', 'CA'])], authController.resetPasswordPage)
+        this.router.post('/resetPassword', [checkJWT.checkJWT, checkRole(['M', 'D', 'CO', 'A', 'CA'])], authController.resetPassword)
+        this.router.post('/forgotPassword', [
+            check('email')
+                .trim()
+                .isEmail().withMessage('Ingrese un correo electrónico valido'),
+        ],authController.forgotPassword)
+        this.router.post('/confirmCaptcha', authController.confirmCaptcha)
+        this.router.get('/confirmEmailPage/:token', authController.confirmEmailPage)
     }
 }
 

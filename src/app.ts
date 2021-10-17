@@ -34,11 +34,11 @@ export class App {
         this.app.set('port', this.port || process.env.PORT || 3000)
         this.app.use(express.static(path.join(__dirname, 'public')))
         this.app.set('views', path.join(__dirname, 'views'))
-        this.app.use(cors({
+        /* this.app.use(cors({
             origin: '*',
             methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
             allowedHeaders: ['Content-Type', 'Authorization']
-        }))
+        })) */
         this.app.engine('.hbs', exphbs({
             defaultLayout: 'main',
             layoutsDir: path.join(this.app.get('views'), 'layouts'),

@@ -11,7 +11,7 @@ document.getElementById('confpass').addEventListener('change', passwordConfirmat
 document.getElementById('dob').addEventListener('change', dobValidation)
 
 //Submit validation
-document.getElementById('form').addEventListener('submit', submitValidation)
+document.getElementById('form').addEventListener('submit', confirmCaptcha)
 
 //Max age restriction
 addEventListener('load', dateInputRestriction)
@@ -107,6 +107,7 @@ async function submitValidation(e) {
                         case 201:
                             alert(`${response.message}. Espere autorización`)
                             form.reset()
+                            grecaptcha.reset()
                             break;
                         case 304:
                             if (response.error) {
@@ -212,5 +213,33 @@ function passwordConfirmation() {
         return false
     } else {
         return true
+    }
+}
+
+async function confirmCaptcha(e) {
+    e.preventDefault()
+
+    const path = `/api/auth/confirmCaptcha`
+    const captcha = document.querySelector('#g-recaptcha-response').value
+
+    try {
+        const data = await fetch(path, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ captcha: captcha })
+        })
+        const response = await data.json()
+
+        if (response.status === 200) {
+            return submitValidation(e)
+        }
+
+        alert(response.message)
+    } catch (error) {
+        if (error) console.log(error)
+        alert(error)
     }
 }

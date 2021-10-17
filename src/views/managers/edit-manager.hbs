@@ -1,151 +1,136 @@
 {{>sidebar}}
 <div class="admin-container">
     <div class="container-fluid">
-        <div class="row mb-4">
-            <div class="col-md-12 fw-bold fs-3">Clientes</div>
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Mi información</div>
         </div>
-
-        <div class="row mt-3 mx-auto">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        Editar datos del cliente
+                        Editar mi información
                     </div>
                     <div class="card-body">
-                        <form id="form">
+                        <form id="form" autocomplete="off">
                             <div class="row mb-3">
-                                <div class="col-sm">
-                                    <div id="phoneExistsAlert"></div>
+                                <div class="col-sm-6">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation change disabled"
+                                        id="name" placeholder="Nombre" value="{{manager.name}}" disabled>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation change disabled"
+                                        id="lastname" placeholder="Apellido" value="{{manager.lastname}}" disabled>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <label for="maternalsurname" class="form-label">Apellido
+                                        Materno</label>
+                                    <input type="text" name="maternalsurname"
+                                        class="form-control input-text-validation change disabled" id="maternalsurname"
+                                        placeholder="Apellido Materno" value="{{manager.maternalsurname}}" disabled>
+                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
+                                        tipo letra</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="dob" class="form-label change">Fecha de nacimiento</label>
+                                    <input type="date" name="dob" class="form-control disabled" id="dob" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select change disabled" id="state-select" disabled>
+                                        <option selected>Seleccione un estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select change disabled" id="city-select" disabled>
+                                        <option selected>Seleccione una ciudad</option>
+                                    </select>
+                                </div>
                                 <div class="col-md-4">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select change disabled" id="municipality-select"
+                                        disabled>
+                                        <option selected>Seleccione una colonia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control change disabled" id="street"
+                                        placeholder="Calle" value="{{manager.street}}" disabled>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number"
+                                        class="form-control input-number-validation change disabled" id="number" min="1"
+                                        max="99999" placeholder="Número" value="{{manager.number}}" disabled>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-sm-5">
                                     <label for="phone">Número telefónico</label>
                                     <input type="number" name="phone"
-                                        class="form-control input-number-validation disabled" id="phone"
+                                        class="form-control input-number-validation change disabled" id="phone"
                                         placeholder="Número telefónico" min="1111111111" max="9999999999"
-                                        pattern="[0-9]" value="{{customer.phone}}" disabled>
+                                        pattern="[0-9]" value="{{manager.phone}}" disabled>
                                     <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
                                     </div>
                                     <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
                                         números</small>
                                 </div>
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="name" class="form-label">Nombre(s)</label>
-                                    <input type="text" name="name" class="form-control input-text-validation disabled"
-                                        id="name" placeholder="Nombre del cliente" value="{{customer.name}}" disabled
-                                        required>
-                                    <small class="text-danger" id="text-muted"></small>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="lastname" class="form-label">Apellido</label>
-                                    <input type="text" name="lastname"
-                                        class="form-control input-text-validation disabled" id="lastname"
-                                        placeholder="Apellido" value="{{customer.lastname}}" disabled required>
-                                    <small class="text-danger" id="text-muted"></small>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="maternalsurname" class="form-label">Segundo apellido</label>
-                                    <input type="text" name="maternalsurname"
-                                        class="form-control input-text-validation disabled" id="maternalsurname"
-                                        placeholder="Segundo apellido" value="{{customer.maternalsurname}}" disabled
-                                        required>
-                                    <small class="text-danger" id="text-muted"></small>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-8 m-auto">
-                                    <div id="dateAlert"></div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="state">Estado</label>
-                                    <select name="state" class="form-select disabled" id="state-select" disabled
-                                        required>
-                                        <option>{{customer.state}}</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label for="city">Ciudad</label>
-                                    <select name="city" class="form-select disabled" id="city-select" disabled required>
-                                        <option>{{customer.city}}</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-5">
-                                    <label for="municipality">Colonia</label>
-                                    <select name="municipality" class="form-select disabled" id="municipality-select"
-                                        disabled required>
-                                        <option>{{customer.municipality}}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-5">
-                                    <label for="street">Calle</label>
-                                    <input type="text" name="street" class="form-control disabled" id="street"
-                                        value="{{customer.street}}" placeholder="Calle" autocomplete="new-text" disabled
-                                        required>
-                                    <small class="text-danger" id="text-muted"></small>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="number">Número</label>
-                                    <input type="number" name="number"
-                                        class="form-control input-number-validation disabled" id="number" min="1"
-                                        max="99999" placeholder="Número" value="{{customer.number}}"
-                                        autocomplete="new-number" disabled required>
-                                    <small class="text-danger" id="text-muted"></small>
-                                </div>
-                            </div>
-
                             <div class="row mb-3">
                                 <div class="col-1">
                                     <label class="form-check-label">Género</label>
                                 </div>
                                 <div class="col">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input disabled" type="radio" name="gender"
-                                            id="genderInput1" value="1" {{#ifCond customer.gender '===' 1}} checked
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input disabled" type="radio" name="gender" id="genderInput1"
+                                            value="1" {{#ifCond manager.gender '===' 1}} checked
                                             {{/ifCond}} disabled required>
                                         <label class="form-check-label" for="genderInput1">Hombre</label>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input disabled" type="radio" name="gender"
-                                            id="genderInput2" {{#ifCond customer.gender '===' 0}} checked {{/ifCond}}
-                                            disabled value="0">
-                                        <label class="form-check-label" for="genderInput2">Mujer</label>
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input disabled" type="radio" name="gender" id="genderInput2"
+                                            value="0" {{#ifCond manager.gender '===' 0}} checked
+                                            {{/ifCond}} disabled>
+                                        <label class="form-check-label change" for="genderInput2">Mujer</label>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input disabled" type="radio" name="gender"
-                                            id="genderInput3" {{#ifCond customer.gender '===' null}} checked {{/ifCond}}
-                                            disabled value="null">
-                                        <label class="form-check-label" for="genderInput3">Prefiere no contestar</label>
+                                    <div class="form-check form-check-inline change">
+                                        <input class="form-check-input disabled" type="radio" name="gender" id="genderInput3"
+                                            value="null" {{#ifCond manager.gender '===' null}} checked
+                                            {{/ifCond}} disabled>
+                                        <label class="form-check-label" for="genderInput3">Prefiero no contestar</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-8 m-auto">
-                                    <div id="formAlert"></div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="email">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control change disabled" id="email"
+                                        placeholder="Ingrese su correo electrónico" value="{{manager.email}}" disabled>
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="pass">Cambiar contraseña</label>
+                                    <div class="d-grid gap-2 col-6">
+                                        <a href="/api/auth/resetPasswordPage" class="btn btn-secondary">Reset</a>
+                                    </div>
                                 </div>
                             </div>
-
-                            {{#if error}}
-                            <div class="my-3">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{error.msg}}</strong>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                            {{/if}}
-
-                            <div class="d-flex justify-content-around">
+                            <input type="number" id="id" data-manager="{{manager.id_user}}" hidden>
+                            <div class="d-flex justify-content-around py-5">
                                 <div class="button">
                                     <input type="submit" data-submit="false" class="btn btn-secondary submit"
                                         value="Editar" role="button">
@@ -163,10 +148,6 @@
         </div>
     </div>
 </div>
-
-
-{{!--
-<script src="/js/customers/editCustomer.js"></script> --}}
 
 <script>
     let states
@@ -191,7 +172,7 @@
 
         if (submit.dataset.submit === 'true') {
             const phone = document.getElementById('phone')
-            await formValidation(phone.value)
+            await formValidation()
         }
     })
 
@@ -218,9 +199,7 @@
 
             const disabled = document.querySelectorAll('.disabled')
             disabled.forEach(item => {
-                if (item.getAttribute('id') !== 'phone') {
-                    item.disabled = false
-                }
+                item.disabled = false
             })
         }
 
@@ -231,11 +210,12 @@
     }
 
     async function formValidation() {
-        const confirmation = window.confirm('¿Esta seguro de realizar los cambios al cliente?')
-        const phone = document.getElementById('phone').value
+        const confirmation = window.confirm('¿Desea continuar con el cambio de su información?')
 
         if (confirmation) {
-            const path = `http://localhost:3000/api/customers/editCustomerByRestaurant/${phone}`
+            const inputId = document.getElementById('id')
+            const id = inputId.dataset.manager
+            const path = `/api/managers/editManager/${id}`
 
             const formData = new URLSearchParams();
             for (const pair of new FormData(form)) {
@@ -243,30 +223,24 @@
             }
 
             try {
-                if (confirmation) {
-                    const response = await fetch(path, {
-                        method: 'PATCH',
-                        body: formData
-                    })
+                const response = await fetch(path, {
+                    method: 'PATCH',
+                    body: formData
+                })
 
-                    const data = await response.json()
-                    switch (data.status) {
-                        case 201:
-                            sendInputAlert(data.message, 'alert-success', 'phoneExistsAlert')
-                            const disabled = document.querySelectorAll('.disabled')
-                            disabled.forEach(item => {
-                                if (item.getAttribute('id') !== 'phone') {
-                                    item.disabled = false
-                                }
-                            })
-                            break;
-                        case 304:
-                            sendInputAlert(data.message, 'alert-danger', 'phoneExistsAlert')
-                            break;
-                    }
+                const data = await response.json()
+                switch (data.status) {
+                    case 201:
+                        alert(data.message)
+                        window.location.reload()
+                        break;
+                    case 304:
+                        alert(data.message)
+                        break;
                 }
             } catch (error) {
                 console.log(error)
+                alert(error)
             }
         }
     }
@@ -382,9 +356,9 @@
     }
 
     async function loadEntities() {
-        const stateId = `{{customer.id_state}}`
-        const cityId = `{{customer.id_city}}`
-        const municipalityId = `{{customer.id_municipality}}`
+        const stateId = `{{manager.id_state}}`
+        const cityId = `{{manager.id_city}}`
+        const municipalityId = `{{manager.id_municipality}}`
 
         const selectStates = document.getElementById('state-select')
         for (let i = 0; i < states.length; i++) {
@@ -426,9 +400,17 @@
         }
     }
 
+    function loadDate() {
+        const dob = `{{manager.dob}}`
+        const date = new Date(dob).toLocaleDateString('en-CA')
+        const inputDate = document.getElementById('dob')
+        inputDate.value = date
+    }
+
     addEventListener('load', async () => {
         await loadStates()
         await loadEntities()
+        loadDate()
 
         document.getElementById('state-select').addEventListener('change', async (e) => {
             const state = e.target.value

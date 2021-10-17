@@ -16,31 +16,27 @@ class OrderRoutes {
         this.router.get('/getNewOrderPage', [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.getNewOrdersPage)
 
         //Post new order
-        this.router.post('/postNewOrder', [
+        this.router.post('/postNewOrder', [checkJWT.checkJWT, checkRole(['M', 'CA'])], [
             //New order validations
-            check('phone')
-                .trim()
-                .isNumeric().withMessage('Solo puede ingresar valores numéricos')
-                .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido'),
-            check('product')
-                .trim()
-                .not().isEmpty().withMessage('Debe agregar platillos a la orden'),
-            check('quantity')
-                .trim()
-                .not().isEmpty().withMessage('Debe agregar la cantidad por platillo'),
-        ], [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.postNewOrder)
+            
+        ], ordersController.postNewOrder)
 
         this.router.get('/getAllTodayOrders', [checkJWT.checkJWT, checkRole(['M', 'CO', 'CA'])], ordersController.getAllTodayOrders)
         this.router.get('/getAllTodayOrdersPage', [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.getAllTodayOrdersPage)
         this.router.post('/postCompleteOrder', [checkJWT.checkJWT, checkRole(['M', 'CO'])], ordersController.postCompleteOrder)
         this.router.delete('/cancelOrderById/:id', [checkJWT.checkJWT, checkRole(['M', 'A'])], ordersController.cancelOrderById)
-        this.router.get('/loadDashboard', [checkJWT.checkJWT, checkRole(['M'])], ordersController.loadDashboard)
-        this.router.get('/loadData7DayChart', [checkJWT.checkJWT, checkRole(['M'])], ordersController.loadData7DayChart)
-        this.router.get('/monthDataSales', [checkJWT.checkJWT, checkRole(['M'])], ordersController.monthDataSales)
+        this.router.get('/loadDashboard', [checkJWT.checkJWT, checkRole(['M'])], [
+            check('quantity')
+                .trim()
+                .not().isEmpty().withMessage('Debe enviar la cantidad de productos'),
+            check('product')
+                .trim()
+                .not().isEmpty().withMessage('Debe enviar los el código del producto')
+        ], ordersController.loadDashboard)
         this.router.get('/getCookerOrderDetailPage/:id', [checkJWT.checkJWT, checkRole(['CO', 'M', 'A'])], ordersController.getCookerOrderDetailPage)
         this.router.get('/getAllRestaurantsOrdersPage', [checkJWT.checkJWT, checkRole(['A'])], ordersController.getAllRestaurantsOrdersPage)
         this.router.get('/getAllRestaurantsOrders', [checkJWT.checkJWT, checkRole(['A'])], ordersController.getAllRestaurantsOrders)
-        
+
 
         //Cooker routes
         this.router.get('/getAllTodayOrdersCookerPage', [checkJWT.checkJWT, checkRole(['CO'])], ordersController.getAllTodayOrdersCookerPage)

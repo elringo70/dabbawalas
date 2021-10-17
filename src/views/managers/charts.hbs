@@ -1,0 +1,307 @@
+{{>sidebar}}
+<div class="admin-container" style="background-color: #ebeff2;">
+    <div class="container-fluid pb-3">
+        <div class="row py-2">
+            <div class="col-md-8">
+                <h2>Reporte general</h2>
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <select class="form-select text-center" id="option-date" aria-label="Default select example">
+                    <option selected value="0">SELECCIONE UNA OPCIÓN</option>
+                    <option value="1">7 DÍAS</option>
+                    <option value="2">MES PRESENTE</option>
+                    <option value="3">ÚLTIMO MES</option>
+                    <option value="4">ÚLTIMOS 6 MESES</option>
+                    <option value="5">AÑO PRESENTE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">VENTAS TOTALES</h5>
+                                <h3 class="dashboard-cards ps-2" id="">0</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                                <path
+                                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">INGRESO NETO</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                                <path
+                                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">GANANCIA</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                                <path
+                                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">COSTO</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="col-md-12 last-and-month">
+                                    <div class="d-flex justify-content-around h-100 align-items-center">
+                                        <div class="py-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                                                fill="#15807e" class="bi bi-calendar-event" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                                <path
+                                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div>0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-7">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Ventas en el último año
+                    </div>
+                    <div class="card-body">
+                        <canvas class="chart" id="year-sales"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Productos mas vendidos
+                    </div>
+                    <div class="card-body">
+                        <canvas class="chart" id="best-selling-product"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Status de órdenes
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        COMPLETADAS
+                                    </div>
+                                    <div class="card-body text-center">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        CANCELADAS
+                                    </div>
+                                    <div class="card-body text-center">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header text-center">
+                                        RESTRASADAS
+                                    </div>
+                                    <div class="card-body text-center">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Top clientes
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead class="text-center">
+                                <th>Lugar</th>
+                                <th>Cliente</th>
+                                <th>Cantidad de ordenes</th>
+                                <th>Gasto</th>
+                            </thead>
+                            <tbody id="top-customers-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<script src="/js/manager/charts.js"></script>

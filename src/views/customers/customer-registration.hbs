@@ -16,7 +16,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="phone">Número telefónico</label>
-                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                    <input type="number" name="phone" class="form-control input-number-validation arrow-number text-center"
                                         id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
                                         pattern="[0-9]" value="{{customer.phone}}" autocomplete="new-number" required>
                                     <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
@@ -140,89 +140,4 @@
 </div>
 
 <script src="/js/addresses.js"></script>
-<script>
-    //Listeners
-
-    document.getElementById('phone').addEventListener('change', findCustomerByPhone)
-
-    //Remove more than 10 characters
-    document.getElementById('phone').addEventListener('keyup', function (e) {
-        if (event.target.value.length > 4) {
-            event.target.value = event.target.value.slice(0, 10);
-        }
-    })
-
-    document.getElementById('form').addEventListener('submit', formValidation)
-
-    //Functions
-    async function formValidation(e) {
-        e.preventDefault()
-
-        const findPhone = await findCustomerByPhone(e)
-
-        if (findPhone) {
-            const confirmation = window.confirm('¿Desea continuar con el registro?')
-
-            if (confirmation) {
-                const path = `/api/customers/postNewCustomer`
-                const formData = new URLSearchParams();
-
-                for (const pair of new FormData(form)) {
-                    formData.append(pair[0], pair[1]);
-                }
-
-                try {
-                    if (confirmation) {
-                        const response = await fetch(path, {
-                            method: 'POST',
-                            body: formData
-                        })
-
-                        const data = await response.json()
-
-                        if (data.status === 304) {
-                            return sendInputAlert(data.errorMessage, 'alert-danger', 'formAlert')
-                        }
-
-                        if (data.status === 201) {
-                            alert('Cliente guardado con éxito')
-                            form.reset()
-                        }
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        }
-    }
-
-    async function findCustomerByPhone() {
-        const path = `/api/customers/getCustomerByPhone`
-
-        const customerPhone = {
-            phone: document.getElementById('phone').value
-        }
-
-        try {
-            const data = await fetch(path, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerPhone)
-            })
-
-            const response = await data.json()
-
-            if (response.status === 304) {
-                sendInputAlert(response.message, 'alert-danger', 'phoneExistsAlert')
-                return false
-            }
-            return true
-        } catch (error) {
-            console.log(error)
-            window.alert(error)
-        }
-    }
-
-</script>
+<script src="/js/customers/customerRegistration.js"></script>

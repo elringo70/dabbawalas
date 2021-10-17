@@ -303,19 +303,30 @@ class ResturantController {
     }
 
     async getAllRestaurants(req: Request, res: Response) {
-        const user = res.locals.token
-
         try {
             const query = `
-                SELECT restaurants.*, manager_restaurant.id_user
+                SELECT
+                    restaurants.*,
+                    manager_restaurant.id_user,
+                    colonias.nombre AS municipality,
+                    municipios.nombre AS city,
+                    estados.nombre AS state,
+                    addresses.street,
+                    addresses.number
                 FROM restaurants
                 JOIN manager_restaurant
-                ON restaurants.id_restaurant = manager_restaurant.id_restaurant
+                    ON restaurants.id_restaurant = manager_restaurant.id_restaurant
+                JOIN addresses
+                    ON restaurants.id_address = addresses.id_address
+                JOIN colonias
+                    ON addresses.id_municipality=colonias.id
+                JOIN municipios
+                    ON addresses.id_city=municipios.id
+                JOIN estados
+                    ON addresses.id_state=estados.id
             `
 
             const restaurants = await Restaurant.fetchAll(query)
-
-            console.log(restaurants)
 
             res.status(200).json(restaurants)
         } catch (error) {
