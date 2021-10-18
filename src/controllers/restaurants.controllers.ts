@@ -2,10 +2,8 @@ import { Request, Response } from 'express'
 import Restaurant from '../models/restaurant'
 import { IRestaurant, IBusinessHours } from '../interfaces/IRestaurant'
 import { validationResult } from 'express-validator'
-import { ICooker } from '../interfaces/IUsers'
-import User from '../models/user'
-import { genSaltSync, hashSync } from 'bcrypt'
 import { IAddress } from '../interfaces/IAddresses'
+import Addresses from '../models/addresses'
 
 class ResturantController {
     async getManagerPage(req: Request, res: Response) {
@@ -45,80 +43,6 @@ class ResturantController {
         })
     }
 
-    async postCookerRegistration(req: Request, res: Response) {
-        const errors = validationResult(req)
-        const error = errors.array()
-        const user = res.locals.token
-        const body = req.body
-
-        try {
-            if (!errors.isEmpty()) {
-                return res.render('restaurants/cookers-registration', {
-                    title: 'Alta de cocineros',
-                    user,
-                    active: true,
-                    loggedIn: true,
-                    errorMessage: error[0].msg
-                })
-            }
-
-            const salt = genSaltSync(10)
-            const hashPass = hashSync(body.pass, salt)
-
-            const cookerObject: ICooker = {
-                name: body.name.toUpperCase(),
-                lastname: body.lastname.toUpperCase(),
-                maternalsurname: body.maternalsurname.toUpperCase(),
-                email: body.email,
-                pass: hashPass,
-                usertype: 'CO',
-                active: 1,
-                id_restaurant: user.id_restaurant
-            }
-
-            const query = `
-                SELECT email
-                FROM users
-                WHERE email='${body.email}'
-            `
-
-            const findUser = await User.findBy(query)
-
-            if (findUser) {
-                return res.render('restaurants/cookers-registration', {
-                    title: 'Alta de cocineros',
-                    errorMessage: 'El correo ya se encuentra registrado',
-                    user,
-                    active: true,
-                    loggedIn: true
-                })
-            }
-
-            const cooker = new User()
-            await cooker.saveCooker(cookerObject)
-
-            res.render('restaurants/cookers-registration', {
-                title: 'Alta de cocineros',
-                message: 'Cocinero registrado',
-                user,
-                active: true,
-                manager: true,
-                loggedIn: true
-            })
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.render('restaurants/cookers-registration', {
-                title: 'Alta de cocineros',
-                errorMessage: 'Error al registrar al cociner',
-                user,
-                active: true,
-                manager: true,
-                loggedIn: true
-            })
-        }
-    }
-
     async updateRestaurantPage(req: Request, res: Response) {
         const user = res.locals.token
         const { id } = req.params
@@ -126,10 +50,16 @@ class ResturantController {
         try {
             const restaurant = await Restaurant.findById(id)
 
+            let address
+            if (restaurant?.id_address !== undefined) {
+                address = await Addresses.findById(restaurant?.id_address)
+            }
+
             res.render('restaurants/edit-restaurant', {
                 title: 'Edit restaurant',
                 user,
                 restaurant,
+                address,
                 active: true,
                 admin: true,
                 loggedIn: true
@@ -151,7 +81,7 @@ class ResturantController {
         const body = req.body
 
         const { days, openhours, closinghours } = req.body
-        const { id } = req.params
+        const id = req.body.id_restaurant
 
         try {
             if (!errors.isEmpty()) {
@@ -162,7 +92,7 @@ class ResturantController {
             }
 
             const restaurant = await Restaurant.findById(id)
-            if(!restaurant) {
+            if (!restaurant) {
                 return res.json({
                     status: 304,
                     message: 'No se encuentra el restaurant que esta enviando'
@@ -182,7 +112,7 @@ class ResturantController {
                 id_state: body.state,
                 id_city: body.city,
                 id_municipality: body.municipality,
-                number: body.number.toUpperCase(),
+                number: body.number,
                 street: body.street.toUpperCase()
             }
 

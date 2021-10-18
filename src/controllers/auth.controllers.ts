@@ -6,6 +6,7 @@ import { validationResult } from 'express-validator'
 import Restaurant from '../models/restaurant'
 import Email from '../services/emailConfirmation'
 import request from 'request'
+import { Console } from 'console'
 
 class AuthController {
     async postLoginUser(req: Request, res: Response) {

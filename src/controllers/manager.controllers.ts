@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ICashier, IManager } from '../interfaces/IUsers'
+import { IEmployee, IManager } from '../interfaces/IUsers'
 import User from '../models/user'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { validationResult } from 'express-validator'
@@ -8,6 +8,7 @@ import Manager from '../models/manager'
 import Order from '../models/orders'
 import Product from '../models/product'
 import Customer from '../models/customer'
+import Email from '../services/emailConfirmation'
 
 class ManagerControllers {
     //Profit chart page
@@ -47,7 +48,7 @@ class ManagerControllers {
                     ON addresses.id_city=municipios.id
                 JOIN estados
                     ON addresses.id_state=estados.id
-                WHERE id_restaurant=6
+                WHERE id_restaurant=${user.id_restaurant}
                     AND (usertype='CA' OR usertype='CO')
             `
             const personnel = await User.fetchAllAny(personnelQuery)
@@ -74,11 +75,124 @@ class ManagerControllers {
     }
 
     async postNewEmployee(req: Request, res: Response) {
+        const user = res.locals.token
+        const errors = validationResult(req)
+        const error = errors.array()
+        const body = req.body
 
         try {
+            if (!errors.isEmpty()) {
+                return res.json({
+                    status: 304,
+                    message: error[0].msg
+                })
+            }
 
+            const emailQuery = `
+                SELECT email
+                FROM users
+                WHERE email='${body.email}'
+            `
+
+            const searchEmail = await User.findBy(emailQuery)
+            
+            if (searchEmail) {
+                return res.json({
+                    status: 304,
+                    message: 'Correo electrónico ya se encuentra registrado'
+                })
+            }
+
+            let position = ''
+            switch (req.body.position) {
+                case '1':
+                    position = 'CA'
+                    break
+                case '2':
+                    position = 'CO'
+                    break
+            }
+
+            const password = createRandomPassword(10)
+            const salt = genSaltSync(10)
+            const hashPass = hashSync(password, salt)
+
+            const employee: IEmployee = {
+                name: body.name.toUpperCase(),
+                lastname: body.lastname.toUpperCase(),
+                maternalsurname: body.maternalsurname.toUpperCase(),
+                pass: hashPass,
+                dob: body.dob,
+                email: body.email,
+                gender: body.gender,
+                usertype: position,
+                phone: body.phone,
+                active: 1,
+                id_restaurant: user.id_restaurant
+            }
+            const address: IAddress = {
+                id_state: body.state,
+                id_city: body.city,
+                id_municipality: body.municipality,
+                number: body.number,
+                street: body.street.toUpperCase()
+            }
+
+            const newEmployee = new User()
+            await newEmployee.saveEmployee(employee, address)
+
+            const nodeMailer = new Email()
+            await nodeMailer.sendEmail({
+                to: {
+                    name: `Admin Dabbawalas`,
+                    email: employee.email
+                },
+                from: {
+                    name: 'Admin Dabbawalas',
+                    email: 'dabbawalas2021@gmail.com'
+                },
+                subject: 'Contraseña para su cuenta',
+                    body: `
+                        <!DOCTYPE html>
+                        <html lang="es_MX">
+                        
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+                                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+                            <title>Reinicar contraseña</title>
+                        </head>
+                        
+                        <body>
+                        
+                            <h1>Su contraseña sera la siguiente</h1>
+                            <br>
+                            <h3>${password}</h3>
+                        
+                        
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                                crossorigin="anonymous"></script>
+                        </body>
+                        
+                        </html>
+                    `
+            })
+
+            res.json({
+                status: 200,
+                message: 'Empleado guardado con éxito'
+            })
         } catch (error) {
+            if (error) console.log(error)
 
+            res.json({
+                status: 304,
+                message: 'Error al crear el nuevo empleado'
+            })
         }
     }
 
@@ -183,139 +297,6 @@ class ManagerControllers {
             res.json({
                 status: 304,
                 message: 'Error al buscar el correo electrónico del supervisor'
-            })
-        }
-    }
-
-    async postNewCashierPage(req: Request, res: Response) {
-        const user = res.locals.token
-
-        res.render('restaurants/new-cashier', {
-            title: 'Registrar un cajero',
-            user,
-            active: true,
-            manager: true,
-            loggedIn: true
-        })
-    }
-
-    async postNewCashier(req: Request, res: Response) {
-        const errors = validationResult(req)
-        const error = errors.array()
-        const user = res.locals.token
-        const body = req.body
-
-        try {
-            if (!errors.isEmpty()) {
-                return res.json({
-                    status: 304,
-                    message: error[0].msg
-                })
-            }
-
-            const query = `SELECT email FROM users WHERE email='${body.email}'`
-            const findCashier = await User.findBy(query)
-
-            if (findCashier) {
-                return res.json({
-                    status: 304,
-                    message: 'El correo electrónico ya se encuentra en uso'
-                })
-            }
-
-            const salt = genSaltSync(10)
-            const hashPass = hashSync(body.pass, salt)
-
-            const cashierObject: ICashier = {
-                name: body.name.toUpperCase(),
-                lastname: body.lastname.toUpperCase(),
-                maternalsurname: body.maternalsurname.toUpperCase(),
-                email: body.email,
-                pass: hashPass,
-                dob: body.dob,
-                phone: body.phone,
-                usertype: 'CA',
-                active: 1,
-                id_restaurant: user.id_restaurant
-            }
-
-            const address: IAddress = {
-                id_state: body.state,
-                id_city: body.city,
-                id_municipality: body.municipality,
-                number: body.number,
-                street: body.street.toUpperCase()
-            }
-
-            const cashier = new User()
-            await cashier.saveCashier(cashierObject, address)
-
-            res.json({
-                status: 200,
-                message: 'Cajero guardado con éxito'
-            })
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                status: 304,
-                message: 'Error al guardar al cajero'
-            })
-        }
-    }
-
-    async getCashiersPage(req: Request, res: Response) {
-        const user = res.locals.token
-
-        res.render('restaurants/cashiers', {
-            title: 'Lista de cajeros',
-            user,
-            active: true,
-            manager: true,
-            loggedIn: true
-        })
-    }
-
-    async getCashiers(req: Request, res: Response) {
-        const user = res.locals.token
-
-        try {
-            const query = `
-                SELECT
-                    users.id_user, users.email, users.name, users.lastname, users.maternalsurname,
-                    users.dob, users.phone, users.usertype, users.active, 
-                    users.id_restaurant, users.id_address,
-                    estados.nombre AS state,
-                    estados.id AS id_state,
-                    municipios.nombre AS city,
-                    municipios.id AS id_city,
-                    colonias.nombre AS municipality,
-                    colonias.id AS id_municipality,
-                    addresses.number, 
-                    addresses.street
-                FROM users
-                LEFT JOIN addresses
-                    ON users.id_address = addresses.id_address
-                JOIN estados
-                    ON addresses.id_state = estados.id
-                JOIN municipios
-                    ON addresses.id_city = municipios.id
-                JOIN colonias
-                    ON addresses.id_municipality = colonias.id
-                WHERE id_restaurant=${user.id_restaurant}
-                AND usertype='CA'
-                AND active=1
-            `
-
-            const cashiers = await User.fetchAllCashiers(query)
-
-            res.json(cashiers)
-        } catch (error) {
-            if (error) console.log(error)
-
-            res.json({
-                status: 304,
-                message: 'Error al cargar a los cajeros'
             })
         }
     }
@@ -455,7 +436,7 @@ class ManagerControllers {
                 message: 'Error al cargar el dashboard del supervisor'
             })
         }
-    }
+    }    
 }
 
 export const managerControllers = new ManagerControllers()
@@ -646,4 +627,13 @@ function customerQuery(option: number | string, id: number | string) {
     `
 
     return query
+}
+
+function createRandomPassword(lenght: number): string {
+    const lowerChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz"
+    let password = "";
+    for (let i = 0; i < lenght; i++) {
+        password += lowerChars.charAt(Math.floor(Math.random() * lowerChars.length))
+    }
+    return password;
 }

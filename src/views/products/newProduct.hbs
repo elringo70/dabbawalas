@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label for="price" class="form-label">Precio de venta</label>
-                                    <input type="number" name="price" class="form-control input-number-validation"
+                                    <input type="number" name="price" class="form-control input-number-validation arrow-number"
                                         id="price" placeholder="Precio del platillo" step="0.01"
                                         value="{{product.price}}" required>
                                     <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label for="cookingtime" class="form-label">Tiempo de preparación</label>
-                                    <input type="number" name="cookingtime" class="form-control input-number-validation"
+                                    <input type="number" name="cookingtime" class="form-control input-number-validation arrow-number"
                                         id="cookingtime" placeholder="Tiempo de preparación" value="{{product.cookingTime}}"
                                         required>
                                     <div class="form-text">Ingrese el tiempo en minutos no mayor a 60 minutos</div>
@@ -79,7 +79,7 @@
                                     <input type="file" name="image" class="form-control" id="formFile"
                                         accept=".jpg, .jpeg, .png, .webp" required>
                                     <div id="formFile" class="form-text">Ingrese solo imágenes en formato JPG, JPEG o
-                                        PNG</div>
+                                        PNG con un tamaño no mayor a 1Mb</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="description" class="form-label">Descripción</label>

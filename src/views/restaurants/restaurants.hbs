@@ -11,7 +11,7 @@
                         Get all restaurants
                     </div>
                     <div class="card-body">
-                        <input class="form-control" id="search" type="text" placeholder="Search by manager">
+                        <input class="form-control" id="search" type="text" placeholder="Search by restaurant">
                         <table class="table table-sm table-hover align-middle" id="restaurantsTable">
                             <thead>
                                 <tr class="text-center">
@@ -36,6 +36,12 @@
 <script>
     let restaurants = []
     const restaurantsList = document.getElementById('restaurants-list')
+
+    addEventListener('load', async function () {
+        await loadRestaurants()
+        renderRestaurants()
+    })
+    document.getElementById('search').addEventListener('keydown', tableFilter)
 
     async function loadRestaurants() {
         path = `/api/restaurants/getAllRestaurants`
@@ -112,14 +118,32 @@
         }
     }
 
+    function tableFilter() {
+        var input, filter, table, tr, td, i, txtValue;
+
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("restaurantsTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]
+
+            if (td) {
+                txtValue = td.textContent || td.innerText
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = ""
+                } else {
+                    tr[i].style.display = "none"
+                }
+            }
+        }
+    }
+
     async function reloadRestaurantsList() {
         restaurants = []
         await loadRestaurants()
         renderRestaurants()
     }
-
-    addEventListener('load', async function () {
-        await loadRestaurants()
-        renderRestaurants()
-    })
 </script>

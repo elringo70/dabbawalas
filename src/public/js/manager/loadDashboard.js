@@ -13,7 +13,7 @@ function renderOrders(orders) {
         const content = `
                 <td>${order.id_order}</td>
                 <td>${order.phone}</td>
-                <td>${order.name} ${order.lastname}</td>
+                <td>${order.fullname}</td>
                 <td>${hour}</td>
                 <td>${order.orderstatus.toUpperCase()}</td>
                 <td>$ ${order.total}</td>
@@ -113,6 +113,8 @@ async function loadDashboard() {
         const data = await fetch(path)
         const response = await data.json()
 
+        console.log(response)
+
         if (response.daysCount) render7DayChart(response.daysCount)
         if (response.monthSales) monthDataSales(response.monthSales)
         if (response.lastSales) renderOrders(response.lastSales)
@@ -123,6 +125,4 @@ async function loadDashboard() {
     }
 }
 
-addEventListener('load', async () => {
-    await loadDashboard()
-})
+addEventListener('load', loadDashboard)

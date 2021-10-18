@@ -17,7 +17,7 @@
                     <div class="col-md-3">
                         <label for="type" class="form-label">Tipo de restaurante</label>
                         <input type="text" name="type" class="form-control" id="type" placeholder="Tipo de restaurante"
-                        autocomplete="new-type" required>
+                            autocomplete="new-type" required>
                     </div>
                     <div class="col-md-6">
                         <label for="description" class="form-label">Descripción del restaurante</label>
@@ -186,7 +186,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
+                <div class="row mb-5">
                     <div class="col-md-3">
                         <label for="number">Número</label>
                         <input type="number" name="number" class="form-control input-number-validation" id="number"
@@ -197,12 +197,13 @@
                     <div class="col-md-5">
                         <label for="street">Calle</label>
                         <input type="text" name="street" class="form-control" id="street" value="" placeholder="Calle"
-                        autocomplete="new-street" required>
+                            autocomplete="new-street" required>
                     </div>
                     <div class="col-sm-4">
                         <label for="phone">Número telefónico</label>
                         <input type="number" name="phone" class="form-control input-number-validation" id="phone"
-                            placeholder="Número telefónico" min="1111111111" max="9999999999" pattern="[0-9]" autocomplete="new-phone" required>
+                            placeholder="Número telefónico" min="1111111111" max="9999999999" pattern="[0-9]"
+                            autocomplete="new-phone" required>
                         <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
                         </div>
                         <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
@@ -210,13 +211,15 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                        <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                    <div class="col-md-6">
+                        <div class="d-grid gap-2 col-3 mx-auto">
+                            <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                        <a href="/api/auth/logout" class="btn btn-primary">Cancelar</a>
+                    <div class="col-md-6">
+                        <div class="d-grid gap-2 col-3 mx-auto">
+                            <a href="/api/auth/logout" class="btn btn-danger">Cancelar</a>
+                        </div>
                     </div>
                 </div>
             </div>

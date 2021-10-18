@@ -39,6 +39,7 @@
 
     function renderOrders() {
         ordersList.innerHTML = ''
+        
         orders.map(order => {
             const tr = document.createElement('tr')
             tr.setAttribute('data-order', order.id)
@@ -60,8 +61,10 @@
                 time = `OPENED`
             }
 
+            console.log(order)
+
             const content = `
-                <td><a href="/api/orders/getCookerOrderDetailPage/${order.id}">${order.id}</a></td>
+                <td><a href="/api/orders/getOrderDetailPage/${order.id}&${order.id_restaurant}">${order.id}</a></td>
                 <td>${order.phone}</td>
                 <td>${order.customer}</td>
                 <td>$ ${order.total}</td>
@@ -108,11 +111,14 @@
             const data = await fetch(path)
             const response = await data.json()
 
+            console.log(response)
+
             if (response) {
                 for (let i = 0; i < response.length; i++) {
                     const date = new Date(response[i].createdAt)
                     const order = {
                         id: response[i].id_order,
+                        id_restaurant: response[i].id_restaurant,
                         phone: response[i].phone,
                         customer: `${response[i].name} ${response[i].lastname}`,
                         total: response[i].total,

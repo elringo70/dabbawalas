@@ -5,16 +5,17 @@ export interface IUser {
     maternalsurname: string,
     dob: Date,
     phone: string,
-    usertype?: 'M' | 'C' | 'D' | 'A' | 'CA',
+    usertype?: 'M' | 'C' | 'D' | 'A' | 'CA' | 'CO' | string,
     image?: string,
     active?: number,
+    gender: number,
     id_address?: number | string
 }
 
-export interface ICashier extends IUser {
+export interface IEmployee extends IUser {
     email: string,
     pass: string,
-    id_restaurant: number | string
+    id_restaurant: number
 }
 
 export interface IManager extends IUser {

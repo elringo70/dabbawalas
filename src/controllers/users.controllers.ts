@@ -3,6 +3,7 @@ import { IManager } from '../interfaces/IUsers'
 import User from '../models/user'
 import { genSaltSync, hashSync } from 'bcrypt'
 import { validationResult } from 'express-validator'
+import { updateArrayBindingPattern } from 'typescript'
 
 class UserControllers {
     //Manager controllers
@@ -125,7 +126,7 @@ class UserControllers {
                 WHERE email='${stringEmail}'
             `
             const searchEmail = await User.findBy(emailQuery)
-            
+
             if (searchEmail) {
                 return res.json({
                     status: 304,
@@ -143,6 +144,36 @@ class UserControllers {
             res.json({
                 status: 304,
                 message: 'Error al buscar el correo electrónico'
+            })
+        }
+    }
+
+    async deleteEmployeeById(req: Request, res: Response) {
+        const { id } = req.params
+        const user = res.locals.token
+
+        try {
+            const employee = await User.findById(id)
+
+            if (!employee) {
+                return res.json({
+                    status: 304,
+                    message: 'No se encontró el usuario'
+                })
+            }
+
+            await User.deleteById(id, user.id_restaurant)
+
+            res.json({
+                status: 200,
+                message: 'Usuario borrado'
+            })
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.json({
+                status: 304,
+                message: 'Error al borrar al usuario'
             })
         }
     }

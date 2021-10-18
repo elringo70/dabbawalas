@@ -13,7 +13,7 @@ async function loadDashBoard(e) {
                 }, body: JSON.stringify({ option: option })
             })
             const response = await data.json()
-            console.log(response)
+
             if (response.card12 || response.card34) dashBoardCards(response.card12, response.card34)
             if (response.bestSellingProduct) bestSellingProduct(response.bestSellingProduct)
             if (response.topSalesCustomer) topSalesCustomer(response.topSalesCustomer)
@@ -98,12 +98,13 @@ function fullYearSalesChart(months) {
 
     let monthLabels = []
     for (let i = 0; i < months.length; i++) {
-        const date = new Date(months[i].date).toLocaleTimeString()
-        monthLabels.push(date)
+        const date = new Date(months[i].date)
+        monthLabels.push(date.toLocaleDateString())
     }
 
+
     let monthsTotal = []
-    for (let i=0; i < months.length; i++) {
+    for (let i = 0; i < months.length; i++) {
         monthsTotal.push(months[i].total)
     }
 
@@ -118,6 +119,16 @@ function fullYearSalesChart(months) {
                 label: 'Ventas mensuales del año',
                 data: monthsTotal
             }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function (value) { if (value % 1 === 0) { return value; } }
+                    }
+                }
+            }
         }
     })
 }

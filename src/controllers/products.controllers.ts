@@ -62,7 +62,7 @@ class ProductController {
             if (image === undefined) {
                 error.push({
                     value: '',
-                    msg: 'No ingreso ninguna archivo de imagen',
+                    msg: 'No ingreso ninguna archivo de imagen o excede el tamaño permitido',
                     param: 'name',
                     location: 'body'
                 })

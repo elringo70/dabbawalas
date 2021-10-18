@@ -19,6 +19,8 @@ class AdminRoutes {
         this.router.get('/getAllManagers', [checkJWT.checkJWT, checkRole(['A'])], adminController.getAllManagers)
         this.router.get('/getManagerPageInfoPage/:id', [checkJWT.checkJWT, checkRole(['A'])], adminController.getManagerPageInfoPage)
         this.router.patch('/approveManager/:id', [checkJWT.checkJWT, checkRole(['A'])], adminController.approveManager)
+        this.router.get('/getRestaurantsPersonnelPage', [checkJWT.checkJWT, checkRole(['A'])], adminController.getRestaurantsPersonnelPage)
+        this.router.post('/postAllPersonnelRestaurant', [checkJWT.checkJWT, checkRole(['A'])], adminController.postAllPersonnelRestaurant)
     }
 }
 

@@ -212,31 +212,55 @@ async function orderForm(e) {
     }
 
     const formData = new URLSearchParams();
-    
+
     for (const pair of new FormData(form)) {
         formData.append(pair[0], pair[1])
-        console.log(pair[0], pair[1])
     }
 
     try {
-        const confirm = window.confirm('¿Esta completa la orden?')
-        if (confirm) {
+        const orderConfirm = window.confirm('¿Esta completa la orden?')
+        if (orderConfirm) {
+
             const phone = document.getElementById('phone').value
             formData.append('phone', phone)
 
-            path = `/api/orders/postNewOrder`
-            const data = await fetch(path, {
-                method: 'POST',
-                body: formData
-            })
+            const id_restaurant = await findExistingOrder(phone)
 
-            const response = await data.json()
+            console.log(id_restaurant)
 
-            if (response.status === 304) {
-                return alert(response.message)
+            if (id_restaurant.status === 200) {
+                const confirm = window.confirm(id_restaurant.message)
+
+                if (confirm) {
+                    path = `/api/orders/postNewOrder`
+                    const data = await fetch(path, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    const response = await data.json()
+
+                    if (response.status === 304) {
+                        return alert(response.message)
+                    } else {
+                        alert('Orden generada con éxito')
+                        removeCustomerCard()
+                    }
+                }
+            } else {
+                path = `/api/orders/postNewOrder`
+                const data = await fetch(path, {
+                    method: 'POST',
+                    body: formData
+                })
+                const response = await data.json()
+
+                if (response.status === 304) {
+                    return alert(response.message)
+                } else {
+                    alert('Orden generada con éxito')
+                    removeCustomerCard()
+                }
             }
-            alert('Orden generada con éxito')
-            removeCustomerCard()
         }
     } catch (error) {
         console.log(error)
@@ -255,4 +279,19 @@ function removeCustomerCard() {
     const phone = document.getElementById('phone')
     phone.value = ''
     order = []
+    productList.innerHTML = ''
+}
+
+async function findExistingOrder(phone) {
+
+    const path = `/api/orders/findExistingOrder/${phone}`
+
+    try {
+        const data = await fetch(path)
+        const response = await data.json()
+        return response
+    } catch (error) {
+        if (error) console.log(error)
+        alert(error)
+    }
 }

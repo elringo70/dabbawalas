@@ -4,6 +4,8 @@ import Order from '../models/orders'
 import { IOrder, IOrderDetail, IPostingOrder } from '../interfaces/IOrder'
 import { validationResult } from 'express-validator'
 import Customer from '../models/customer'
+import { resolveCaa } from 'dns'
+import User from '../models/user'
 
 class OrderController {
     getNewOrdersPage(req: Request, res: Response) {
@@ -32,6 +34,38 @@ class OrderController {
         profile.title = 'Live orders'
 
         res.render('orders/restaurants-orders', profile)
+    }
+
+    async getOrderDetailPage(req: Request, res: Response) {
+        const { id, restaurant } = req.params
+        const profile = res.locals.profile
+        profile.title = 'Detalle de la orden'
+
+        try {
+            const orderDetailQuery = `
+                SELECT
+                    order_detail.id_restaurant, order_detail.quantity, products.*
+                FROM order_detail
+                JOIN products
+                    ON order_detail.id_product = products.id_product
+                WHERE order_detail.id_restaurant=${restaurant}
+                    AND order_detail.id_order=${id}
+            `
+            const orderDetail = await Order.fetchAllAny(orderDetailQuery)
+
+            if (!orderDetail) {
+                profile.message = 'La el del platillo enviado no existe'
+                return res.render('orders/order-detail', profile)
+            }
+
+            profile.orderDetail = orderDetail
+            res.render('orders/order-detail', profile)
+        } catch (error) {
+            if (error) console.log(error)
+
+            profile.message = 'Error al buscar la orden'
+            res.render('orders/order-detail', profile)
+        }
     }
 
     async getAllRestaurantsOrders(req: Request, res: Response) {
@@ -115,7 +149,6 @@ class OrderController {
             `
             const customerPhone = await Customer.findBy(customerPhoneQuery)
 
-            console.log(customerPhone)
             if (!customerPhone) {
                 return res.json({
                     status: 304,
@@ -153,9 +186,9 @@ class OrderController {
             SELECT orders.*, users.name, users.lastname, users.phone
             FROM orders
             LEFT JOIN users
-            ON orders.id_user = users.id_user
+                ON orders.id_user = users.id_user
             WHERE orders.id_restaurant=${user.id_restaurant}
-            AND orderstatus='opened'
+                AND orderstatus='opened'
             ORDER BY orders.createdAt ASC
         `
 
@@ -272,7 +305,7 @@ class OrderController {
             dashboard.monthSales = monthSales
 
             const last3OrdersQuery = `
-                SELECT orders.*, users.name, users.lastname, users.phone
+                SELECT orders.*, CONCAT(users.name, " ",users.lastname, " ", users.maternalsurname) AS fullname, users.phone
                 FROM orders
                 LEFT JOIN users
                     ON orders.id_user = users.id_user
@@ -280,7 +313,7 @@ class OrderController {
                     AND orderstatus='opened'
                     AND CURDATE()
                 ORDER BY orders.createdAt ASC
-                LIMIT 3
+                LIMIT 5
             `
             const last3Orders = await Order.fetchAllAny(last3OrdersQuery)
             dashboard.lastSales = last3Orders
@@ -297,84 +330,44 @@ class OrderController {
         }
     }
 
-    async getCookerOrderDetailPage(req: Request, res: Response) {
-        const user = res.locals.token
-        const { id } = req.params
+    async findExistingOrder(req: Request, res: Response) {
+        const { phone } = req.params
 
         try {
-            const query = `
-                SELECT orders.id_order, orders.id_user, order_detail.*
-                FROM orders
-                RIGHT JOIN order_detail
-                ON orders.id_order = order_detail.id_order
-                WHERE orders.id_order=${id}
+            const idQuery = `
+                SELECT
+                    id_restaurant
+                FROM users
+                WHERE phone='${phone}'
+                    AND usertype='C'
             `
+            const id = await User.findBy(idQuery)
 
-            const orderDetail = await Order.fetchAllAny(query)
+            const findExistingOrderQuery = `
+                SELECT orderstatus
+                FROM orders
+                WHERE id_restaurant=${id.id_restaurant}
+                AND orderstatus='opened'
+            `
+            const findExistingOrder = await Order.fetchAllAny(findExistingOrderQuery)
 
-            if (!orderDetail) {
-                return res.status(200).render('orders/order-detail', {
-                    title: 'Detalle de la orden',
-                    user: res.locals.token,
-                    active: true,
-                    cooker: true,
-                    errorMessage: 'No exite informacion para esa orden',
-                    loggedIn: true
+            if (findExistingOrder) {
+                return res.json({
+                    status: 200,
+                    message: 'Existe una orden previa sin completar, ¿desea continuar?'
                 })
             }
 
-            let products = []
-            for (let i = 0; i < orderDetail.length; i++) {
-                const product = await Product.findById(orderDetail[i].id_product, user.id_restaurant)
-
-                products.push({
-                    quantity: orderDetail[i].quantity,
-                    product
-                })
-            }
-
-            switch (user.usertype) {
-                case 'A':
-                    res.status(200).render('orders/order-detail', {
-                        title: 'Detalle de la orden',
-                        user,
-                        active: true,
-                        admin: true,
-                        loggedIn: true,
-                        products
-                    })
-                    break
-                case 'CO':
-                    res.status(200).render('orders/order-detail', {
-                        title: 'Detalle de la orden',
-                        user,
-                        active: true,
-                        cooker: true,
-                        loggedIn: true,
-                        products
-                    })
-                    break
-                case 'M':
-                    res.status(200).render('orders/order-detail', {
-                        title: 'Detalle de la orden',
-                        user,
-                        active: true,
-                        manager: true,
-                        loggedIn: true,
-                        products
-                    })
-                    break
-            }
+            res.json({
+                status: 304,
+                message: 'Sin órdenes'
+            })
         } catch (error) {
             if (error) console.log(error)
 
-            res.status(200).render('orders/order-detail', {
-                title: 'Detalle de la orden',
-                user: res.locals.token,
-                active: true,
-                cooker: true,
-                errorMessage: 'Error al traer el detalle de la orden',
-                loggedIn: true
+            res.json({
+                status: 304,
+                message: 'Error al verificar si existe alguna orden previa'
             })
         }
     }
@@ -393,15 +386,14 @@ function todayOrdersRoleQuery(user: any) {
             query = `
                 SELECT * FROM orders
                 WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
-                AND id_restaurant=6
+                AND id_restaurant=${user.id_restaurant}
             `
             break
         case 'M':
             query = `
-                SELECT *
-                FROM orders 
-                WHERE DATE_FORMAT(orders.createdAt, '%Y-%m-%d') = CURDATE()
-                AND id_restaurant=${user.id_restaurant}
+                SELECT * FROM orders
+                WHERE DATE(createdAt) = CURDATE()
+                    AND id_restaurant=6
             `
             break
     }

@@ -81,9 +81,9 @@ export default class Order {
         })
     }
 
-    static fetchAllAny(query: string): Promise<IOrder[] | null> {
+    static fetchAllAny(query: string): Promise<any[] | null> {
         return new Promise((resolve, reject) => {
-            pool.query(query, (error, results: IOrder[]) => {
+            pool.query(query, (error, results: any[]) => {
                 if (error) reject(error)
 
                 if (results === undefined) {

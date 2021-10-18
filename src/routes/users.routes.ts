@@ -13,6 +13,7 @@ class UsersRoutes {
 
     private config() {
         this.router.get('/getUserByEmail/:email', [checkJWT.checkJWT, checkRole(['A', 'M'])], userControllers.getUserByEmail)
+        this.router.delete('/deleteEmployeeById/:id', [checkJWT.checkJWT, checkRole(['A', 'M'])], userControllers.deleteEmployeeById)
     }
 }
 

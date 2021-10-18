@@ -2,9 +2,61 @@ import { Request, Response } from 'express'
 import Order from '../models/orders'
 import Product from '../models/product'
 import User from '../models/user'
-import { IManager } from '../interfaces/IUsers'
+import Restaurant from '../models/restaurant'
+import Addresses from '../models/addresses'
 
 class AdminController {
+
+    async getRestaurantsPersonnelPage(req: Request, res: Response) {
+        const profile = res.locals.profile
+        profile.title = 'Restaurants personnel'
+
+        res.render('admin/managers-personnel', profile)
+    }
+
+    async postAllPersonnelRestaurant(req: Request, res: Response) {
+        const body = req.body
+
+        let restaurantObject: any = {
+            personnel: null,
+            restaurant: null
+        }
+        try {
+            const query = `
+                SELECT id_user, email, CONCAT(name, " ", lastname, " ",maternalsurname) AS fullname, dob, phone, usertype,
+                    CONCAT(addresses.street, " ", addresses.number, " ", colonias.nombre, " ", municipios.nombre, " ", estados.nombre) AS address
+                FROM users
+                JOIN addresses
+                    ON users.id_address = addresses.id_address
+                JOIN colonias
+                    ON addresses.id_municipality=colonias.id
+                JOIN municipios
+                    ON addresses.id_city=municipios.id
+                JOIN estados
+                    ON addresses.id_state=estados.id
+                WHERE id_restaurant=${body.personnel}
+                    AND (usertype='CO' OR usertype='CA')
+            `
+            const personnel = await User.fetchAllAny(query)
+            restaurantObject.personnel = personnel
+
+            const restaurant = await Restaurant.findById(body.personnel)
+            restaurantObject.restaurant = restaurant
+
+            res.json({
+                status: 200,
+                restaurantObject
+            })
+        } catch (error) {
+            if (error) console.log(error)
+
+            res.json({
+                status: 304,
+                message: 'Error while loading personnel'
+            })
+        }
+    }
+
     getAdminDashboardPage(req: Request, res: Response) {
         const user = res.locals.token
 
@@ -46,13 +98,16 @@ class AdminController {
         const { id } = req.params
 
         try {
-            const manager: IManager = await User.findById(id)
+            const manager: any = await User.findById(id)
             delete manager.pass
+
+            const address = await Addresses.findById(manager.id_address)
 
             res.render('admin/managers-info', {
                 title: 'Manager information',
                 user,
                 manager,
+                address,
                 active: true,
                 admin: true,
                 loggedIn: true

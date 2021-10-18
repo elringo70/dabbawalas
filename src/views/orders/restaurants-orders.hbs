@@ -42,13 +42,14 @@
         ordersList.innerHTML = ''
         orders.map(order => {
             const tr = document.createElement('tr')
-            tr.setAttribute('data-order', order.id)
+            tr.setAttribute('data-order', order.id_order)
+            tr.setAttribute('data-restaurant', order.id_restaurant)
             tr.classList.add('text-center')
 
             const time = new Date(order.createdAt).toLocaleTimeString()
 
             const content = `
-                <td><a href="/api/orders/getCookerOrderDetailPage/${order.id_order}">${order.id_order}</a></td>
+                <td><a href="/api/orders/getOrderDetailPage/${order.id_order}&${order.id_restaurant}">${order.id_order}</a></td>
                 <td>${order.name}</td>
                 <td>$ ${order.total}</td>
                 <td>${time}</td>

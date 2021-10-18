@@ -49,37 +49,6 @@ class RestaurantRoutes {
         this.router.get('/getManagerPage', [checkJWT.checkJWT, checkRole(['M'])], restaurantController.getManagerPage)
         this.router.get('/cookerRegistration', [checkJWT.checkJWT, checkRole(['M'])], restaurantController.cookerRegistrationPage)
         
-        this.router.post('/postCookerRegistration', [checkJWT.checkJWT, checkRole(['M'])], [
-            
-            //Cooker post validations
-            check('name')
-                .not().isEmpty().withMessage('Ingrese el nombre')
-                .trim()
-                .isLength({ min: 3 }).withMessage('El nombre debe de contener al menos 3 caracteres')
-                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el nombre'),
-            check('lastname')
-                .not().isEmpty().withMessage('Ingrese el apellido')
-                .trim()
-                .isLength({ min: 3 }).withMessage('El apellido debe de contener al menos 3 caracteres')
-                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el apellido'),
-            check('maternalsurname')
-                .not().isEmpty().withMessage('Ingrese el segundo apellido')
-                .trim()
-                .isLength({ min: 3 }).withMessage('El segundo apellido debe de contener al menos 3 caracteres')
-                .isAlpha('es-ES', { ignore: ' ' }).withMessage('Solo puede ingresar letras en el segundo apellido'),
-            check('dob')
-                .not().isEmpty().withMessage('Ingrese la su fecha de nacimiento')
-                .trim()
-                .isDate().withMessage('Seleccione un formato valido de fecha'),
-            check('email')
-                .not().isEmpty().withMessage('Ingrese un correo electrónico')
-                .trim()
-                .isEmail().withMessage('Ingrese un email con formato valido'),
-            check('pass')
-                .not().isEmpty().withMessage('Ingrese una contraseña')
-                .trim()
-                .isStrongPassword({ minLength: 6, minUppercase: 1, minSymbols: 1 }).withMessage('Ingrese la contraseña como se le indica')
-        ], restaurantController.postCookerRegistration)
 
         //Admin routes
         this.router.get('/:id', [checkJWT.checkJWT, checkRole(['M', 'A'])], restaurantController.getRestaurantById)
@@ -88,7 +57,7 @@ class RestaurantRoutes {
         this.router.get('/getBusinessHours/:id', [checkJWT.checkJWT, checkRole(['A', 'M'])], restaurantController.getBusinessHours)
 
         //Update restaurant route
-        /* this.router.post('/updateRestaurant/:id', [checkJWT.checkJWT, checkRole(['A'])], [
+        this.router.post('/updateRestaurant', [checkJWT.checkJWT, checkRole(['A'])], [
             //Input validations
             check('name')
                 .not().isEmpty().withMessage('Ingrese el nombre')
@@ -114,7 +83,7 @@ class RestaurantRoutes {
                 .trim()
                 .isNumeric().withMessage('Solo puede ingresar valores numéricos')
                 .isMobilePhone(['es-MX']).withMessage('Ingrese un teléfono valido')
-        ], restaurantController.updateRestaurant) */
+        ], restaurantController.updateRestaurant)
     }
 }
 

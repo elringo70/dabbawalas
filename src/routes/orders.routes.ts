@@ -16,10 +16,7 @@ class OrderRoutes {
         this.router.get('/getNewOrderPage', [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.getNewOrdersPage)
 
         //Post new order
-        this.router.post('/postNewOrder', [checkJWT.checkJWT, checkRole(['M', 'CA'])], [
-            //New order validations
-            
-        ], ordersController.postNewOrder)
+        this.router.post('/postNewOrder', [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.postNewOrder)
 
         this.router.get('/getAllTodayOrders', [checkJWT.checkJWT, checkRole(['M', 'CO', 'CA'])], ordersController.getAllTodayOrders)
         this.router.get('/getAllTodayOrdersPage', [checkJWT.checkJWT, checkRole(['M', 'CA'])], ordersController.getAllTodayOrdersPage)
@@ -33,10 +30,12 @@ class OrderRoutes {
                 .trim()
                 .not().isEmpty().withMessage('Debe enviar los el código del producto')
         ], ordersController.loadDashboard)
-        this.router.get('/getCookerOrderDetailPage/:id', [checkJWT.checkJWT, checkRole(['CO', 'M', 'A'])], ordersController.getCookerOrderDetailPage)
+        this.router.get('/findExistingOrder/:phone', [checkJWT.checkJWT, checkRole(['M'])], ordersController.findExistingOrder)
+
+        //Admin
+        this.router.get('/getOrderDetailPage/:id&:restaurant', [checkJWT.checkJWT, checkRole(['CO', 'M', 'A', 'CA'])], ordersController.getOrderDetailPage)
         this.router.get('/getAllRestaurantsOrdersPage', [checkJWT.checkJWT, checkRole(['A'])], ordersController.getAllRestaurantsOrdersPage)
         this.router.get('/getAllRestaurantsOrders', [checkJWT.checkJWT, checkRole(['A'])], ordersController.getAllRestaurantsOrders)
-
 
         //Cooker routes
         this.router.get('/getAllTodayOrdersCookerPage', [checkJWT.checkJWT, checkRole(['CO'])], ordersController.getAllTodayOrdersCookerPage)

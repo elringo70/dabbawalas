@@ -194,18 +194,6 @@
                                         <span>Personal</span>
                                     </a>
                                 </li>
-{{!--                                 <li>
-                                    <a href="/api/restaurants/cookerRegistration" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-layout-split"></i></span>
-                                        <span>Cocineros</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/api/managers/getCashiersPage" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-layout-split"></i></span>
-                                        <span>Cajeros</span>
-                                    </a>
-                                </li> --}}
                                 <li>
                                     <a href="/api/auth/logout" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-door-open"></i></span>
@@ -258,38 +246,6 @@
             </ul>
 
             <ul class="navbar-nav">
-                <li>
-                    <div class="text-muted small fw-bold text-uppercase px-3">
-                        Perfil
-                    </div>
-                </li>
-                <li>
-                    <a href="" class="nav-link px-3">
-                        <span class="me-2"><i class="bi bi-person-square"></i></span>
-                        <span>{{user.name}} {{user.lastname}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
-                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
-                        <span class="me-2"><i class="bi bi-gear"></i></span>
-                        <span>Opciones</span>
-                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
-                    </a>
-                    <div class="collapse" id="profileCollapse3">
-                        <div>
-                            <ul class="navbar-nav ps-3">
-                                <li>
-                                    <a href="/api/auth/logout" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
-                                        <span>Cerrar sesión</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-
                 <li class="my-4">
                     <hr class="dropdown-divider">
                 </li>
@@ -310,15 +266,51 @@
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
-                                    <a href="/api/orders/getNewOrderPage" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-bag-plus"></i></span>
-                                        <span>Agregar orden</span>
-                                    </a>
-                                </li>
-                                <li>
                                     <a href="/api/orders/getAllTodayOrdersPage" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
                                         <span>Ver órdenes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Perfil
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3">
+                        <span class="me-2"><i class="bi bi-person-square"></i></span>
+                        <span>{{user.name}} {{user.lastname}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
+                        <span class="me-2"><i class="bi bi-gear"></i></span>
+                        <span>Opciones</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse3">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/auth/resetPasswordPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cambiar contraseña</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/auth/logout" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cerrar sesión</span>
                                     </a>
                                 </li>
                             </ul>
@@ -398,12 +390,6 @@
                                         <span>Live orders</span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="/api/admin/adminCharts" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-graph-up"></i></span>
-                                        <span>Charts</span>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -433,6 +419,12 @@
                                     <a href="/api/admin/getAllManagersPage" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-people"></i></span>
                                         <span>Managers</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/admin/getRestaurantsPersonnelPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-people-fill"></i></span>
+                                        <span>Managers personnel</span>
                                     </a>
                                 </li>
                             </ul>
@@ -618,6 +610,12 @@
                     <div class="collapse" id="profileCollapse3">
                         <div>
                             <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/auth/resetPasswordPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cambiar contraseña</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="/api/auth/logout" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-door-open"></i></span>

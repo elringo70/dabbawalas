@@ -1,72 +1,49 @@
 import { IReqRest } from '../interfaces/IRestaurant'
 import { pool, asyncConn } from '../utils/database'
-import { IAdmin, ICashier, ICooker } from '../interfaces/IUsers'
+import { IAdmin, IEmployee } from '../interfaces/IUsers'
 import { IAddress } from '../interfaces/IAddresses'
 
 export default class User {
-    saveCooker(cooker: ICooker) {
-        return new Promise((resolve, reject) => {
-            const query = `INSERT INTO users SET ?`
-
-            pool.query(query, [cooker], (error, results) => {
-                if (error) reject(error)
-
-                resolve(results)
-            })
-        })
-    }
-
-    saveCashier(cashier: ICashier, address: IAddress) {
+    saveEmployee(employee: IEmployee, address: IAddress) {
         return new Promise(async (resolve, reject) => {
             const db = asyncConn()
             try {
-                await db.beginTransaction()
-
                 const addressQuery = `
                     INSERT INTO addresses
-                    (id_municipality, id_city, id_state, street, number)
+                    (id_state, id_city, id_municipality, number, street)
                     VALUES
-                    (${address.id_municipality},
-                    ${address.id_city},
-                    ${address.id_state},
-                    '${address.street}',
-                    '${address.number}')
+                    (
+                        '${address.id_state}',
+                        '${address.id_city}',
+                        '${address.id_municipality}',
+                        '${address.number}',
+                        '${address.street}'
+                    )
                 `
                 const newAddress: any = await db.query(addressQuery)
 
-                const cashierQuery = `
+                const employeeQuery = `
                     INSERT INTO users
+                    (name, lastname, maternalsurname, pass, dob, email, gender, usertype, phone, active, id_restaurant, id_address)
+                    VALUES
                     (
-                        name,
-                        lastname,
-                        maternalsurname,
-                        dob,
-                        phone,
-                        usertype,
-                        active,
-                        email,
-                        pass,
-                        id_restaurant,
-                        id_address
-                    )
-                        VALUES
-                    (
-                        '${cashier.name}',
-                        '${cashier.lastname}',
-                        '${cashier.maternalsurname}',
-                        '${cashier.dob}',
-                        '${cashier.phone}',
-                        '${cashier.usertype}',
-                        ${cashier.active},
-                        '${cashier.email}',
-                        '${cashier.pass}',
-                        ${cashier.id_restaurant},
+                        '${employee.name}',
+                        '${employee.lastname}',
+                        '${employee.maternalsurname}',
+                        '${employee.pass}',
+                        '${employee.dob}',
+                        '${employee.email}',
+                        '${employee.gender}',
+                        '${employee.usertype}',
+                        '${employee.phone}',
+                        '${employee.active}',
+                        ${employee.id_restaurant},
                         ${newAddress.insertId}
                     )
                 `
-                const newCashier = await db.query(cashierQuery)
-                const results = await db.commit()
+                await db.query(employeeQuery)
 
+                const results = await db.commit()
                 resolve(results)
             } catch (error) {
                 await db.rollback()
@@ -75,16 +52,6 @@ export default class User {
             } finally {
                 await db.close()
             }
-        })
-    }
-
-    static fetchAllCashiers(query: string): Promise<ICashier[] | null> {
-        return new Promise(async (resolve, reject) => {
-            pool.query(query, (error, results: ICashier[]) => {
-                if (error) reject(error)
-
-                resolve(results.length > 0 ? results : null)
-            })
         })
     }
 
@@ -173,7 +140,7 @@ export default class User {
         })
     }
 
-    static fetchAllAny(query: string): Promise<IAdmin[] | null> {
+    static fetchAllAny(query: string): Promise<any[] | null> {
         return new Promise((resolve, reject) => {
             pool.query(query, (error, results: IAdmin[]) => {
                 if (error) reject(error)
@@ -197,11 +164,15 @@ export default class User {
         })
     }
 
-    deleteById(id: string) {
+    static deleteById(id: string | number, id_restaurant: string | number) {
         return new Promise((resolve, reject) => {
-            const query = `DELETE FROM users WHERE=?`
+            const query = `
+            DELETE FROM users
+            WHERE id_user=?
+                AND id_restaurant=?
+            `
 
-            pool.query(query, [id], (error, results) => {
+            pool.query(query, [id, id_restaurant], (error, results) => {
                 if (error) reject(error)
 
                 resolve(results)

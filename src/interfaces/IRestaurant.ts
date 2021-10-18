@@ -4,7 +4,7 @@ export interface IRestaurant {
     type: string,
     phone: string,
     description: string,
-    id_address?: number
+    id_address?: string
 }
 
 export interface IBusinessHours {
