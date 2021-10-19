@@ -1,0 +1,149 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Restaurants</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Get all restaurants
+                    </div>
+                    <div class="card-body">
+                        <input class="form-control" id="search" type="text" placeholder="Search by restaurant">
+                        <table class="table table-sm table-hover align-middle" id="restaurantsTable">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Restaurant type</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Manager</th>
+                                    <th>Edition</th>
+                                </tr>
+                            </thead>
+                            <tbody id="restaurants-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let restaurants = []
+    const restaurantsList = document.getElementById('restaurants-list')
+
+    addEventListener('load', async function () {
+        await loadRestaurants()
+        renderRestaurants()
+    })
+    document.getElementById('search').addEventListener('keydown', tableFilter)
+
+    async function loadRestaurants() {
+        path = `/api/restaurants/getAllRestaurants`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            console.log(response)
+
+            for (let i = 0; i < response.length; i++) {
+                restaurants.push(response[i])
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    function renderRestaurants() {
+        restaurantsList.innerHTML = ''
+        restaurants.map(restaurant => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-restaurant', restaurant.id_restaurant)
+            tr.classList.add('text-center')
+
+            const content = `
+                <td><a href="/api/restaurants/editRestaurantPage/${restaurant.id_restaurant}">${restaurant.id_restaurant}</a></td>
+                <td>${restaurant.name}</td>
+                <td>${restaurant.type}</td>
+                <td>
+                    ${restaurant.street} ${restaurant.number}, ${restaurant.municipality}, ${restaurant.city}, ${restaurant.state}
+                </td>
+                <td>${restaurant.phone}</td>
+                <td><a href="/api/admin/getManagerPageInfoPage/${restaurant.id_user}">${restaurant.id_user}</a></td>
+                <td>
+                    <div class="btn-group">
+                        <a data-restaurant="${restaurant.id_restaurant}" class="btn btn-outline-danger delete-restaurant">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+
+            tr.innerHTML = content
+            restaurantsList.append(tr)
+
+            tr.querySelector('.delete-restaurant').addEventListener('click', async function () {
+                deleteRestaurant(restaurant.id_restaurant)
+        })
+    })
+    }
+
+    async function deleteRestaurant(restaurant) {
+        const path = `/api/restaurants/${restaurant}`
+
+        try {
+            const confirm = window.confirm('Do you want to delete this restaurant?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'DELETE'
+                })
+                const response = await data.json()
+                reloadRestaurantsList()
+            }
+        } catch (error) {
+            console.log(error)
+            alert(error)
+        }
+    }
+
+    function tableFilter() {
+        var input, filter, table, tr, td, i, txtValue;
+
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("restaurantsTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]
+
+            if (td) {
+                txtValue = td.textContent || td.innerText
+
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = ""
+                } else {
+                    tr[i].style.display = "none"
+                }
+            }
+        }
+    }
+
+    async function reloadRestaurantsList() {
+        restaurants = []
+        await loadRestaurants()
+        renderRestaurants()
+    }
+</script>

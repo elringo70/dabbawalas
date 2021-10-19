@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 const express_1 = __importDefault(require("express"));
 const express_handlebars_1 = __importDefault(require("express-handlebars"));
-//import morgan from 'morgan'
+const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
 //Error 404
 const _404_controllers_1 = require("./controllers/404.controllers");
@@ -18,6 +18,9 @@ const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const customers_routes_1 = __importDefault(require("./routes/customers.routes"));
 const orders_routes_1 = __importDefault(require("./routes/orders.routes"));
+const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
+const addresses_routes_1 = __importDefault(require("./routes/addresses.routes"));
+const managers_routes_1 = __importDefault(require("./routes/managers.routes"));
 class App {
     constructor(port) {
         this.app = express_1.default();
@@ -29,6 +32,11 @@ class App {
         this.app.set('port', this.port || process.env.PORT || 3000);
         this.app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
         this.app.set('views', path_1.default.join(__dirname, 'views'));
+        /* this.app.use(cors({
+            origin: '*',
+            methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
+            allowedHeaders: ['Content-Type', 'Authorization']
+        })) */
         this.app.engine('.hbs', express_handlebars_1.default({
             defaultLayout: 'main',
             layoutsDir: path_1.default.join(this.app.get('views'), 'layouts'),
@@ -66,7 +74,7 @@ class App {
         this.app.set('view engine', '.hbs');
     }
     middlewares() {
-        //this.app.use(morgan('dev'))
+        this.app.use(morgan_1.default('dev'));
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
     }
@@ -78,6 +86,9 @@ class App {
         this.app.use('/api/auth', auth_routes_1.default);
         this.app.use('/api/customers', customers_routes_1.default);
         this.app.use('/api/orders', orders_routes_1.default);
+        this.app.use('/api/admin', admin_routes_1.default);
+        this.app.use('/api/addresses', addresses_routes_1.default);
+        this.app.use('/api/managers', managers_routes_1.default);
         this.app.use(_404_controllers_1.error404.get404Page);
     }
     listen() {

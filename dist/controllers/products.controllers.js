@@ -22,6 +22,7 @@ class ProductController {
             title: 'Agregar nuevo platillo',
             user: res.locals.token,
             active: true,
+            manager: true,
             loggedIn: true
         });
     }
@@ -36,6 +37,7 @@ class ProductController {
                     user: res.locals.token,
                     products: products,
                     active: true,
+                    manager: true,
                     loggedIn: true
                 });
             }
@@ -52,48 +54,217 @@ class ProductController {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const errors = express_validator_1.validationResult(req);
+            const error = errors.array();
+            const body = req.body;
             const user = res.locals.token;
             try {
-                const restaurant = yield restaurant_1.default.findWithUser(user.id_user);
                 const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename;
                 const productObj = {
-                    name: req.body.name,
-                    cost: req.body.cost,
-                    price: req.body.price,
+                    name: body.name.toUpperCase(),
+                    cost: body.cost,
+                    price: body.price,
                     image: 'uploads/' + image,
-                    description: req.body.description,
+                    description: body.description.toUpperCase(),
+                    cookingTime: body.cookingtime,
                     active: 1,
-                    id_restaurant: restaurant === null || restaurant === void 0 ? void 0 : restaurant.id_restaurant
+                    id_restaurant: user.id_restaurant
                 };
-                if (!productObj.image) {
-                    return res.render('products/newProduct', {
+                if (image === undefined) {
+                    error.push({
+                        value: '',
+                        msg: 'No ingreso ninguna archivo de imagen o excede el tamaño permitido',
+                        param: 'name',
+                        location: 'body'
+                    });
+                    return res.status(422).render('products/newProduct', {
+                        user,
                         title: 'Agregar nuevo platillo',
-                        errorMessage: 'Asegurese de enviar una imagen o un formato valido',
                         product: productObj,
-                        loggedIn: true
+                        active: true,
+                        manager: true,
+                        loggedIn: true,
+                        error: error[0]
                     });
                 }
-                if (!errors.array()) {
+                if (!errors.isEmpty()) {
                     return res.status(422).render('products/newProduct', {
+                        user,
                         title: 'Agregar nuevo platillo',
-                        errors: errors.array(),
                         product: productObj,
-                        loggedIn: true
+                        active: true,
+                        manager: true,
+                        loggedIn: true,
+                        error: error[0]
                     });
                 }
                 const product = new product_1.default();
                 yield product.save(productObj);
-                res.render('products/newProduct', {
+                res.status(201).render('products/newProduct', {
+                    user,
                     title: 'Agregar nuevo platillo',
                     active: true,
-                    loggedIn: true
+                    manager: true,
+                    loggedIn: true,
+                    message: 'Producto agregado'
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.render('products/newProduct', {
+                    user,
+                    title: 'Agregar nuevo platillo',
+                    active: true,
+                    manager: true,
+                    loggedIn: true,
+                    errorMessage: 'Error al agregar el Platillo'
+                });
+            }
+        });
+    }
+    getProductByIdByRestaurant(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = res.locals.token;
+            const id = req.body.id;
+            try {
+                const product = yield product_1.default.findById(id, user.id_restaurant);
+                if (product) {
+                    return res.json({
+                        status: 200,
+                        product
+                    });
+                }
+                res.json({
+                    status: 304,
+                    message: 'Platillo no encontrado'
                 });
             }
             catch (error) {
                 if (error)
                     console.log(error);
                 res.json({
-                    errorMessage: 'Error al agregar el Platillo'
+                    errorMessage: 'Error al buscar al platillo'
+                });
+            }
+        });
+    }
+    deleteProductByIdByRestaurant(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = res.locals.token;
+            const id = req.params.id;
+            try {
+                const product = {
+                    id_product: id,
+                    id_restaurant: user.id_restaurant
+                };
+                yield product_1.default.deleteById(product);
+                res.status(200).json({
+                    status: 200,
+                    message: 'Platillo borrado'
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.json({
+                    errorMessage: 'Error al eliminar el platillo'
+                });
+            }
+        });
+    }
+    getAllProductsByRestaurant(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = res.locals.token;
+            try {
+                const products = yield product_1.default.fetchAllByRestaurant(user.id_restaurant);
+                res.json(products);
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.json({
+                    errorMessage: 'Error al traer los platillos'
+                });
+            }
+        });
+    }
+    editProductByIdPage(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = res.locals.token;
+            const id = req.params.id;
+            try {
+                const editProduct = yield product_1.default.findById(id, user.id_restaurant);
+                res.status(200).render('products/edit-product', {
+                    title: 'Editar el platillo',
+                    user: res.locals.token,
+                    product: editProduct,
+                    active: true,
+                    manager: true,
+                    loggedIn: true
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.render('products/edit-product', {
+                    title: 'Editar el platillo',
+                    user: res.locals.token,
+                    errorMessage: 'Error al cargar la página',
+                    active: true,
+                    manager: true,
+                    loggedIn: true
+                });
+            }
+        });
+    }
+    editProductByIdByRestaurant(req, res) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const errors = express_validator_1.validationResult(req);
+            const error = errors.array();
+            const body = req.body;
+            const user = res.locals.token;
+            const { id } = req.params;
+            try {
+                if (!errors.isEmpty()) {
+                    return res.json({
+                        status: 304,
+                        message: error[0].msg
+                    });
+                }
+                const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename;
+                const productObject = {
+                    name: body.name.toUpperCase(),
+                    cost: body.cost,
+                    price: body.price,
+                    description: body.description.toUpperCase(),
+                    cookingTime: body.cookingtime,
+                    active: 1,
+                    id_restaurant: user.id_restaurant
+                };
+                if (image !== undefined) {
+                    productObject.image = 'uploads/' + image;
+                }
+                const searchProduct = yield product_1.default.findById(id, user.id_restaurant);
+                if (!searchProduct) {
+                    return res.json({
+                        status: 200,
+                        message: 'Error con el id del platillo'
+                    });
+                }
+                const product = new product_1.default();
+                yield product.updateById(id, productObject);
+                res.json({
+                    status: 200,
+                    message: 'Platillo editado con éxito'
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.json({
+                    status: 304,
+                    message: 'Error al editar el platillo'
                 });
             }
         });

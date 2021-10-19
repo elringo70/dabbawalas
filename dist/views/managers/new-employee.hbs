@@ -1,0 +1,145 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Personal</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Regsitro de nuevo empleado
+                    </div>
+                    <div class="card-body">
+                        <form id="form" autocomplete="off">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre del empleado" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="maternalsurname" class="form-label">Segundo apellido</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Segundo apellido" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select" id="state-select" required>
+                                        <option selected>Seleccione un estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select" id="city-select" required>
+                                        <option selected>Seleccione una ciudad</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select" id="municipality-select"
+                                        required>
+                                        <option selected>Seleccione una colonia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control" id="street"
+                                        placeholder="Calle" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number"
+                                        class="form-control input-number-validation arrow-number" id="number"
+                                        min="1" max="99999" placeholder="Número" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone"
+                                        class="form-control input-number-validation arrow-number" id="phone"
+                                        placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" required>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="dob" class="form-label">Fecha de nacimiento</label>
+                                    <input type="date" name="dob" class="form-control" id="dob" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="position" class="form-label">Posición</label>
+                                    <select name="position" id="position" class="form-control">
+                                        <option selected>Seleccione una opción</option>
+                                        <option value="1">Cajero</option>
+                                        <option value="2">Cocinero</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="Correo electrónico" required>
+                                </div>
+                                <div class="col-md-1">
+                                    <label class="form-check-label">Género</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput1"
+                                            value="1" required>
+                                        <label class="form-check-label" for="genderInput1">Hombre</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput2"
+                                            value="0">
+                                        <label class="form-check-label" for="genderInput2">Mujer</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="genderInput3"
+                                            value="null">
+                                        <label class="form-check-label" for="genderInput3">Prefiero no
+                                            contestar</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/addresses.js"></script>
+<script src="/js/manager/new-employee.js"></script>

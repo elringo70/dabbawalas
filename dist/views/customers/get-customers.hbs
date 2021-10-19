@@ -14,52 +14,17 @@
                         <div class="table-responsive">
                             <input class="form-control" id="search" type="text"
                                 placeholder="Buscar por número telefónico">
-                            <table class="table table-hover align-middle" id="customersTable">
+                            <table class="table table-hover table-sm align-middle" id="customersTable">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Teléfono</th>
                                         <th>Cliente</th>
                                         <th>Dirección</th>
-                                        <th>Correo electrónico</th>
                                         <th>Edición</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {{#each customers}}
-                                    <tr>
-                                        <td><a href="#">{{this.phone}}</a></td>
-                                        <td>{{this.name}} {{this.lastname}} {{this.maternalsurname}}</td>
-                                        <td>{{this.street}} #{{this.number}}, {{this.municipality}}, {{this.city}}</td>
-                                        <td>{{this.email}}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <a data-user="{{this.id_user}}"
-                                                    class="btn btn-outline-danger customerEdition">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-person-x-fill"
-                                                        viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd"
-                                                            d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
-                                                    </svg>
-                                                    <span class="visually-hidden">Button</span>
-                                                </a>
-                                                <a href="/api/customers/editCustomerByRestaurantPage/{{this.id_user}}"
-                                                    class="btn btn-outline-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-person-square"
-                                                        viewBox="0 0 16 16">
-                                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                                        <path
-                                                            d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z">
-                                                        </path>
-                                                    </svg>
-                                                    <span class="visually-hidden">Button</span>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
+                                <tbody id="customers-list"></tbody>
                             </table>
                         </div>
                     </div>
@@ -70,9 +35,9 @@
 </div>
 
 <script>
+    let customers = []
+
     //Listeners
-
-
     document.getElementById('search').addEventListener('keyup', tableFilter)
 
     document.querySelectorAll('.customerEdition').forEach(function (href, i) {
@@ -82,7 +47,7 @@
             const customerButton = document.querySelectorAll('.customerEdition')
             const userId = customerButton[i].getAttribute('data-user')
 
-            path = `https://dabbawalas.herokuapp.com/api/customers/deleteCustomerByRestaurant/${userId}`
+            path = `http://localhost:3000/api/customers/deleteCustomerByRestaurant/${userId}`
 
             const alterConfirmation = window.confirm('¿Esta seguro de borrar al cliente?')
 
@@ -126,4 +91,101 @@
             }
         }
     }
+
+    async function loadCustomers() {
+        const path = `/api/customers/getAllCustomersByRestaurant`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            for (let i = 0; i < response.customers.length; i++) {
+                customers.push(response.customers[i])
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function deleteCustomer(customer) {
+        const path = `/api/customers/deleteCustomerByRestaurant/${customer}`
+
+        try {
+            const confirm = window.confirm('¿Desea borrar al cliente?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'DELETE'
+                })
+                const response = await data.json()
+                if (response.status === 304) {
+                    return alert(response.message)
+                }
+                await reloadCustomersList()
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    function renderCustomers(clients) {
+        const customersList = document.getElementById('customers-list')
+        customersList.innerHTML = ''
+
+        clients.map(customer => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-customer', customer.id_user)
+            tr.classList.add('text-center')
+
+            const content = `
+                <td><a href="#">${customer.id_user}</a></td>
+                <td>${customer.phone}</td>
+                <td>${customer.name} ${customer.lastname} ${customer.maternalsurname}</td>
+                <td>
+                    ${customer.street} ${customer.number}, ${customer.municipality}, ${customer.city}, ${customer.state}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a
+                        href="/api/customers/editCustomerByRestaurantPage/${customer.id_user}"
+                        data-customer-edit="${customer.id_user}"
+                        class="btn btn-outline-secondary edit-customer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                        <a data-order-delete="${customer.id_user}"
+                        class="btn btn-outline-danger delete-customer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+
+            tr.innerHTML = content
+            customersList.append(tr)
+
+            tr.querySelector('.delete-customer').addEventListener('click', async function () {
+                await deleteCustomer(customer.id_user)
+            })
+        })
+    }
+
+    async function reloadCustomersList() {
+        customers = []
+        await loadCustomers()
+        renderCustomers(customers)
+    }
+
+    addEventListener('load', async () => {
+        await loadCustomers()
+        renderCustomers(customers)
+    })
 </script>

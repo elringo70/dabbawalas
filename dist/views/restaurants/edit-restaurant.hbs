@@ -1,0 +1,534 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <form id="form">
+            <div class="row">
+                <h1 class="col-md-12">Restaurant information</h1>
+            </div>
+
+            {{#if message}}
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="alert alert-info" role="alert">
+                        {{message}}
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="name" class="form-label">Restaurant name</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Nombre del restaurante"
+                        value="{{restaurant.name}}" readonly="true" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="type" class="form-label">Restaurant type</label>
+                    <input type="text" name="type" class="form-control" id="type" placeholder="Tipo de restaurante"
+                        value="{{restaurant.type}}" readonly="true" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="" class="form-label">Description</label>
+                    <textarea name="description" rows="4" class="form-control textarea-validation" style="resize:none"
+                        readonly required>{{restaurant.description}}</textarea>
+                    <small class="text-danger" id="text-muted"></small>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12 fw-bold fs-3">Schedule</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <label for="end" class="form-label">Day</label>
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="0">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Sunday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="openhours" class="form-label">Opening hours</label>
+                    <input type="time" name="openhours" class="form-control" id="openhours0" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="closinghours" class="form-label">Closing hours</label>
+                    <input type="time" name="closinghours" class="form-control" id="closinghours0" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="1">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Monday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours1" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours1" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="2">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Tuesday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours2" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours2" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="3">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Wednesday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours3" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours3" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="4">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Thursday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours4" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours4" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="5">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Friday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours5" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours5" disabled>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="form-control">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="days" type="checkbox" id="inlineCheckBoxDays1"
+                                value="6">
+                            <label class="form-check-label" for="inlineCheckBoxDays1">Saturday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="openhours" class="form-control" id="openhours6" disabled>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <input type="time" name="closinghours" class="form-control" id="closinghours6" disabled>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <h1 class="col-md-12">Address</h1>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-4">
+                    <label for="state">State</label>
+                    <select name="state" class="form-select disabled" id="state-select" required></select>
+                </div>
+                <div class="col-sm-4">
+                    <label for="city">City</label>
+                    <select name="city" class="form-select disabled" id="city-select" required></select>
+                </div>
+                <div class="col-md-4">
+                    <label for="municipality">Municipality</label>
+                    <select name="municipality" class="form-select disabled" id="municipality-select" required></select>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-5">
+                    <label for="street">Street</label>
+                    <input type="text" name="street" class="form-control disabled" id="street"
+                        value="{{address.street}}" placeholder="Calle" autocomplete="new-text" required>
+                    <small class="text-danger" id="text-muted"></small>
+                </div>
+                <div class="col-md-3">
+                    <label for="number">Number</label>
+                    <input type="number" name="number"
+                        class="form-control input-number-validation disabled arrow-number" id="number" min="1"
+                        max="99999" placeholder="Número" value="{{address.number}}" autocomplete="new-number" required>
+                    <small class="text-danger" id="text-muted"></small>
+                </div>
+                <div class="col-sm-4">
+                    <label for="phone">Telephone number</label>
+                    <input type="number" name="phone" class="form-control input-number-validation arrow-number"
+                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999" pattern="[0-9]"
+                        value="{{restaurant.phone}}" required>
+                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                    </div>
+                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                        números</small>
+                </div>
+            </div>
+
+            {{#if errors}}
+            {{#each errors}}
+            <div class="my-3">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{this.msg}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            {{/each}}
+            {{/if}}
+            <input type="number" id="restaurant-id" name="id_restaurant" value="{{restaurant.id_restaurant}}" hidden>
+            <div class="row pb-5">
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <input type="submit" class="btn btn-primary" value="Update" role="button">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    //Listeners
+
+    document.getElementById('form').addEventListener('submit', submitForm)
+
+    document.querySelectorAll('.form-check-input').forEach(function (checkbox, i) {
+        checkbox.addEventListener('change', function () {
+
+            const openInput = document.querySelector(`#openhours${(i)}`)
+            const closeInput = document.querySelector(`#closinghours${(i)}`)
+
+            openInput.toggleAttribute('disabled')
+            openInput.toggleAttribute('required')
+            closeInput.toggleAttribute('disabled')
+            closeInput.toggleAttribute('required')
+
+            if (!checkbox.checked) {
+                openInput.value = ""
+                closeInput.value = ""
+            }
+        })
+    })
+
+    addEventListener('load', function () {
+        loadBusinessHours()
+    })
+
+    function schedule(getDay, openHours, closingHours) {
+        let hoursDays = []
+
+        for (let i = 0; i < getDay.length; i++) {
+            hoursDays.push({ day: getDay[i], openhours: openHours[i], closinghours: closingHours[i] })
+        }
+
+        return hoursDays
+    }
+
+    function registrationConfirmation() {
+        document.getElementById("backdrop").style.display = "block"
+        document.getElementById("exampleModal").style.display = "block"
+        document.getElementById("exampleModal").classList.add("show")
+    }
+
+    async function loadBusinessHours() {
+        const path = `/api/restaurants/getBusinessHours/{{restaurant.id_restaurant}}`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            const checkboxes = document.querySelectorAll('.form-check-input')
+
+            for (let i = 0; i < checkboxes.length; i++) {
+                for (let j = 0; j < response.length; j++) {
+                    if (checkboxes[i].value == response[j].day) {
+                        checkboxes[i].checked = true
+                        const openInput = document.querySelector(`#openhours${(i)}`)
+                        const closeInput = document.querySelector(`#closinghours${(i)}`)
+
+                        openInput.toggleAttribute('disabled')
+                        openInput.toggleAttribute('required')
+                        closeInput.toggleAttribute('disabled')
+                        closeInput.toggleAttribute('required')
+
+                        openInput.value = response[j].openhours
+                        closeInput.value = response[j].closinghours
+                    }
+                }
+            }
+
+        } catch (error) {
+            alert(error)
+            console.log(error)
+        }
+    }
+
+    async function submitForm(e) {
+        e.preventDefault()
+
+        const formData = new URLSearchParams();
+        for (const pair of new FormData(form)) {
+            formData.append(pair[0], pair[1])
+        }
+
+        const path = `/api/restaurants/updateRestaurant`
+        try {
+            const confirm = window.confirm('¿Do you wish to continue?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'POST',
+                    body: formData
+                })
+                const response = await data.json()
+
+                if(response.status === 200) {
+                    alert(response.message)
+                    return location.reload()
+                }
+                if(response.status === 304) return alert(response.message)
+            }
+        } catch (error) {
+            if (error) console.log(error)
+            alert(error)
+        }
+    }
+</script>
+
+<script>
+    let states
+    let cities
+    let municipalities
+    //Listeners
+
+    //Remove more than 10 characters
+    document.getElementById('phone').addEventListener('keyup', function (e) {
+        if (e.target.value.length > 4) {
+            e.target.value = e.target.value.slice(0, 10);
+        }
+    })
+
+    //Functions
+    function resetSelect() {
+        const citySelect = document.getElementById('city-select')
+        while (citySelect.options.length > 0) {
+            citySelect.options.remove(0)
+        }
+
+        const option1 = document.createElement('option')
+        option1.text = 'Seleccione una ciudad'
+        citySelect.add(option1)
+
+        const municipalitySelect = document.getElementById('municipality-select')
+        while (municipalitySelect.options.length > 0) {
+            municipalitySelect.options.remove(0)
+        }
+
+        const option2 = document.createElement('option')
+        option2.text = 'Selecciona una colonia'
+        municipalitySelect.add(option2)
+    }
+
+    async function loadStates() {
+        states = []
+
+        const path = `/api/addresses/getAllStates`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+            states = response
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+
+    }
+
+    function renderStates() {
+        const selectStates = document.getElementById('state-select')
+
+        for (let i = 0; i < states.length; i++) {
+            const option = document.createElement('option')
+            option.value = states[i].id
+            option.text = states[i].nombre
+            selectStates.add(option)
+        }
+    }
+
+    function renderCities() {
+        const citySelect = document.getElementById('city-select')
+
+        while (citySelect.options.length > 0) {
+            citySelect.options.remove(0)
+        }
+
+        for (let i = 0; i < cities.length; i++) {
+            const option = document.createElement('option')
+            option.value = cities[i].id
+            option.text = cities[i].nombre
+            option.classList.add('option-cities')
+            citySelect.add(option)
+        }
+    }
+
+    function renderMunicipalities() {
+        const municipalitySelect = document.getElementById('municipality-select')
+
+        while (municipalitySelect.options.length > 0) {
+            municipalitySelect.options.remove(0)
+        }
+
+        for (let i = 0; i < municipalities.length; i++) {
+            const option = document.createElement('option')
+            option.value = municipalities[i].id
+            option.text = municipalities[i].nombre
+            option.classList.add('option-municipalities')
+            municipalitySelect.add(option)
+        }
+    }
+
+    async function loadCities(state) {
+        cities = []
+
+        const path = `/api/addresses/getAllCitiesFromState/${state}`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            cities = response
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function loadMunicipalities(city) {
+        municipalities = []
+        const path = `/api/addresses/getAllMunicipalitiesFromCity/${city}`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            municipalities = response
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function loadEntities() {
+        const stateId = `{{address.id_state}}`
+        const cityId = `{{address.id_city}}`
+        const municipalityId = `{{address.id_municipality}}`
+
+        const selectStates = document.getElementById('state-select')
+        for (let i = 0; i < states.length; i++) {
+            const option = document.createElement('option')
+            option.value = states[i].id
+            option.text = states[i].nombre
+            if (states[i].id == stateId) {
+                option.setAttribute('selected', true)
+            }
+            selectStates.add(option)
+        }
+
+        await loadCities(stateId)
+        const citySelect = document.getElementById('city-select')
+
+        for (let i = 0; i < cities.length; i++) {
+            const option = document.createElement('option')
+            option.value = cities[i].id
+            option.text = cities[i].nombre
+            option.classList.add('option-cities')
+            if (cities[i].id == cityId) {
+                option.setAttribute('selected', true)
+            }
+            citySelect.add(option)
+        }
+
+        await loadMunicipalities(cityId)
+        const municipalitySelect = document.getElementById('municipality-select')
+
+        for (let i = 0; i < municipalities.length; i++) {
+            const option = document.createElement('option')
+            option.value = municipalities[i].id
+            option.text = municipalities[i].nombre
+            option.classList.add('option-municipalities')
+            if (municipalities[i].id == municipalityId) {
+                option.setAttribute('selected', true)
+            }
+            municipalitySelect.add(option)
+        }
+    }
+
+    addEventListener('load', async () => {
+        await loadStates()
+        await loadEntities()
+
+        document.getElementById('state-select').addEventListener('change', async (e) => {
+            const state = e.target.value
+            const municipalitySelect = document.getElementById('municipality-select')
+
+            while (municipalitySelect.options.length > 0) {
+                municipalitySelect.options.remove(0)
+            }
+            const option = document.createElement('option')
+            option.text = 'Seleccione una colonia'
+            municipalitySelect.add(option)
+
+            await loadCities(state)
+            renderCities()
+
+            document.getElementById('city-select').addEventListener('change', async (e) => {
+                const municipality = e.target.value
+
+                await loadMunicipalities(municipality)
+                renderMunicipalities()
+            })
+        })
+    })
+</script>

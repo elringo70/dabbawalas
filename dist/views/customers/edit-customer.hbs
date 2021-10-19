@@ -14,39 +14,46 @@
                     <div class="card-body">
                         <form id="form">
                             <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="phone">Número telefónico</label>
-                                    <input type="number" name="phone" class="form-control input-number-validation"
-                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
-                                        pattern="[0-9]" value="{{customer.phone}}" disabled required>
-                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
-                                    </div>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
-                                        números</small>
-                                </div>
                                 <div class="col-sm">
                                     <div id="phoneExistsAlert"></div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <label for="name" class="form-label">Nombre</label>
-                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
-                                        placeholder="Nombre del cliente" value="{{customer.name}}" disabled required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone"
+                                        class="form-control input-number-validation disabled" id="phone"
+                                        placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" value="{{customer.phone}}" disabled>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Nombre(s)</label>
+                                    <input type="text" name="name" class="form-control input-text-validation disabled"
+                                        id="name" placeholder="Nombre del cliente" value="{{customer.name}}" disabled
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="lastname" class="form-label">Apellido</label>
-                                    <input type="text" name="lastname" class="form-control input-text-validation"
-                                        id="lastname" placeholder="Apellido" value="{{customer.lastname}}" disabled required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                    <input type="text" name="lastname"
+                                        class="form-control input-text-validation disabled" id="lastname"
+                                        placeholder="Apellido" value="{{customer.lastname}}" disabled required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="maternalsurname" class="form-label">Segundo apellido</label>
-                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
-                                        id="maternalsurname" placeholder="Segundo apellido"
-                                        value="{{customer.maternalsurname}}" disabled required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                    <input type="text" name="maternalsurname"
+                                        class="form-control input-text-validation disabled" id="maternalsurname"
+                                        placeholder="Segundo apellido" value="{{customer.maternalsurname}}" disabled
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                             </div>
 
@@ -55,81 +62,69 @@
                                     <div id="dateAlert"></div>
                                 </div>
                             </div>
+
                             <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <label for="number">Número</label>
-                                    <input type="number" name="number" class="form-control input-number-validation"
-                                        id="number" min="1" max="99999" placeholder="Número" value="{{customer.number}}"
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select disabled" id="state-select" disabled
                                         required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
-                                        números</small>
+                                        <option>{{customer.state}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select disabled" id="city-select" disabled required>
+                                        <option>{{customer.city}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select disabled" id="municipality-select"
+                                        disabled required>
+                                        <option>{{customer.municipality}}</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-5">
                                     <label for="street">Calle</label>
-                                    <input type="text" name="street" class="form-control" id="street"
-                                        value="{{customer.street}}" placeholder="Calle" required>
+                                    <input type="text" name="street" class="form-control disabled" id="street"
+                                        value="{{customer.street}}" placeholder="Calle" autocomplete="new-text" disabled
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="municipality">Colonia</label>
-                                    <input type="text" name="municipality" class="form-control" id="municipality"
-                                        placeholder="Colonia" value="{{customer.municipality}}" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="city">Ciudad</label>
-                                    <input type="text" name="city" class="form-control input-text-validation" id="city"
-                                        placeholder="Ciudad" value="{{customer.city}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
-                                        tipo letra</small>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label for="state">Estado</label>
-                                    <input type="text" name="state" class="form-control input-text-validation"
-                                        id="state" placeholder="Estado" value="{{customer.state}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
-                                        tipo letra</small>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number"
+                                        class="form-control input-number-validation disabled" id="number" min="1"
+                                        max="99999" placeholder="Número" value="{{customer.number}}"
+                                        autocomplete="new-number" disabled required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                             </div>
+
                             <div class="row mb-3">
                                 <div class="col-1">
                                     <label class="form-check-label">Género</label>
                                 </div>
                                 <div class="col">
                                     <div class="form-check form-check-inline">
-                                        <input
-                                        class="form-check-input"
-                                        type="radio" name="gender"
-                                        id="genderInput1"
-                                        value="1"
-                                        {{#ifCond customer.gender '===' 1}}
-                                            checked
-                                        {{/ifCond}}
-                                        required>
+                                        <input class="form-check-input disabled" type="radio" name="gender"
+                                            id="genderInput1" value="1" {{#ifCond customer.gender '===' 1}} checked
+                                            {{/ifCond}} disabled required>
                                         <label class="form-check-label" for="genderInput1">Hombre</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="gender"
-                                        id="genderInput2"
-                                        {{#ifCond customer.gender '===' 0}}
-                                            checked
-                                        {{/ifCond}}
-                                        value="0">
+                                        <input class="form-check-input disabled" type="radio" name="gender"
+                                            id="genderInput2" {{#ifCond customer.gender '===' 0}} checked {{/ifCond}}
+                                            disabled value="0">
                                         <label class="form-check-label" for="genderInput2">Mujer</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        name="gender"
-                                        id="genderInput3"
-                                        {{#ifCond customer.gender '===' null}}
-                                            checked
-                                        {{/ifCond}}
-                                        value="null">
+                                        <input class="form-check-input disabled" type="radio" name="gender"
+                                            id="genderInput3" {{#ifCond customer.gender '===' null}} checked {{/ifCond}}
+                                            disabled value="null">
                                         <label class="form-check-label" for="genderInput3">Prefiere no contestar</label>
                                     </div>
                                 </div>
@@ -140,21 +135,25 @@
                                 </div>
                             </div>
 
-                            {{#if errors}}
-                            {{#each errors}}
+                            {{#if error}}
                             <div class="my-3">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{this.msg}}</strong>
+                                    <strong>{{error.msg}}</strong>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"
                                         aria-label="Close"></button>
                                 </div>
                             </div>
-                            {{/each}}
                             {{/if}}
 
-                            <div class="row">
-                                <div class="d-grid gap-2 col-6 mx-auto">
-                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                            <div class="d-flex justify-content-around">
+                                <div class="button">
+                                    <input type="submit" data-submit="false" class="btn btn-secondary submit"
+                                        value="Editar" role="button">
+                                </div>
+                                <div class="button">
+                                    <a class="btn btn-danger disabled" id="cancel-button">
+                                        Cancelar
+                                    </a>
                                 </div>
                             </div>
                         </form>
@@ -165,81 +164,292 @@
     </div>
 </div>
 
-<script>
-    //Listeners
 
-    document.getElementById('phone').addEventListener('change', findCustomerByPhone)
+{{!--
+<script src="/js/customers/editCustomer.js"></script> --}}
+
+<script>
+    let states
+    let cities
+    let municipalities
+    //Listeners
 
     //Remove more than 10 characters
     document.getElementById('phone').addEventListener('keyup', function (e) {
-        if (event.target.value.length > 4) {
-            event.target.value = event.target.value.slice(0, 10);
+        if (e.target.value.length > 4) {
+            e.target.value = e.target.value.slice(0, 10);
         }
     })
 
-    document.getElementById('form').addEventListener('submit', formValidation)
-
-    
-    //Functions
-
-    async function formValidation(e) {
+    document.getElementById('form').addEventListener('submit', async (e) => {
         e.preventDefault()
+        const submit = document.querySelector('.submit')
 
-        const findPhone = await findCustomerByPhone(e)
+        if (submit.dataset.submit === 'false') {
+            return formReset(submit)
+        }
 
-        if (findPhone) {
-            const confirmation = window.confirm('¿Esta seguro de realizar los cambios al cliente?')
+        if (submit.dataset.submit === 'true') {
+            const phone = document.getElementById('phone')
+            await formValidation(phone.value)
+        }
+    })
 
-            if (confirmation) {
-                const path = `https://dabbawalas.herokuapp.com/api/customers/editCustomerByRestaurant`
+    document.getElementById('cancel-button').addEventListener('click', (e) => {
+        window.location.reload();
+    })
 
-                const formData = new FormData(form)
+    //Functions
+    function formReset(target) {
+        const cancelButton = document.getElementById('cancel-button')
 
-                try {
-                    if (confirmation) {
-                        const response = await fetch(path, {
-                            method: 'PATCH',
-                            body: formData
-                        })
+        if (target.value.toUpperCase() === 'EDITAR' && target.type === 'submit') {
+            target.value = 'Guardar'
+            target.type = 'submit'
+            target.classList.remove('btn-secondary')
+            target.classList.add('btn-primary')
+            cancelButton.classList.remove('disabled')
+            if (target.hasAttribute('data-submit')) {
+                target.setAttribute('data-submit', true)
+            } else {
+                console.log('Modificación no permitida')
+                return window.alert('Modificación no permitida')
+            }
 
-                        const data = await response.json()
-
-                        if (data.status === 304) {
-                            return sendInputAlert(data.errorMessage, 'alert-danger', 'formAlert')
-                        }
-                    }
-                } catch (error) {
-                    console.log(error)
+            const disabled = document.querySelectorAll('.disabled')
+            disabled.forEach(item => {
+                if (item.getAttribute('id') !== 'phone') {
+                    item.disabled = false
                 }
+            })
+        }
+
+        const disabled = document.querySelectorAll('.disabled')
+        disabled.forEach(input => {
+            if (!input.disabled === false) return input.disabled.false
+        })
+    }
+
+    async function formValidation() {
+        const confirmation = window.confirm('¿Esta seguro de realizar los cambios al cliente?')
+        const phone = document.getElementById('phone').value
+
+        if (confirmation) {
+            const path = `http://localhost:3000/api/customers/editCustomerByRestaurant/${phone}`
+
+            const formData = new URLSearchParams();
+            for (const pair of new FormData(form)) {
+                formData.append(pair[0], pair[1]);
+            }
+
+            try {
+                if (confirmation) {
+                    const response = await fetch(path, {
+                        method: 'PATCH',
+                        body: formData
+                    })
+
+                    const data = await response.json()
+                    switch (data.status) {
+                        case 201:
+                            sendInputAlert(data.message, 'alert-success', 'phoneExistsAlert')
+                            const disabled = document.querySelectorAll('.disabled')
+                            disabled.forEach(item => {
+                                if (item.getAttribute('id') !== 'phone') {
+                                    item.disabled = false
+                                }
+                            })
+                            break;
+                        case 304:
+                            sendInputAlert(data.message, 'alert-danger', 'phoneExistsAlert')
+                            break;
+                    }
+                }
+            } catch (error) {
+                console.log(error)
             }
         }
     }
 
-    async function findCustomerByPhone(e) {
-        const path = `https://dabbawalas.herokuapp.com/api/customers/getCustomerBy`
-
-        const customerPhone = {
-            phone: e.target.value
+    function resetSelect() {
+        const citySelect = document.getElementById('city-select')
+        while (citySelect.options.length > 0) {
+            citySelect.options.remove(0)
         }
+
+        const option1 = document.createElement('option')
+        option1.text = 'Seleccione una ciudad'
+        citySelect.add(option1)
+
+        const municipalitySelect = document.getElementById('municipality-select')
+        while (municipalitySelect.options.length > 0) {
+            municipalitySelect.options.remove(0)
+        }
+
+        const option2 = document.createElement('option')
+        option2.text = 'Selecciona una colonia'
+        municipalitySelect.add(option2)
+    }
+
+    async function loadStates() {
+        states = []
+
+        const path = `/api/addresses/getAllStates`
 
         try {
-            const response = await fetch(path, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerPhone)
-            })
-
-            const data = await response.json()
-
-            if (data.status === 200) {
-                return sendInputAlert('El número telefónico ya esta registrado', 'alert-danger', 'phoneExistsAlert')
-                return false
-            }
-            return true
+            const data = await fetch(path)
+            const response = await data.json()
+            states = response
         } catch (error) {
             console.log(error)
+            window.alert(error)
+        }
+
+    }
+
+    function renderStates() {
+        const selectStates = document.getElementById('state-select')
+
+        for (let i = 0; i < states.length; i++) {
+            const option = document.createElement('option')
+            option.value = states[i].id
+            option.text = states[i].nombre
+            selectStates.add(option)
         }
     }
+
+    function renderCities() {
+        const citySelect = document.getElementById('city-select')
+
+        while (citySelect.options.length > 0) {
+            citySelect.options.remove(0)
+        }
+
+        for (let i = 0; i < cities.length; i++) {
+            const option = document.createElement('option')
+            option.value = cities[i].id
+            option.text = cities[i].nombre
+            option.classList.add('option-cities')
+            citySelect.add(option)
+        }
+    }
+
+    function renderMunicipalities() {
+        const municipalitySelect = document.getElementById('municipality-select')
+
+        while (municipalitySelect.options.length > 0) {
+            municipalitySelect.options.remove(0)
+        }
+
+        for (let i = 0; i < municipalities.length; i++) {
+            const option = document.createElement('option')
+            option.value = municipalities[i].id
+            option.text = municipalities[i].nombre
+            option.classList.add('option-municipalities')
+            municipalitySelect.add(option)
+        }
+    }
+
+    async function loadCities(state) {
+        cities = []
+
+        const path = `/api/addresses/getAllCitiesFromState/${state}`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            cities = response
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function loadMunicipalities(city) {
+        municipalities = []
+        const path = `/api/addresses/getAllMunicipalitiesFromCity/${city}`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            municipalities = response
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function loadEntities() {
+        const stateId = `{{customer.id_state}}`
+        const cityId = `{{customer.id_city}}`
+        const municipalityId = `{{customer.id_municipality}}`
+
+        const selectStates = document.getElementById('state-select')
+        for (let i = 0; i < states.length; i++) {
+            const option = document.createElement('option')
+            option.value = states[i].id
+            option.text = states[i].nombre
+            if (states[i].id == stateId) {
+                option.setAttribute('selected', true)
+            }
+            selectStates.add(option)
+        }
+
+        await loadCities(stateId)
+        const citySelect = document.getElementById('city-select')
+
+        for (let i = 0; i < cities.length; i++) {
+            const option = document.createElement('option')
+            option.value = cities[i].id
+            option.text = cities[i].nombre
+            option.classList.add('option-cities')
+            if (cities[i].id == cityId) {
+                option.setAttribute('selected', true)
+            }
+            citySelect.add(option)
+        }
+
+        await loadMunicipalities(cityId)
+        const municipalitySelect = document.getElementById('municipality-select')
+
+        for (let i = 0; i < municipalities.length; i++) {
+            const option = document.createElement('option')
+            option.value = municipalities[i].id
+            option.text = municipalities[i].nombre
+            option.classList.add('option-municipalities')
+            if (municipalities[i].id == municipalityId) {
+                option.setAttribute('selected', true)
+            }
+            municipalitySelect.add(option)
+        }
+    }
+
+    addEventListener('load', async () => {
+        await loadStates()
+        await loadEntities()
+
+        document.getElementById('state-select').addEventListener('change', async (e) => {
+            const state = e.target.value
+            const municipalitySelect = document.getElementById('municipality-select')
+
+            while (municipalitySelect.options.length > 0) {
+                municipalitySelect.options.remove(0)
+            }
+            const option = document.createElement('option')
+            option.text = 'Seleccione una colonia'
+            municipalitySelect.add(option)
+
+            await loadCities(state)
+            renderCities()
+
+            document.getElementById('city-select').addEventListener('change', async (e) => {
+                const municipality = e.target.value
+
+                await loadMunicipalities(municipality)
+                renderMunicipalities()
+            })
+        })
+    })
 </script>

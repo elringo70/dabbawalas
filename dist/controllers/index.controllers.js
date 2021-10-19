@@ -28,7 +28,7 @@ class IndexControllers {
             }
         }
         res.render('index', {
-            title: 'Pagina principal',
+            title: 'Página principal',
             loggedIn: false
         });
     }
@@ -40,7 +40,7 @@ class IndexControllers {
     }
     getRestaurantRegistration(req, res) {
         res.status(200).render('restaurants/registration', {
-            title: 'Pagina de registro de restaurant',
+            title: 'Página de registro de restaurant',
             loginIn: false
         });
     }
@@ -68,7 +68,7 @@ class IndexControllers {
                 if (error)
                     console.log(error);
                 res.json({
-                    errorMessage: 'Error al cargar la pagina de login'
+                    errorMessage: 'Error al cargar la página de login'
                 });
             }
         });

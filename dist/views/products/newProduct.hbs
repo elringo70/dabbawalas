@@ -14,17 +14,37 @@
                         <form action="/api/products/postNewProduct" method="POST" id="form"
                             enctype="multipart/form-data">
                             <div class="row mb-3">
+
+                                {{#if errorMessage}}
+                                <div class="my-3">
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>{{errorMessage}}</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{#if error}}
+                                <div class="my-3">
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>{{error.msg}}</strong>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                {{/if}}
+
                                 <div class="col-md-3">
                                     <label for="name" class="form-label">Nombre del platillo</label>
-                                    <input type="text" name="name" class="form-control input-name-product-validation"
-                                        id="name" placeholder="Nombre del platillo" value="{{product.name}}" required>
-                                    <small class="text-danger" id="text-muted" hidden></small>
+                                    <input type="text" name="name"
+                                        class="form-control input-name-product-validation count-string arrow-number" id="name"
+                                        placeholder="Nombre del platillo" value="{{product.name}}" required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
-                            </div>
-                            <div class="row mb-3">
                                 <div class="col-md-3">
                                     <label for="cost" class="form-label">Costo del platillo</label>
-                                    <input type="number" name="cost" class="form-control input-number-validation"
+                                    <input type="number" name="cost" class="form-control input-number-validation arrow-number"
                                         id="cost" placeholder="Costo del platillo" step="0.01" value="{{product.cost}}"
                                         required>
                                     <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
@@ -32,9 +52,18 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label for="price" class="form-label">Precio de venta</label>
-                                    <input type="number" name="price" class="form-control input-number-validation"
+                                    <input type="number" name="price" class="form-control input-number-validation arrow-number"
                                         id="price" placeholder="Precio del platillo" step="0.01"
                                         value="{{product.price}}" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="cookingtime" class="form-label">Tiempo de preparación</label>
+                                    <input type="number" name="cookingtime" class="form-control input-number-validation arrow-number"
+                                        id="cookingtime" placeholder="Tiempo de preparación" value="{{product.cookingTime}}"
+                                        required>
+                                    <div class="form-text">Ingrese el tiempo en minutos no mayor a 60 minutos</div>
                                     <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
                                         números</small>
                                 </div>
@@ -49,44 +78,21 @@
                                     <label for="formFile" class="form-label">Imagen</label>
                                     <input type="file" name="image" class="form-control" id="formFile"
                                         accept=".jpg, .jpeg, .png, .webp" required>
-                                    <div id="formFile" class="form-text">Ingrese solo imagenes en formato JPG, JPEG o
-                                        PNG</div>
+                                    <div id="formFile" class="form-text">Ingrese solo imágenes en formato JPG, JPEG o
+                                        PNG con un tamaño no mayor a 1Mb</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="description" class="form-label">Descripción</label>
+                                    <textarea name="description" rows="4" class="form-control textarea-validation"
+                                        style="resize:none" required>{{product.description}}</textarea>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <img id="loadedImg" src="" alt="" class="img-fluid">
                                 </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="description" class="form-label">Descripción</label>
-                                    <textarea name="description" rows="4" class="form-control" style="resize:none"
-                                        required>{{product.description}}</textarea>
-                                </div>
-                            </div>
-
-                            {{#if errorMessage}}
-                            <div class="my-3">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{errorMessage}}</strong>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                            {{/if}}
-
-                            {{#if errors}}
-                            {{#each errors}}
-                            <div class="my-3">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{this.msg}}</strong>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                            {{/each}}
-                            {{/if}}
+                            </div>                            
 
                             <div class="row">
                                 <div class="d-grid gap-2 col-6 mx-auto">
@@ -112,13 +118,27 @@
     async function formValidation(e) {
         e.preventDefault()
         const priceVal = priceValidation()
+        const cookingTime = CookingTime()
 
-        if (priceVal) {
+        if (priceVal && cookingTime) {
             const confirmation = window.confirm('¿Desea continuar con el registro del producto?')
             if (confirmation) {
                 form.submit()
             }
         }
+    }
+
+    function CookingTime() {
+        const cookingTime = parseFloat(document.getElementById('cookingtime').value, 10)
+        if (cookingTime > 60) {
+            sendInputAlert('El tiempo no puede ser mayor a 60 minutos', 'alert-danger', 'priceAlert')
+            return false
+        }
+        else if (cookingTime < 10) {
+            sendInputAlert('El tiempo no puede ser menor a 10 minutos', 'alert-danger', 'priceAlert')
+            return false
+        }
+        return true
     }
 
     function priceValidation() {
@@ -177,27 +197,3 @@
         }
     }
 </script>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true"
-    role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">¿Desea agregar otro artículo?</h5>
-            </div>
-            <div class="modal-footer">
-                <a href="/api/products/getNewProductPage">
-                    <button type="button" class="btn btn-primary">
-                        Si
-                    </button>
-                </a>
-                <a href="/api/restaurants/manager">
-                    <button type="button" class="btn btn-secondary">
-                        No
-                    </button>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>

@@ -1,0 +1,185 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Dashboard</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Select a restaurant
+                    </div>
+                    <div class="card-body">
+                        <form id="form">
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="id" class="form-label">Restaurant ID</label>
+                                    <input type="number" name="id" class="form-control input-number-validation" id="id"
+                                        placeholder="Search by ID" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="option" class="form-label">Select data</label>
+                                    <select class="form-select" name="option" aria-label="Default select example"
+                                        required>
+                                        <option value="1">Today</option>
+                                        <option value="2">Last 7 days </option>
+                                        <option value="3">Last month</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="load" class="form-label">Load information</label>
+                                    <button class="btn btn-primary form-control">Load</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="name" class="form-label">Download excel</label>
+                                    <button class="btn btn-success form-control download-btn" disabled>
+                                        <span class="me-2"><i class="bi bi-download"></i></span>
+                                        Download file
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="processing-orders">0</h1>
+                                <h6 class="card-title">Processing</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#2196f3"
+                                    class="bi bi-bag" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="completed-orders">0</h1>
+                                <h6 class="card-title">Completed</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#4caf50"
+                                    class="bi bi-bag-check" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="card-dashboard-text w-100">
+                                <h1 class="canceled-orders">0</h1>
+                                <h6 class="card-title">Canceled</h6>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#ff5252"
+                                    class="bi bi-bag-x" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M6.146 8.146a.5.5 0 0 1 .708 0L8 9.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 10l1.147 1.146a.5.5 0 0 1-.708.708L8 10.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 10 6.146 8.854a.5.5 0 0 1 0-.708z" />
+                                    <path
+                                        d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Charts
+                    </div>
+                    <div class="card-body">
+                        <canvas class="chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Total revenue
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="d-flex justify-content-around align-items-end w-100 h-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="55" fill="#ea9b2b"
+                                        class="bi bi-cart" viewBox="0 0 16 16">
+                                        <path
+                                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                    </svg>
+                                    <div class="card-dashboard-text w-100">
+                                        <h5 class="canceled-orders">Best selling</h5>
+                                        <h6 class="selling-product"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex justify-content-around align-items-end w-100 h-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="55" fill="#adadca"
+                                        class="bi bi-sort-numeric-up" viewBox="0 0 16 16">
+                                        <path
+                                            d="M12.438 1.668V7H11.39V2.684h-.051l-1.211.859v-.969l1.262-.906h1.046z" />
+                                        <path fill-rule="evenodd"
+                                            d="M11.36 14.098c-1.137 0-1.708-.657-1.762-1.278h1.004c.058.223.343.45.773.45.824 0 1.164-.829 1.133-1.856h-.059c-.148.39-.57.742-1.261.742-.91 0-1.72-.613-1.72-1.758 0-1.148.848-1.835 1.973-1.835 1.09 0 2.063.636 2.063 2.687 0 1.867-.723 2.848-2.145 2.848zm.062-2.735c.504 0 .933-.336.933-.972 0-.633-.398-1.008-.94-1.008-.52 0-.927.375-.927 1 0 .64.418.98.934.98z" />
+                                        <path
+                                            d="M4.5 13.5a.5.5 0 0 1-1 0V3.707L2.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L4.5 3.707V13.5z" />
+                                    </svg>
+                                    <div class="card-dashboard-text w-100">
+                                        <h5 class="canceled-orders">Quantity</h5>
+                                        <h6 class="selling-product-quantity"></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex justify-content-around align-items-end w-100 h-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="55" fill="#c09259"
+                                        class="bi bi-card-image" viewBox="0 0 16 16">
+                                        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                        <path
+                                            d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z" />
+                                    </svg>
+                                    <div class="card-dashboard-text w-100">
+                                        <h5 class="canceled-orders">Image</h5>
+                                        <img id="selling-product-image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<script src="/js/admin/chart.js"></script>

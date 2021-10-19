@@ -1,0 +1,223 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Órdenes</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Órdenes activas
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover align-middle" id="orders-table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>ID</th>
+                                    <th>Número telefónico</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Hora de creación</th>
+                                    <th>Tiempo de preparación</th>
+                                    <th>Estatus</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let orders = []
+    const ordersList = document.getElementById('orders-list')
+
+    function renderOrders() {
+        ordersList.innerHTML = ''
+        
+        orders.map(order => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-order', order.id)
+            tr.classList.add('text-center')
+
+            const due = orderDue(order.creationTime)
+
+            let time
+
+            if (due.hours > 1) {
+                time = `RETRASADA`
+                tr.classList.add('b')
+                tr.classList.add('b-danger')
+            } else if (due.minutes > 30) {
+                time = `RETRASADA`
+                tr.classList.add('b')
+                tr.classList.add('b-danger')
+            } else {
+                time = `OPENED`
+            }
+
+            console.log(order)
+
+            const content = `
+                <td><a href="/api/orders/getOrderDetailPage/${order.id}&${order.id_restaurant}">${order.id}</a></td>
+                <td>${order.phone}</td>
+                <td>${order.customer}</td>
+                <td>$ ${order.total}</td>
+                <td>${order.creationTime.toLocaleTimeString()}</td>
+                <td>${due.difference}</td>
+                <td>${time}</td>
+                <td>
+                    <div class="btn-group">
+                        <a data-order="${order.id}" class="btn btn-outline-primary complete-order">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"/>
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                        <a data-order="${order.id}" class="btn btn-outline-danger cancel-order">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+
+            tr.innerHTML = content
+            ordersList.append(tr)
+
+            tr.querySelector('.complete-order').addEventListener('click', async function () {
+                await completeOrder(order.id)
+            })
+
+            tr.querySelector('.cancel-order').addEventListener('click', async function () {
+                await cancelOrder(order.id)
+            })
+        })
+    }
+
+    async function loadOrders() {
+        path = `/api/orders/getAllTodayOrders`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            console.log(response)
+
+            if (response) {
+                for (let i = 0; i < response.length; i++) {
+                    const date = new Date(response[i].createdAt)
+                    const order = {
+                        id: response[i].id_order,
+                        id_restaurant: response[i].id_restaurant,
+                        phone: response[i].phone,
+                        customer: `${response[i].name} ${response[i].lastname}`,
+                        total: response[i].total,
+                        creationTime: date,
+                        status: response[i].orderstatus
+                    }
+                    orders.push(order)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function completeOrder(orderId) {
+        const path = `/api/orders/postCompleteOrder`
+
+        try {
+            const confirm = window.confirm('¿Desea completar la order?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_order: orderId })
+                })
+                const response = await data.json()
+                await reloadOrderList()
+                return response
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function cancelOrder(orderId) {
+        path = `/api/orders/cancelOrderById/${orderId}`
+
+        try {
+            const confirm = window.confirm('¿Desea cancelar la orden?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'DELETE'
+                })
+                const response = await data.json()
+                await reloadOrderList()
+                return response
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function orderDue(dateFuture) {
+        const now = new Date()
+
+        let diffInMilliSeconds = Math.abs(now - dateFuture) / 1000;
+
+        // calculate days
+        const days = Math.floor(diffInMilliSeconds / 86400);
+        diffInMilliSeconds -= days * 86400;
+
+        // calculate hours
+        const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+        diffInMilliSeconds -= hours * 3600;
+
+        // calculate minutes
+        const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
+        diffInMilliSeconds -= minutes * 60;
+
+        let difference = '';
+        if (days > 0) {
+            difference += (days === 1) ? `${days} day, ` : `${days} days, `;
+        }
+
+        difference += (hours === 0 || hours === 1) ? `${hours} hour, ` : `${hours} hours, `;
+
+        difference += (minutes === 0 || hours === 1) ? `${minutes} minutes` : `${minutes} minutes`;
+
+        return timeDue = {
+            days,
+            hours,
+            minutes,
+            difference
+        }
+    }
+
+
+
+    async function reloadOrderList() {
+        orders = []
+        await loadOrders()
+        renderOrders()
+    }
+
+    addEventListener('load', async function () {
+        await loadOrders()
+        renderOrders()
+    })
+</script>

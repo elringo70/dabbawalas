@@ -1,0 +1,136 @@
+{{>sidebar}}
+<div class="admin-container" style="background-color: #ebeff2;">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Registro de cajeros</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Registrar un nuevo cajero
+                    </div>
+                    <div class="card-body">
+                        <form id="form" autocomplete="off" novalidate>
+                            <div class="row mb-2">
+                                <div class="col-md-12 fw-bold fs-6">Login</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="email">Correo electrónico</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="Ingrese su correo electrónico" autocomplete="new-email" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="pass">Contraseña</label>
+                                    <input type="password" name="pass" class="form-control" id="pass"
+                                        placeholder="Ingrese la contraseña" aria-describedby="passReq" required>
+                                    <div id="passReq" class="form-text">La contraseña debe de contar con al menos 6
+                                        letras, un número y un caracter especial</div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="confpass">Confirme su contraseña</label>
+                                    <input type="password" name="confpass" class="form-control" id="confpass"
+                                        placeholder="Confirme la contraseña" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-8 m-auto">
+                                    <div id="emailAlert"></div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-12 fw-bold fs-6">Cajero</div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" name="name" class="form-control input-text-validation" id="name"
+                                        placeholder="Nombre del cliente" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" name="lastname" class="form-control input-text-validation"
+                                        id="lastname" placeholder="Apellido" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="maternalsurname" class="form-label">Segundo apellido</label>
+                                    <input type="text" name="maternalsurname" class="form-control input-text-validation"
+                                        id="maternalsurname" placeholder="Segundo apellido" required>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-12 fw-bold fs-6">Dirección</div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select" id="state-select" required>
+                                        <option selected>Seleccione un estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select" id="city-select" required>
+                                        <option selected>Seleccione una ciudad</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select" id="municipality-select" required>
+                                        <option selected>Seleccione una colonia</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="street">Calle</label>
+                                    <input type="text" name="street" class="form-control" id="street"
+                                        placeholder="Calle" autocomplete="new-street" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number" class="form-control input-number-validation"
+                                        id="number" min="1" max="99999" placeholder="Número" autocomplete="new-number"
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="phone">Número telefónico</label>
+                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                        id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
+                                        pattern="[0-9]" autocomplete="new-phone" required>
+                                    <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
+                                    </div>
+                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
+                                        números</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="dob">Fecha de nacimiento</label>
+                                    <input type="date" name="dob" class="form-control" id="dob" required>
+                                    <small class="text-danger" id="text-muted"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <input type="submit" class="btn btn-primary" value="Registrar" role="button">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/addresses.js"></script>
+<script src="/js/cashier/index.js"></script>

@@ -8,7 +8,7 @@ const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './dist/public/uploads');
+        cb(null, './src/public/uploads');
     },
     filename: function (req, file, cb) {
         cb(null, uuid_1.v4() + file.originalname);
@@ -16,6 +16,10 @@ const storage = multer_1.default.diskStorage({
 });
 exports.upload = multer_1.default({
     storage,
+    limits: {
+        fieldNameSize: 300,
+        fileSize: 1048576,
+    },
     fileFilter: function (req, file, cb) {
         if (file.mimetype == "image/png"
             || file.mimetype == "image/jpg"

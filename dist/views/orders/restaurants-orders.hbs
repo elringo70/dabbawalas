@@ -1,0 +1,126 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12 fw-bold fs-3">Ordenes</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Ordenes activas
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover align-middle" id="orders-table">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Order Id</th>
+                                    <th>Restaurant</th>
+                                    <th>Total</th>
+                                    <th>Creation time</th>
+                                    <th>Status</th>
+                                    <th>Time Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let orders = []
+    const ordersList = document.getElementById('orders-list')
+
+    function renderOrders() {
+        let orderStatus
+
+        ordersList.innerHTML = ''
+        orders.map(order => {
+            const tr = document.createElement('tr')
+            tr.setAttribute('data-order', order.id_order)
+            tr.setAttribute('data-restaurant', order.id_restaurant)
+            tr.classList.add('text-center')
+
+            const time = new Date(order.createdAt).toLocaleTimeString()
+
+            const content = `
+                <td><a href="/api/orders/getOrderDetailPage/${order.id_order}&${order.id_restaurant}">${order.id_order}</a></td>
+                <td>${order.name}</td>
+                <td>$ ${order.total}</td>
+                <td>${time}</td>
+                <td>${order.orderstatus.toUpperCase()}</td>
+                <td></td>
+                <td>
+                    <div class="btn-group">
+                        <a data-order="${order.id_order}" class="btn btn-outline-danger cancel-order">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+
+            tr.innerHTML = content
+            ordersList.append(tr)
+
+            tr.querySelector('.cancel-order').addEventListener('click', async function () {
+                await cancelOrder(order.id_order)
+            })
+        })
+    }
+
+    async function loadOrders() {
+        path = `/api/orders/getAllRestaurantsOrders`
+
+        try {
+            const data = await fetch(path)
+            const response = await data.json()
+
+            if (response) {
+                for (let i = 0; i < response.length; i++) {
+                    orders.push(response[i])
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            window.alert(error)
+        }
+    }
+
+    async function cancelOrder(orderId) {
+        path = `/api/orders/cancelOrderById/${orderId}`
+
+        try {
+            const confirm = window.confirm('Do you wish to continue?')
+            if (confirm) {
+                const data = await fetch(path, {
+                    method: 'DELETE'
+                })
+                const response = await data.json()
+                await reloadOrderList()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function reloadOrderList() {
+        orders = []
+        await loadOrders()
+        renderOrders()
+    }
+
+    addEventListener('load', async function () {
+        await loadOrders()
+        renderOrders()
+    })
+</script>

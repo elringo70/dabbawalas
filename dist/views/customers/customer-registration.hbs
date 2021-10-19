@@ -12,41 +12,45 @@
                         Almacenar un nuevo cliente
                     </div>
                     <div class="card-body">
-                        <form id="form">
+                        <form id="form" autocomplete="off">
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <label for="phone">Número telefónico</label>
-                                    <input type="number" name="phone" class="form-control input-number-validation"
+                                    <input type="number" name="phone" class="form-control input-number-validation arrow-number text-center"
                                         id="phone" placeholder="Número telefónico" min="1111111111" max="9999999999"
-                                        pattern="[0-9]" value="{{customer.phone}}" required>
+                                        pattern="[0-9]" value="{{customer.phone}}" autocomplete="new-number" required>
                                     <div id="emailHelp" class="form-text">Ingrese el número telefónico de 10 dígitos
                                     </div>
                                     <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
                                         números</small>
                                 </div>
+                            </div>
+                            <div class="row mb-3">
                                 <div class="col-sm">
                                     <div id="phoneExistsAlert"></div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <label for="name" class="form-label">Nombre</label>
+                                    <label for="name" class="form-label">Nombre(s)</label>
                                     <input type="text" name="name" class="form-control input-text-validation" id="name"
-                                        placeholder="Nombre del cliente" value="{{customer.name}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                        placeholder="Nombre del cliente" value="{{customer.name}}" autocomplete="new-text"
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="lastname" class="form-label">Apellido</label>
                                     <input type="text" name="lastname" class="form-control input-text-validation"
-                                        id="lastname" placeholder="Apellido" value="{{customer.lastname}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                        id="lastname" placeholder="Apellido" value="{{customer.lastname}}"
+                                        autocomplete="new-lastaname" required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="maternalsurname" class="form-label">Segundo apellido</label>
                                     <input type="text" name="maternalsurname" class="form-control input-text-validation"
                                         id="maternalsurname" placeholder="Segundo apellido"
-                                        value="{{customer.maternalsurname}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar letras</small>
+                                        value="{{customer.maternalsurname}}" autocomplete="new-maternalsurname" required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                             </div>
 
@@ -55,42 +59,45 @@
                                     <div id="dateAlert"></div>
                                 </div>
                             </div>
+
                             <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <label for="number">Número</label>
-                                    <input type="number" name="number" class="form-control input-number-validation"
-                                        id="number" min="1" max="99999" placeholder="Número" value="{{customer.number}}"
-                                        required>
-                                    <small class="text-danger" id="text-muted" hidden>Solo puede ingresar
-                                        números</small>
+                                <div class="col-sm-4">
+                                    <label for="state">Estado</label>
+                                    <select name="state" class="form-select" id="state-select" required>
+                                        <option selected>Seleccione un estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="city">Ciudad</label>
+                                    <select name="city" class="form-select" id="city-select" required>
+                                        <option selected>Seleccione una ciudad</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-5">
+                                    <label for="municipality">Colonia</label>
+                                    <select name="municipality" class="form-select" id="municipality-select" required>
+                                        <option selected>Seleccione una colonia</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-5">
                                     <label for="street">Calle</label>
                                     <input type="text" name="street" class="form-control" id="street"
-                                        value="{{customer.street}}" placeholder="Calle" required>
+                                        placeholder="Calle" autocomplete="new-text"
+                                        required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="municipality">Colonia</label>
-                                    <input type="text" name="municipality" class="form-control" id="municipality"
-                                        placeholder="Colonia" value="{{customer.municipality}}" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-4">
-                                    <label for="city">Ciudad</label>
-                                    <input type="text" name="city" class="form-control input-text-validation" id="city"
-                                        placeholder="Ciudad" value="{{customer.city}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
-                                        tipo letra</small>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label for="state">Estado</label>
-                                    <input type="text" name="state" class="form-control input-text-validation"
-                                        id="state" placeholder="Estado" value="{{customer.state}}" required>
-                                    <small class="text-danger" id="text-muted" hidden>Por favor ingrese solo caracter
-                                        tipo letra</small>
+                                <div class="col-md-2">
+                                    <label for="number">Número</label>
+                                    <input type="number" name="number" class="form-control input-number-validation"
+                                        id="number" min="1" max="99999" placeholder="Número" value="{{customer.number}}"
+                                        autocomplete="new-number" required>
+                                    <small class="text-danger" id="text-muted"></small>
                                 </div>
                             </div>
+
                             <div class="row mb-3">
                                 <div class="col-1">
                                     <label class="form-check-label">Género</label>
@@ -119,18 +126,6 @@
                                 </div>
                             </div>
 
-                            {{#if errors}}
-                            {{#each errors}}
-                            <div class="my-3">
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <strong>{{this.msg}}</strong>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            </div>
-                            {{/each}}
-                            {{/if}}
-
                             <div class="row">
                                 <div class="d-grid gap-2 col-6 mx-auto">
                                     <input type="submit" class="btn btn-primary" value="Registrar" role="button">
@@ -144,85 +139,5 @@
     </div>
 </div>
 
-<script>
-    //Listeners
-
-    document.getElementById('phone').addEventListener('change', findCustomerByPhone)
-
-    //Remove more than 10 characters
-    document.getElementById('phone').addEventListener('keyup', function (e) {
-        if (event.target.value.length > 4) {
-            event.target.value = event.target.value.slice(0, 10);
-        }
-    })
-
-    document.getElementById('form').addEventListener('submit', formValidation)
-
-    
-    //Functions
-
-    async function formValidation(e) {
-        e.preventDefault()
-
-        const findPhone = await findCustomerByPhone(e)
-
-        if (findPhone) {
-            const confirmation = window.confirm('¿Desea continuar con el registro?')
-
-            if (confirmation) {
-                const path = `https://dabbawalas.herokuapp.com/api/customers/postNewCustomer`
-
-                const formData = new FormData(form)
-
-                try {
-                    if (confirmation) {
-                        const response = await fetch(path, {
-                            method: 'POST',
-                            body: formData
-                        })
-
-                        const data = await response.json()
-
-                        if (data.status === 304) {
-                            return sendInputAlert(data.errorMessage, 'alert-danger', 'formAlert')
-                        }
-
-                        if (data.status === 201) {
-                            form.reset()
-                        }
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        }
-    }
-
-    async function findCustomerByPhone(e) {
-        const path = `https://dabbawalas.herokuapp.com/api/customers/getCustomerBy`
-
-        const customerPhone = {
-            phone: e.target.value
-        }
-
-        try {
-            const response = await fetch(path, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(customerPhone)
-            })
-
-            const data = await response.json()
-
-            if (data.status === 200) {
-                return sendInputAlert('El número telefónico ya esta registrado', 'alert-danger', 'phoneExistsAlert')
-                return false
-            }
-            return true
-        } catch (error) {
-            console.log(error)
-        }
-    }
-</script>
+<script src="/js/addresses.js"></script>
+<script src="/js/customers/customerRegistration.js"></script>

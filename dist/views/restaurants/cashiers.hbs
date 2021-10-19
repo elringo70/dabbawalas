@@ -1,0 +1,36 @@
+{{>sidebar}}
+<div class="admin-container" style="background-color: #ebeff2;">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Cajeros</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Lista de cajeros
+                    </div>
+                    <div class="card-body">
+                        <a href="/api/managers/postNewCashierPage" class="btn btn-primary mb-3">Agregar cajero</a>
+                        <input class="form-control" id="search" type="text" placeholder="Busque por nombre">
+                        <table class="table table-hover table-sm align-middle" id="cashiersTable">
+                            <thead class="text-center">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Correo electrónico</th>
+                                    <th>Nombre</th>
+                                    <th>Dirección</th>
+                                    <th>Fecha de nacimiento</th>
+                                    <th>Phone</th>
+                                    <th>Edición</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cashiers-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/cashier/cashiers.js"></script>

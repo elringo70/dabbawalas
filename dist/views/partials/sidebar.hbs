@@ -1,4 +1,4 @@
-{{#if loggedIn}}
+{{#if manager}}
 
 <div class="toggler-button">
     <div class="d-flex flex-row-reverse me-3 mt-3">
@@ -24,7 +24,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="/api/restaurants/manager" class="nav-link px-3 active">
+                    <a href="/api/restaurants/getManagerPage" class="nav-link px-3 active">
                         <span class="me-2">
                             <i class="bi bi-speedometer2"></i>
                         </span>
@@ -59,9 +59,9 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link px-2">
+                                    <a href="/api/orders/getAllTodayOrdersPage" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
-                                        <span>Ver ordenes</span>
+                                        <span>Ver órdenes</span>
                                     </a>
                                 </li>
                             </ul>
@@ -80,8 +80,8 @@
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse2" role="button"
-                        aria-expanded="false" aria-controls="layoutCollapse2">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse2"
+                        role="button" aria-expanded="false" aria-controls="layoutCollapse2">
                         <span class="me-2"><i class="bi bi-cup-straw"></i></span>
                         <span>Platillos</span>
                         <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
@@ -96,7 +96,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/api/products/getAllProductsByRestaurant" class="nav-link px-2">
+                                    <a href="/api/products/getAllProductsPage" class="nav-link px-2">
                                         <span class="me-2"><i class="bi bi-card-list"></i></span>
                                         <span>Ver platillos</span>
                                     </a>
@@ -117,8 +117,8 @@
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse3" role="button"
-                        aria-expanded="false" aria-controls="layoutCollapse3">
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse3"
+                        role="button" aria-expanded="false" aria-controls="layoutCollapse3">
                         <span class="me-2"><i class="bi bi-people"></i></span>
                         <span>Tus clientes</span>
                         <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
@@ -147,13 +147,14 @@
                 <li class="my-4">
                     <hr class="dropdown-divider">
                 </li>
+
                 <li>
                     <div class="text-muted small fw-bold text-uppercase px-3">
                         Reportes visuales
                     </div>
                 </li>
                 <li>
-                    <a href="" class="nav-link px-3">
+                    <a href="/api/managers/getChartsPage" class="nav-link px-3">
                         <span class="me-2">
                             <i class="bi bi-graph-up"></i>
                         </span>
@@ -172,7 +173,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="" class="nav-link px-3">
+                    <a href="/api/managers/editManagerPage/{{user.id_user}}" class="nav-link px-3">
                         <span class="me-2"><i class="bi bi-person-square"></i></span>
                         <span>{{user.name}} {{user.lastname}}</span>
                     </a>
@@ -188,9 +189,431 @@
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
-                                    <a href="" class="nav-link px-2">
-                                        <span class="me-2"><i class="bi bi-layout-split"></i></span>
-                                        <span>Configuración</span>
+                                    <a href="/api/managers/getPersonnelPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-people"></i></span>
+                                        <span>Personal</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/auth/logout" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cerrar sesión</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+{{/if}}
+
+{{#if cooker}}
+
+<div class="toggler-button">
+    <div class="d-flex flex-row-reverse me-3 mt-3">
+        <button class="navbar-toggler bg-dark text-white" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <span class="navbar-toggler-icon"><i class="bi bi-three-dots"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start sidebar-nav bg-dark text-white" tabindex="-1" id="offcanvasExample"
+    aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Administration Panel</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Panel Principal
+                    </div>
+                </li>
+                <li>
+                    <a href="/api/orders/getAllTodayOrdersCookerPage" class="nav-link px-3 active">
+                        <span class="me-2">
+                            <i class="bi bi-speedometer2"></i>
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Cocina
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse1"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse1">
+                        <span class="me-2"><i class="bi bi-bag"></i></span>
+                        <span>Órdenes</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse1">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/orders/getAllTodayOrdersPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
+                                        <span>Ver órdenes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Perfil
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3">
+                        <span class="me-2"><i class="bi bi-person-square"></i></span>
+                        <span>{{user.name}} {{user.lastname}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
+                        <span class="me-2"><i class="bi bi-gear"></i></span>
+                        <span>Opciones</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse3">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/auth/resetPasswordPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cambiar contraseña</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/auth/logout" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cerrar sesión</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{{/if}}
+
+{{#if admin}}
+
+<div class="toggler-button">
+    <div class="d-flex flex-row-reverse me-3 mt-3">
+        <button class="navbar-toggler bg-dark text-white" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <span class="navbar-toggler-icon"><i class="bi bi-three-dots"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start sidebar-nav bg-dark text-white" tabindex="-1" id="offcanvasExample"
+    aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Administration Panel</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Admin Profile
+                    </div>
+                </li>
+                <li>
+                    <a href="/api/admin/getAdminDashboardPage" class="nav-link px-3 active">
+                        <span class="me-2">
+                            <i class="bi bi-speedometer2"></i>
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Restaurants
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse1"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse1">
+                        <span class="me-2"><i class="bi bi-bag"></i></span>
+                        <span>Status</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse1">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/restaurants/getAllRestaurantsPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus"></i></span>
+                                        <span>Get all restaurants</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/orders/getAllRestaurantsOrdersPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
+                                        <span>Live orders</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Managers
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse2"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse2">
+                        <span class="me-2"><i class="bi bi-clipboard"></i></span>
+                        <span>Control</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse2">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/admin/getAllManagersPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-people"></i></span>
+                                        <span>Managers</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/admin/getRestaurantsPersonnelPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-people-fill"></i></span>
+                                        <span>Managers personnel</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Profile
+                    </div>
+                </li>
+                <li>
+                    <a href="" class="nav-link px-3">
+                        <span class="me-2"><i class="bi bi-person-square"></i></span>
+                        <span>{{user.name}} {{user.lastname}}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
+                        <span class="me-2"><i class="bi bi-gear"></i></span>
+                        <span>Configuration</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse3">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/auth/logout" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{{/if}}
+
+{{#if cashier}}
+<div class="toggler-button">
+    <div class="d-flex flex-row-reverse me-3 mt-3">
+        <button class="navbar-toggler bg-dark text-white" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <span class="navbar-toggler-icon"><i class="bi bi-three-dots"></i></span>
+        </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start sidebar-nav bg-dark text-white" tabindex="-1" id="offcanvasExample"
+    aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Panel principal</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="navbar-dark">
+            <ul class="navbar-nav">
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Perfil de cajero
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 active">
+                        <span class="me-2">
+                            <i class="bi bi-speedometer2"></i>
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Cocina
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse1"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse1">
+                        <span class="me-2"><i class="bi bi-bag"></i></span>
+                        <span>Órdenes</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse1">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/orders/getNewOrderPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus"></i></span>
+                                        <span>Agregar orden</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/orders/getAllTodayOrdersPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-bag-plus-fill"></i></span>
+                                        <span>Ver órdenes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Clientes
+                    </div>
+                </li>
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#layoutCollapse3"
+                        role="button" aria-expanded="false" aria-controls="layoutCollapse3">
+                        <span class="me-2"><i class="bi bi-people"></i></span>
+                        <span>Tus clientes</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="layoutCollapse3">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/customers/getCustomerPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-person-plus"></i></span>
+                                        <span>Agregar cliente</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/api/customers/getAllCustomersPageByRestaurant" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-person-lines-fill"></i></span>
+                                        <span>Ver clientes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+
+                {{!-- Divider --}}
+                <li class="my-4">
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+                    <div class="text-muted small fw-bold text-uppercase px-3">
+                        Cajero
+                    </div>
+                </li>
+                <li>
+                    <a href="" class="nav-link px-3">
+                        <span class="me-2"><i class="bi bi-person-square"></i></span>
+                        <span>{{user.name}} {{user.lastname}}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#profileCollapse3"
+                        role="button" aria-expanded="false" aria-controls="profileCollapse3">
+                        <span class="me-2"><i class="bi bi-gear"></i></span>
+                        <span>Configuration</span>
+                        <span class="right-icon ms-auto"><i class="bi bi-chevron-compact-down"></i></span>
+                    </a>
+                    <div class="collapse" id="profileCollapse3">
+                        <div>
+                            <ul class="navbar-nav ps-3">
+                                <li>
+                                    <a href="/api/auth/resetPasswordPage" class="nav-link px-2">
+                                        <span class="me-2"><i class="bi bi-door-open"></i></span>
+                                        <span>Cambiar contraseña</span>
                                     </a>
                                 </li>
                                 <li>

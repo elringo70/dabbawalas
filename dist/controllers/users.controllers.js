@@ -34,7 +34,12 @@ class UserControllers {
                     errorMessage: 'Envie el dato email'
                 });
             }
-            const manager = yield user_1.default.findBy('email', queryObj.email);
+            const query = `
+            SELECT users.*
+            FROM users
+            WHERE email='${queryObj.email}'
+        `;
+            const manager = yield user_1.default.findBy(query);
             if (manager) {
                 return res.json({
                     status: 304,
@@ -59,7 +64,7 @@ class UserControllers {
                 }
                 delete queryObj.confpass;
                 const manager = new user_1.default();
-                yield manager.save(queryObj);
+                //await manager.save(queryObj)
                 setTimeout(function () {
                     res.redirect('/login');
                 }, 4000);
@@ -77,7 +82,12 @@ class UserControllers {
         return __awaiter(this, void 0, void 0, function* () {
             const { email } = req.body;
             try {
-                const manager = yield user_1.default.findBy('email', email);
+                const query = `
+                SELECT users.*
+                FROM users
+                WHERE email='${email}'
+            `;
+                const manager = yield user_1.default.findBy(query);
                 if (manager) {
                     res.json({
                         status: 200,
@@ -96,6 +106,73 @@ class UserControllers {
                     console.log(error);
                 res.json({
                     errorMessage: 'Error al buscar el correo electrónico'
+                });
+            }
+        });
+    }
+    getUserByEmail(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = res.locals.token;
+            const { email } = req.params;
+            try {
+                if (email === null || email === '' || email === undefined) {
+                    return res.json({
+                        status: 304,
+                        message: 'Debe enviar un correo electrónico valido'
+                    });
+                }
+                const stringEmail = email.toString();
+                const emailQuery = `
+                SELECT email
+                FROM users
+                WHERE email='${stringEmail}'
+            `;
+                const searchEmail = yield user_1.default.findBy(emailQuery);
+                if (searchEmail) {
+                    return res.json({
+                        status: 304,
+                        message: 'Correo electrónico ya se encuentra registrado'
+                    });
+                }
+                res.json({
+                    status: 200,
+                    message: 'Correo electrónico disponible'
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.json({
+                    status: 304,
+                    message: 'Error al buscar el correo electrónico'
+                });
+            }
+        });
+    }
+    deleteEmployeeById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const user = res.locals.token;
+            try {
+                const employee = yield user_1.default.findById(id);
+                if (!employee) {
+                    return res.json({
+                        status: 304,
+                        message: 'No se encontró el usuario'
+                    });
+                }
+                yield user_1.default.deleteById(id, user.id_restaurant);
+                res.json({
+                    status: 200,
+                    message: 'Usuario borrado'
+                });
+            }
+            catch (error) {
+                if (error)
+                    console.log(error);
+                res.json({
+                    status: 304,
+                    message: 'Error al borrar al usuario'
                 });
             }
         });

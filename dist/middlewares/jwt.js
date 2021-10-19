@@ -14,18 +14,48 @@ class JWT {
     checkJWT(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const cookies = req.headers.cookie;
-            const token = yield (cookies === null || cookies === void 0 ? void 0 : cookies.split('='));
             try {
+                const token = yield (cookies === null || cookies === void 0 ? void 0 : cookies.split('='));
                 if (token[0] === 'token') {
                     const user = yield jsonwebtoken_1.verify(token[1], 'SECRET');
-                    if (user) {
-                        res.locals.token = user.user;
+                    if (user.user.usertype !== null) {
+                        const newToken = jsonwebtoken_1.sign({ user: user.user }, 'SECRET', { expiresIn: '1h' });
+                        const newUser = yield jsonwebtoken_1.verify(newToken, 'SECRET');
+                        res.locals.token = newUser.user;
+                        let profile = {
+                            user: newUser.user,
+                            active: true,
+                            loggedIn: true
+                        };
+                        switch (newUser.user.usertype) {
+                            case 'A':
+                                profile.admin = true;
+                                break;
+                            case 'M':
+                                profile.manager = true;
+                                break;
+                            case 'CO':
+                                profile.cooker = true;
+                                break;
+                            case 'CA':
+                                profile.cashier = true;
+                                break;
+                        }
+                        res.locals.profile = profile;
+                        res.clearCookie('token');
+                        res.cookie('token', newToken, {
+                            httpOnly: false
+                        });
                         next();
                     }
                     else {
                         res.clearCookie('token');
                         res.redirect('/login');
                     }
+                }
+                else {
+                    res.clearCookie('token');
+                    res.redirect('/login');
                 }
             }
             catch (error) {

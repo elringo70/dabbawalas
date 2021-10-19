@@ -1,0 +1,156 @@
+{{>sidebar}}
+<div class="admin-container">
+    <div class="container-fluid">
+        <div class="row py-3">
+            <div class="col-md-12 fw-bold fs-3">Personnel</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Restaurant personnel
+                    </div>
+                    <div class="card-body">
+                        <form id="form">
+                            <div class="row mb-3 align-items-end">
+                                <div class="col-md-3">
+                                    <input class="form-control text-center arrow-number" type="number" name="personnel"
+                                        id="personnel" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                                <div class="col-md-7">
+                                    <div id="restaurant-card"></div>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-hover table-sm align-middle">
+                            <thead class="text-center">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Date of birth</th>
+                                    <th>Phone</th>
+                                    <th>Position</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="personnel-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('form').addEventListener('submit', loadPersonnel)
+
+    async function loadPersonnel(e) {
+        e.preventDefault()
+
+        const path = `/api/admin/postAllPersonnelRestaurant`
+        const formData = new URLSearchParams()
+
+        for (const pair of new FormData(form)) {
+            formData.append(pair[0], pair[1]);
+        }
+
+        try {
+            const data = await fetch(path, {
+                method: 'POST',
+                body: formData
+            })
+            const response = await data.json()
+
+            if (response.status === 202) return alert(response.message)
+            if (response.status === 200) {
+                renderPersonnel(response.restaurantObject.personnel)
+                restaurantCard(response.restaurantObject.restaurant)
+                const input = document.getElementById('personnel')
+                input.value = ''
+            }
+            if (response.status === 304) alert(response.message)
+        } catch (error) {
+            if (error) console.log(error)
+            alert(error)
+        }
+    }
+
+    function renderPersonnel(personnel) {
+        const personnelList = document.getElementById('personnel-list')
+
+        personnel.map(employee => {
+            const tr = document.createElement('tr')
+            tr.classList.add('text-center')
+
+            const dob = new Date(employee.dob)
+
+            let position
+            switch (employee.usertype) {
+                case 'CA':
+                    position = 'CAJERO'
+                    break
+                case 'CO':
+                    position = 'COCINERO'
+                    break
+            }
+
+            const content = /*HTML*/ `
+                <td>${employee.id_user}</td>
+                <td>${employee.email}</td>
+                <td>${employee.fullname}</td>
+                <td>${employee.address}</td>
+                <td>${dob.toLocaleDateString()}</td>
+                <td>${employee.phone}</td>
+                <td>${position}</td>
+                <td>
+                    <div class="btn-group">
+                        <a data-employee="${employee.id_user}" class="btn btn-outline-danger delete-employee">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                            </svg>
+                            <span class="visually-hidden">Button</span>
+                        </a>
+                    </div>
+                </td>
+            `
+            tr.innerHTML = content
+            personnelList.append(tr)
+        })
+    }
+
+    function restaurantCard(restaurant) {
+        const restaurantCardInfo = document.getElementById('restaurant-card')
+        restaurantCardInfo.innerHTML = ''
+
+        restaurantCardInfo.innerHTML = `
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-end">
+                        <div class="col-md-6">
+                            <h5>Restaurant: ${restaurant.name}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Tipo de restaurant: ${restaurant.type}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="card-text">Teléfono: ${restaurant.phone}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text">Descripción: ${restaurant.description}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    }
+</script>

@@ -1,0 +1,122 @@
+{{>sidebar}}
+<div class="admin-container" style="background-color: #ebeff2;">
+    <div class="container-fluid pb-3">
+        <div class="row py-2">
+            <div class="col-md-8">
+                <h2>Reporte general</h2>
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <select class="form-select text-center" id="option-date" aria-label="Default select example">
+                    <option selected value="0">SELECCIONE UNA OPCIÓN</option>
+                    <option value="1">7 DÍAS</option>
+                    <option value="2">MES PRESENTE</option>
+                    <option value="3">ÚLTIMO MES</option>
+                    <option value="4">ÚLTIMOS 6 MESES</option>
+                    <option value="5">AÑO PRESENTE</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">VENTAS TOTALES</h5>
+                                <h3 class="dashboard-cards ps-2" id="">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">INGRESO NETO</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">GANANCIA</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="card-dashboard-text w-100">
+                                <h5 class="card-title">COSTO</h5>
+                                <h3 class="dashboard-cards ps-2" id="">$ 0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-7">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Ventas en el último año
+                    </div>
+                    <div class="card-body">
+                        <canvas class="chart" id="year-sales" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Productos mas vendidos
+                    </div>
+                    <div class="card-body">
+                        <canvas class="chart" id="best-selling-product" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Top clientes
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm">
+                            <thead class="text-center">
+                                <th>Lugar</th>
+                                <th>Cliente</th>
+                                <th>Cantidad de ordenes</th>
+                                <th>Gasto</th>
+                            </thead>
+                            <tbody id="top-customers-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+<script src="/js/manager/charts.js"></script>
